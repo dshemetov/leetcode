@@ -1,0 +1,7 @@
+black
+jupyter
+matplotlib
+numpy
+pytest
+scalene
+scipy
