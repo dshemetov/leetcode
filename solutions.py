@@ -1276,11 +1276,25 @@ def minMutation(startGene: str, endGene: str, bank: list[str]) -> int:
 
 
 # %% 587. https://leetcode.com/problems/erect-the-fence/
+# Lessons learned:
+# - The atan2 function was invented back in the Fortran days and makes for a stable polar angle definition
+# - Convex hull: https://en.wikipedia.org/wiki/Convex_hull_algorithms#Algorithms
+# - Graham scan: https://en.wikipedia.org/wiki/Graham_scan
+# - Tip from a graphics guy: avoid representing angles with degrees/radians, stay in fractions
+def crossproduct_vec(v1: tuple[int, int], v2: tuple[int, int]) -> int:
+    return v1[0] * v2[1] - v1[1] * v2[0]
+
+def crossproduct_pt(pt1: tuple[int, int], pt2: tuple[int, int], pt3: tuple[int, int]) -> float:
+    v1 = (pt2[0] - pt1[0], pt2[1] - pt1[1])
+    v2 = (pt3[0] - pt2[0], pt3[1] - pt2[1])
+    return crossproduct_vec(v1, v2)
+
+def polar_angle(pt1: tuple[int, int], pt2: tuple[int, int]) -> float:
+    v1 = (pt2[0] - pt1[0], pt2[1] - pt1[1])
+    return np.arctan2(v1[1], v1[0])
+
 def outerTrees(trees: list[list[int]]) -> list[list[int]]:
     """
-    Convex hull: https://en.wikipedia.org/wiki/Convex_hull_algorithms#Algorithms
-    Graham scan: https://en.wikipedia.org/wiki/Graham_scan
-
     Examples:
     >>> outerTrees([[1,1],[2,2],[2,0],[2,4],[3,3],[4,2]])
     [[1, 1], [2, 0], [3, 3], [2, 4], [4, 2]]
@@ -1289,37 +1303,15 @@ def outerTrees(trees: list[list[int]]) -> list[list[int]]:
     >>> outerTrees([[1,1],[2,2],[3,3],[2,1],[4,1],[2,3],[1,3]])
     [[1, 1], [2, 1], [4, 1], [3, 3], [1, 3]]
     """
-
-    def crossproduct(v1: tuple[int, int], v2: tuple[int, int]) -> int:
-        return v1[0] * v2[1] - v1[1] * v2[0]
-
-    def polar_angle_from_pt(pt1: tuple[int, int], pt2: tuple[int, int]) -> int:
-        return crossproduct(pt1, (pt2[0] - pt1[0], pt2[1] - pt1[1]))
-
-    def ccw(pt1: tuple[int, int], pt2: tuple[int, int], pt3: tuple[int, int]) -> float:
-        """Counterclockwise."""
-        v1 = (pt2[0] - pt1[0], pt2[1] - pt1[1])
-        v2 = (pt3[0] - pt2[0], pt3[1] - pt2[1])
-        return crossproduct(v1, v2)
-
-    def get_polar_angle(pt1: tuple[int, int], pt2: tuple[int, int]) -> Fraction | float:
-        if pt1 == pt2:
-            raise ValueError("Undefined polar angle for a point to itself.")
-        if pt1[0] == pt2[0] and pt1[1] > pt2[1]:
-            return -math.inf
-        elif pt1[0] == pt2[0] and pt1[1] < pt2[1]:
-            return math.inf
-        else:
-            return Fraction(pt2[1] - pt1[1], pt2[0] - pt1[0])
-
-    # Get bottom left point.
-    bottom_left_pt = (math.inf, math.inf)
-    for x, y in trees:
-        if y < bottom_left_pt[1] or (y == bottom_left_pt[1] and x < bottom_left_pt[0]):
-            bottom_left_pt = (x, y)
+    lowest_left_point = (math.inf, math.inf)
+    for x, y in pts:
+        if y < lowest_left_point[1] or (y == lowest_left_point[1] and x < lowest_left_point[0]):
+            lowest_left_point = (x, y)
 
     # Sort by polar angle.
-    trees = sorted(trees, lambda x: polar_angle_from_pt(bottom_left_pt, x))
+    trees = sorted(trees, key=lambda x: polar_angle(lowest_left_point, x))
+
+
 
     # stack = []
     # new_pt = trees[1]
@@ -1332,26 +1324,20 @@ def outerTrees(trees: list[list[int]]) -> list[list[int]]:
 
     # between_trees = []
 
-
-def crossproduct(v1: tuple[int, int], v2: tuple[int, int]) -> int:
-    return v1[0] * v2[1] - v1[1] * v2[0]
-
-
-def polar_angle_from_pt(pt1: tuple[int, int], pt2: tuple[int, int]) -> int:
-    return crossproduct(pt1, (pt2[0] - pt1[0], pt2[1] - pt1[1]))
-
-
 pts = [(math.cos(t), math.sin(t)) for t in np.linspace(0, 2 * math.pi, 20)]
-# Get bottom left point.
-bottom_left_pt = (math.inf, math.inf)
+lowest_left_point = (math.inf, math.inf)
 for x, y in pts:
-    if y < bottom_left_pt[1] or (y == bottom_left_pt[1] and x < bottom_left_pt[0]):
-        bottom_left_pt = (x, y)
+    if y < lowest_left_point[1] or (y == lowest_left_point[1] and x < lowest_left_point[0]):
+        lowest_left_point = (x, y)
 
-angles = [polar_angle_from_pt(pts[0], pt) for pt in pts]
-import matplotlib.pyplot as plt
+sorted_pts = sorted(pts, key=lambda x: polar_angle(lowest_left_point, x))
+sorted_pts
 
-plt.plot(angles)
+# %%
+lowest_left_point
+
+# %%
+crossproduct_pt(lowest_left_point, )
 
 # outerTrees([[1,1],[2,2],[3,3]])
 # %% 622. https://leetcode.com/problems/design-circular-queue/
