@@ -6,13 +6,10 @@ from collections.abc import Generator, Iterable
 from collections import Counter, defaultdict, deque, namedtuple
 from fractions import Fraction
 from functools import reduce
-from itertools import permutations
 from operator import mul
-from typing import Iterable, Literal
+from typing import Callable, Iterable, Literal
 
 import numpy as np
-from scipy.sparse import csr_matrix
-from scipy.sparse.csgraph import connected_components
 
 
 # %% 1. Two Sum https://leetcode.com/problems/two-sum/
