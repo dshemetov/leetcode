@@ -1326,8 +1326,9 @@ def guessNumber2(n: int) -> int:
     return bisect_left(range(0, n), 0, lo=0, hi=n, key=lambda x: -guess(x))
 
 
-# %% 402. https://leetcode.com/problems/remove-k-digits/
-# Idea: remove the top n largest elements, while making sure you don't have leading zeros.
+# %% 402. Remove k Digits https://leetcode.com/problems/remove-k-digits/
+# Lessons learned:
+# - try to build up a heuristic algorithm from a few examples
 def removeKdigits(num: str, k: int) -> str:
     """
     Examples:
@@ -1337,30 +1338,32 @@ def removeKdigits(num: str, k: int) -> str:
     '200'
     >>> removeKdigits("10", 2)
     '0'
+    >>> removeKdigits("9", 1)
+    '0'
+    >>> removeKdigits("112", 1)
+    '11'
     """
-    if len(num) == k:
+    if len(num) <= k:
         return "0"
 
-    queue = deque(sorted(num[:k]))
-    # This is borked.
+    stack = []
     for c in num:
-        if c < queue[0]:
-            queue.appendleft(c)
-        elif queue[-1] < c:
-            queue.append(c)
+        if c == "0" and not stack:
+            continue
+        while stack and stack[-1] > c and k > 0:
+            stack.pop()
+            k -= 1
+        stack.append(c)
 
-    for _ in range(k):
-        if num[0] == "0" and len(num) > 1:
-            num = num[1:]
-        elif num[0] == "0":
-            return "0"
-        else:
-            num.replace(queue.pop(), "", 1)
+    if k > 0:
+        stack = stack[:-k]
 
-    return num
+    return "".join(stack).lstrip("0") or "0"
 
 
-# %% 433. https://leetcode.com/problems/minimum-genetic-mutation/
+removeKdigits("112", 1)
+
+
 def minMutation(startGene: str, endGene: str, bank: list[str]) -> int:
     """
     Examples:
