@@ -1132,6 +1132,7 @@ def addDigits2(num: int) -> int:
         return num % 9
 
 
+# %% 263. Ugly Number https://leetcode.com/problems/ugly-number/
 def isUgly(n: int) -> bool:
     if n < 1:
         return False
@@ -1256,6 +1257,7 @@ def bulbSwitch2(n: int) -> int:
     return int(np.sqrt(n))
 
 
+# %% 345. Reverse Vowels of a String https://leetcode.com/problems/reverse-vowels-of-a-string/
 def reverseVowels(s: str) -> str:
     """
     Examples:
@@ -1364,6 +1366,7 @@ def removeKdigits(num: str, k: int) -> str:
 removeKdigits("112", 1)
 
 
+# %% 433. Minimum Genetic Mutation https://leetcode.com/problems/minimum-genetic-mutation/
 def minMutation(startGene: str, endGene: str, bank: list[str]) -> int:
     """
     Examples:
@@ -1759,6 +1762,7 @@ def numSimilarGroups(strs: list[str]) -> int:
     return len(set(find(i) for i in range(n)))
 
 
+# %% 899. Orderly Queue https://leetcode.com/problems/orderly-queue/
 # A total troll problem that was spoiled a bit by Github Copilot. I thought it hinted an obviously wrong solution, but on further thought
 # it made me realize that the solution is dead simple.
 def orderlyQueue(s: str, k: int) -> str:
@@ -1932,6 +1936,7 @@ def lastStoneWeight(stones: list[int]) -> int:
     return sorted_stones[0] if sorted_stones else 0
 
 
+# %% 1047. Remove All Adjacent Duplicates in String https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
 def remove_duplicates(s: str) -> str:
     """
     Examples:
@@ -2110,6 +2115,7 @@ def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
     return total_edges
 
 
+# %% 1680. Concatenation of Consecutive Binary Numbers https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 def concatenatedBinary(n: int) -> int:
     """
     Examples:
@@ -2170,6 +2176,7 @@ def distanceLimitedPathsExist(n: int, edgeList: list[list[int]], queries: list[l
     return result
 
 
+# %% 1706. Where Will The Ball Fall https://leetcode.com/problems/where-will-the-ball-fall/
 def findBall(grid: list[list[int]]) -> list[int]:
     """
     Examples:
