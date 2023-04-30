@@ -1100,7 +1100,38 @@ def isAnagram(s: str, t: str) -> bool:
     return Counter(s) == Counter(t)
 
 
-# %% 263. https://leetcode.com/problems/ugly-number/
+# %% 258. Add Digits https://leetcode.com/problems/add-digits/
+# - Turns out this can be solved with modular arithmetic because 10 ** n == 1 mod 9
+def addDigits(num: int) -> int:
+    """
+    Examples:
+    >>> addDigits(38)
+    2
+    >>> addDigits(0)
+    0
+    """
+    s = str(num)
+    while len(s) > 1:
+        s = str(sum(int(x) for x in s))
+    return int(s)
+
+
+def addDigits2(num: int) -> int:
+    """
+    Examples:
+    >>> addDigits(38)
+    2
+    >>> addDigits(0)
+    0
+    """
+    if num == 0:
+        return num
+    elif num % 9 == 0:
+        return 9
+    else:
+        return num % 9
+
+
 def isUgly(n: int) -> bool:
     if n < 1:
         return False
