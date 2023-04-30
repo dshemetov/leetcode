@@ -1820,11 +1820,13 @@ class StockSpanner:
         return span
 
 
-# %% 947. https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
+# %% 947. Most Stones Removed With Same Row or Column https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
+# Lessons learned:
+# - The key idea is that we can remove all stones in each connected component except one
+# - We can use dfs to find the connected components
+# - You can avoid dfs recursion using a stack
 def removeStones(stones: list[list[int]]) -> int:
     """
-    This is O(n**2) in len(stones). Unnecesary, but C- connected components doesn't make up for it.
-
     Examples:
     >>> removeStones([[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]])
     5
@@ -1837,31 +1839,6 @@ def removeStones(stones: list[list[int]]) -> int:
     >>> removeStones([[0,1],[1,0]])
     0
     """
-
-    mat = csr_matrix((len(stones), len(stones)), dtype=bool)
-    for i, j in permutations(range(len(stones)), 2):
-        if stones[i][0] == stones[j][0] or stones[i][1] == stones[j][1]:
-            mat[i, j] = True
-            mat[j, i] = True
-
-    n_components = connected_components(mat, directed=False, return_labels=False)
-    return len(stones) - n_components
-
-
-def removeStones2(stones: list[list[int]]) -> int:
-    """
-    Examples:
-    >>> removeStones2([[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]])
-    5
-    >>> removeStones2([[0,0],[0,2],[1,1],[2,0],[2,2]])
-    3
-    >>> removeStones2([[0,0]])
-    0
-    >>> removeStones2([[0,0],[0,1],[1,1]])
-    2
-    >>> removeStones2([[0,1],[1,0]])
-    0
-    """
     rows = defaultdict(list)
     cols = defaultdict(list)
 
@@ -1872,10 +1849,14 @@ def removeStones2(stones: list[list[int]]) -> int:
     seen = set()
 
     def dfs(i: int) -> None:
-        seen.add(i)
-        for j in rows[stones[i][0]] + cols[stones[i][1]]:
-            if j not in seen:
-                dfs(j)
+        """dfs without recursion"""
+        stack = [i]
+        while stack:
+            j = stack.pop()
+            seen.add(j)
+            for k in rows[stones[j][0]] + cols[stones[j][1]]:
+                if k not in seen:
+                    stack.append(k)
 
     n_components = 0
     for i in range(len(stones)):
