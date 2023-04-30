@@ -590,7 +590,7 @@ board = [
 assert is_valid_sudoku(board) == False
 
 
-# %% 49. https://leetcode.com/problems/group-anagrams/
+# %% 49. Group Anagrams https://leetcode.com/problems/group-anagrams/
 def groupAnagrams(strs: list[str]) -> list[list[str]]:
     def group_key(s: str) -> Counter:
         return tuple(sorted(s))
@@ -602,7 +602,7 @@ def groupAnagrams(strs: list[str]) -> list[list[str]]:
     return list(groups.values())
 
 
-# %% 91. https://leetcode.com/problems/decode-ways/
+# %% 91. Decode Ways https://leetcode.com/problems/decode-ways/
 valid_codes = {str(x) for x in range(1, 27)}
 
 
@@ -763,16 +763,17 @@ def numDecodings3(s: str) -> int:
     return d[-1]
 
 
-# %% 133. https://leetcode.com/problems/clone-graph/
+# %% 133. Clone Graph https://leetcode.com/problems/clone-graph/
 # Definition for a Node.
 class Node:
-    def __init__(self, val: int = 0, neighbors: list['Node'] | None = None):
+    def __init__(self, val: int = 0, neighbors: list["Node"] | None = None):
         self.val = val
         self.neighbors = neighbors if neighbors is not None else []
 
-def adjacency_list_to_node_graph(adjacency_list: list[list[int]]) -> 'Node':
+
+def adjacency_list_to_node_graph(adjacency_list: list[list[int]]) -> "Node":
     """Build a node-based graph from an adjacency list.
-    
+
     Examples:
     >>> node_graph_to_adjacency_list(adjacency_list_to_node_graph([[1, 2], [1, 4], [2, 3], [3, 4]]))
     [[1, 2], [1, 4], [2, 3], [3, 4]]
@@ -795,9 +796,9 @@ def adjacency_list_to_node_graph(adjacency_list: list[list[int]]) -> 'Node':
     return node_index[1]
 
 
-def node_graph_to_adjacency_list(node: 'Node') -> 'Node':
+def node_graph_to_adjacency_list(node: "Node") -> "Node":
     """Traverse through a graph and build an adjacency list.
-    
+
     Examples:
     >>> node_graph_to_adjacency_list(adjacency_list_to_node_graph([[1, 2], [1, 4], [2, 3], [3, 4]]))
     [[1, 2], [1, 4], [2, 3], [3, 4]]
@@ -817,9 +818,9 @@ def node_graph_to_adjacency_list(node: 'Node') -> 'Node':
                 node_queue.append(neighbor)
 
     return sorted([list(e) for e in adjacency_list], key=lambda x: (x[0], x[1]))
-    
 
-def cloneGraph(node: 'Node') -> 'Node':
+
+def cloneGraph(node: "Node") -> "Node":
     """
     Examples:
     >>> cloneGraph(None)
@@ -845,35 +846,10 @@ def cloneGraph(node: 'Node') -> 'Node':
     return clone_index[1]
 
 
-# %% 151. https://leetcode.com/problems/reverse-words-in-a-string/
+# %% 151. Reverse Words In A String https://leetcode.com/problems/reverse-words-in-a-string/
 # Lesson learned:
-# - I keep trying to use a Python for-loop, but the built-ins are just so much faster.
+# - Python string built-ins are fast.
 def reverseWords(s: str) -> str:
-    """
-    Examples:
-    >>> reverseWords("the sky is blue")
-    'blue is sky the'
-    >>> reverseWords("  hello world!  ")
-    'world! hello'
-    >>> reverseWords("a good   example")
-    'example good a'
-    >>> reverseWords("  Bob    Loves  Alice   ")
-    'Alice Loves Bob'
-    """
-    stack = []
-    words = []
-    for i in range(len(s) - 1, -1, -1):
-        if s[i] != " ":
-            stack.append(s[i])
-        elif s[i] == " " and stack:
-            words.append("".join(reversed(stack)))
-            stack = []
-    if stack:
-        words.append("".join(reversed(stack)))
-    return " ".join(words)
-
-
-def reverseWords2(s: str) -> str:
     """
     Examples:
     >>> reverseWords("the sky is blue")
@@ -888,20 +864,20 @@ def reverseWords2(s: str) -> str:
     return " ".join(s.split()[::-1])
 
 
-def reverseWords3(s: str) -> str:
+def reverseWords2(s: str) -> str:
     """
-    Follow up: use O(1) extra space.
-    - Reverse string.
-    - Then reverse each worse.
+    Follow up: use only O(1) extra space.
+    - Reverse string
+    - Then reverse each word
 
     Examples:
-    >>> reverseWords("the sky is blue")
+    >>> reverseWords2("the sky is blue")
     'blue is sky the'
-    >>> reverseWords("  hello world!  ")
+    >>> reverseWords2("  hello world!  ")
     'world! hello'
-    >>> reverseWords("a good   example")
+    >>> reverseWords2("a good   example")
     'example good a'
-    >>> reverseWords("  Bob    Loves  Alice   ")
+    >>> reverseWords2("  Bob    Loves  Alice   ")
     'Alice Loves Bob'
     """
 
@@ -934,7 +910,7 @@ def reverseWords3(s: str) -> str:
     return "".join(a[:lo])
 
 
-# %% 200. https://leetcode.com/problems/number-of-islands/
+# %% 200. Number of Islands https://leetcode.com/problems/number-of-islands/
 def numIslands(grid: list[list[str]]) -> int:
     return len(get_connected_components(grid))
 
@@ -972,7 +948,7 @@ def get_node_neighbors(ix: tuple[int, int], matrix: list[list[str]]) -> set[tupl
     return neighbors
 
 
-# %% 212. https://leetcode.com/problems/word-search-ii/description/
+# %% 212. Word Search II https://leetcode.com/problems/word-search-ii/
 def findWords(board: list[list[str]], words: list[str]) -> list[str]:
     """
     Examples:
@@ -1042,7 +1018,7 @@ def findWords(board: list[list[str]], words: list[str]) -> list[str]:
     return list(found_words)
 
 
-# %% 222. https://leetcode.com/problems/count-complete-tree-nodes/
+# %% 222. Count Complete Tree Nodes https://leetcode.com/problems/count-complete-tree-nodes/
 # Lessons learned:
 # - "A complete binary tree is a binary tree in which every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible."
 class TreeNode:
@@ -1114,7 +1090,7 @@ def countNodes(root: TreeNode | None) -> int:
     return 2 ** (height) + lo - 1
 
 
-# %% 223. https://leetcode.com/problems/rectangle-area/
+# %% 223. Rectangle Area https://leetcode.com/problems/rectangle-area/
 def computeArea(ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int) -> int:
     A1 = (ax2 - ax1) * (ay2 - ay1)
     A2 = (bx2 - bx1) * (by2 - by1)
@@ -1122,7 +1098,7 @@ def computeArea(ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2:
     return A1 + A2 - I
 
 
-# %% 242. https://leetcode.com/problems/valid-anagram/
+# %% 242. Valid Anagram https://leetcode.com/problems/valid-anagram/
 def isAnagram(s: str, t: str) -> bool:
     return Counter(s) == Counter(t)
 
@@ -1140,7 +1116,7 @@ def isUgly(n: int) -> bool:
     return True if n == 1 else False
 
 
-# %% 295. https://leetcode.com/problems/find-median-from-data-stream/
+# %% 295. Find Median From Data Stream https://leetcode.com/problems/find-median-from-data-stream/
 class MedianFinder:
     """
     Examples:
@@ -1223,7 +1199,7 @@ def reverseVowels(s: str) -> str:
     return "".join(s_)
 
 
-# %% 374. https://leetcode.com/problems/guess-number-higher-or-lower/
+# %% 374. Guess Number Higher or Lower https://leetcode.com/problems/guess-number-higher-or-lower/
 # Lessons learned:
 # - bisect_left has a 'key' argument as of 3.10.
 __pick__ = 6
@@ -1401,8 +1377,7 @@ lowest_left_point
 # %%
 crossproduct_pt(lowest_left_point, )
 
-# outerTrees([[1,1],[2,2],[3,3]])
-# %% 622. https://leetcode.com/problems/design-circular-queue/
+# %% 622. Design Circular Queue https://leetcode.com/problems/design-circular-queue/
 _empty = object()
 
 
@@ -1485,7 +1460,7 @@ inputs = [[2], [1], [2], [], [3], [], [3], [], [3], [], []]
 run(cmds, inputs)
 
 
-# %% 658. https://leetcode.com/problems/find-k-closest-elements/
+# %% 658. Find k Closest Elements https://leetcode.com/problems/find-k-closest-elements/
 def findClosestElements(arr: list[int], k: int, x: int) -> list[int]:
     """
     Examples:
@@ -1563,7 +1538,7 @@ def findClosestElements2(arr: list[int], k: int, x: int) -> list[int]:
     return arr[lo : lo + k]
 
 
-# %% 766. https://leetcode.com/problems/toeplitz-matrix/
+# %% 766. Toeplitz Matrix https://leetcode.com/problems/toeplitz-matrix/
 def isToeplitzMatrix(matrix: list[list[int]]) -> bool:
     """
     Examples:
@@ -1604,7 +1579,7 @@ def orderlyQueue(s: str, k: int) -> str:
     return "".join(sorted(s))
 
 
-# %% 901. https://leetcode.com/problems/online-stock-span/
+# %% 901. Online Stock Span https://leetcode.com/problems/online-stock-span/
 # Lessons learned:
 # - this uses a monotonically decreasing stack (in the first coordinate); the complexity of an MDS is linear
 # - we don't need the full stack, so we compress into (value, number of elements before a bigger value); not sure how to analyze the complexity
@@ -1705,7 +1680,13 @@ def removeStones2(stones: list[list[int]]) -> int:
     return len(stones) - n_components
 
 
-# %% 990. https://leetcode.com/problems/satisfiability-of-equality-equations/
+# %% 990. Satisfiability of Equality Equations https://leetcode.com/problems/satisfiability-of-equality-equations/
+# Lessons learned:
+# - This was clearly a graph problem underneath, where you need to find the connected components given
+#   by the equality statements
+# - Efficiently calculating the connected components was hard for me though, so learning about the
+#   disjoint set data structure was key (also referred to as union find):
+#   https://cp-algorithms.com/data_structures/disjoint_set_union.html
 def equationsPossible(equations: list[str]) -> bool:
     """
     Examples:
@@ -1718,67 +1699,14 @@ def equationsPossible(equations: list[str]) -> bool:
     >>> assert equationsPossible(["a==b", "e==c", "c==b", "a!=e"]) is False
     >>> assert equationsPossible(["a==b", "e==c", "b==c", "a!=e"]) is False
     """
-    equivalence_classes = []
-    for x, eq, _, y in equations:
-        if eq == "=":
-            if x == y:
-                continue
-            for equivalence_class in equivalence_classes:
-                if x in equivalence_class or y in equivalence_class:
-                    equivalence_class |= {x, y}
-                    break
-            else:
-                equivalence_classes.append({x, y})
-
-    while True:
-        merged = False
-        for i in range(len(equivalence_classes)):
-            for j in range(i + 1, len(equivalence_classes)):
-                if len(equivalence_classes[i] & equivalence_classes[j]) > 0:
-                    equivalence_classes[i] |= equivalence_classes[j]
-                    equivalence_classes.pop(j)
-                    merged = True
-                    break
-            if merged:
-                break
-        if not merged:
-            break
-
-    for x, eq, _, y in equations:
-        if eq == "!":
-            if x == y:
-                return False
-            for equivalence_class in equivalence_classes:
-                if x in equivalence_class and y in equivalence_class:
-                    return False
-    return True
-
-
-# You can use Disjoint Set Union (aka Union Find): https://cp-algorithms.com/data_structures/disjoint_set_union.html
-# I prefer the iterative version, but recursive could work for small inputs.
-def equationsPossible2(equations: list[str]) -> bool:
-    """
-    Examples:
-    >>> assert equationsPossible2(["a==b", "b!=a"]) is False
-    >>> assert equationsPossible2(["x==y", "z==w", "y==z", "a==b", "d==e", "f==g", "e==f", "w==x", "c==d", "b==d", "g!=x"]) is True
-    >>> assert equationsPossible2(["x==y", "z==w", "y==z", "a==b", "d==e", "f==g", "e==f", "w==x", "c==d", "b==d", "g!=x", "a==z"]) is False
-    >>> assert equationsPossible2(["x==a", "w==b", "z==c", "a==b", "b==c", "c!=x"]) is False
-    >>> assert equationsPossible2(["a==b", "c==e", "b==c", "a!=e"]) is False
-    >>> assert equationsPossible2(["a==b", "e==c", "c==b", "a!=e"]) is False
-    >>> assert equationsPossible2(["a==b", "e==c", "c==b", "a!=e"]) is False
-    >>> assert equationsPossible2(["a==b", "e==c", "b==c", "a!=e"]) is False
-    """
     parent: dict[str, str] = {}
 
     def find(x: str) -> str:
-        y = x
         while True:
-            if y != parent[y]:
-                y = parent[y]
-                continue
-            break
-        parent[x] = y
-        return parent[x]
+            if parent[x] == x:
+                return x
+            parent[x] = parent[parent[x]]
+            x = parent[x]
 
     def union(x: str, y: str) -> None:
         parent[find(x)] = find(y)
@@ -1816,12 +1744,10 @@ def remove_duplicates(s: str) -> str:
     return "".join(stack)
 
 
-# %% 1293. https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
+# %% 1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
 # Lessons learned:
 # - You don't need a dictionary of best distances, just a set of visited nodes (since any first visit to a node is the best).
 # - You don't need a priority queue, just a queue.
-
-
 State = namedtuple("State", "steps k i j")
 
 
@@ -1870,7 +1796,7 @@ def shortestPath(grid: list[list[int]], k: int) -> int:
     return -1
 
 
-# %% 1323. https://leetcode.com/problems/maximum-69-number/
+# %% 1323. Maximum 69 Number https://leetcode.com/problems/maximum-69-number/
 # Lessons learned:
 # - Converting to a string and using replace is surprisingly fast.
 # - Just need to accept that Python string built-ins are in C-land.
@@ -1894,7 +1820,7 @@ def maximum69Number2(num: int) -> int:
     return int(str(num).replace("6", "9", 1))
 
 
-# %% 1544. https://leetcode.com/problems/make-the-string-great/
+# %% 1544. Make The String Great https://leetcode.com/problems/make-the-string-great/
 def makeGood(s: str) -> str:
     """
     Examples:
@@ -1965,23 +1891,23 @@ def findBall(grid: list[list[int]]) -> list[int]:
     return [find_ball(i) for i in range(len(grid[0]))]
 
 
-# %% 2131. https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
-def longestPalindrome(words: list[str]) -> int:
+# %% 2131. Longest Palindrome by Concatenating Two Letter Words https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+def longestPalindrome2(words: list[str]) -> int:
     """
     Examples:
-    >>> longestPalindrome(["ab","ba","aa","bb","cc"])
+    >>> longestPalindrome2(["ab","ba","aa","bb","cc"])
     6
-    >>> longestPalindrome(["ab","ba","cc","ab","ba","cc"])
+    >>> longestPalindrome2(["ab","ba","cc","ab","ba","cc"])
     12
-    >>> longestPalindrome(["aa","ba"])
+    >>> longestPalindrome2(["aa","ba"])
     2
-    >>> longestPalindrome(["ba", "ce"])
+    >>> longestPalindrome2(["ba", "ce"])
     0
-    >>> longestPalindrome(["lc","cl","gg"])
+    >>> longestPalindrome2(["lc","cl","gg"])
     6
-    >>> longestPalindrome(["ab","ty","yt","lc","cl","ab"])
+    >>> longestPalindrome2(["ab","ty","yt","lc","cl","ab"])
     8
-    >>> longestPalindrome(["cc","ll","xx"])
+    >>> longestPalindrome2(["cc","ll","xx"])
     2
     """
     d = Counter()
@@ -2005,7 +1931,7 @@ def longestPalindrome(words: list[str]) -> int:
     return total
 
 
-# %% 2269. https://leetcode.com/problems/find-the-k-beauty-of-a-number/
+# %% 2269. Find The k-Beauty of a Number https://leetcode.com/problems/find-the-k-beauty-of-a-number/
 def divisorSubstrings(num: int, k: int) -> int:
     result = 0
     digits = str(num)
