@@ -1189,7 +1189,10 @@ class MedianFinder:
             return (self.heap[len(self.heap) // 2] + self.heap[len(self.heap) // 2 - 1]) / 2
 
 
-# %% 316. https://leetcode.com/problems/remove-duplicate-letters/
+# %% 316. Remove Duplicate Letters https://leetcode.com/problems/remove-duplicate-letters/
+# 1081. https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
+# - Another one where the solution heuristic is not obvious without a few examples
+# - Jumped to a solution hint for this one and verified it
 def removeDuplicateLetters(s: str) -> str:
     """
     Examples:
@@ -1197,8 +1200,21 @@ def removeDuplicateLetters(s: str) -> str:
     'abc'
     >>> removeDuplicateLetters("cbacdcbc")
     'acdb'
+    >>> removeDuplicateLetters("bbcaac")
+    'bac'
+    >>> removeDuplicateLetters("bcba")
+    'bca'
     """
-    ...
+    letter_counts = Counter(s)
+    stack = []
+    for c in s:
+        letter_counts[c] -= 1
+        if c in stack:
+            continue
+        while stack and c < stack[-1] and letter_counts[stack[-1]] > 0:
+            stack.pop()
+        stack.append(c)
+    return "".join(stack)
 
 
 # %% 345. https://leetcode.com/problems/reverse-vowels-of-a-string/
