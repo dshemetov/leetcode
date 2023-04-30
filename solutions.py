@@ -240,7 +240,7 @@ def get_median_sorted(nums: list[int]) -> float:
 # - In longestPalindrome, I tried an approach with three pointers and expanding outwards if the characters
 #   matched. The edge case I couldn't figure out is long runs of the same character. The issue there is that
 #   you need to keep changing the palindrome center. I gave up on that approach and looked at the solution.
-# - The expand_center solution is straightforward and clear and I probably would have thought of it, if I 
+# - The expand_center solution is straightforward and clear and I probably would have thought of it, if I
 #   didn't get stuck trying to fix the three pointer approach.
 def longestPalindrome(s: str) -> str:
     """
@@ -294,7 +294,7 @@ def longestPalindrome(s: str) -> str:
         return s[0]
     else:
         lo, hi = max_length_location
-        return s[lo:hi+1]
+        return s[lo : hi + 1]
 
 
 # %% 8. String to Integer (atoi) https://leetcode.com/problems/string-to-integer-atoi/
@@ -2071,6 +2071,7 @@ def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
     >>> maxNumEdgesToRemove(2, [[1,1,2],[2,1,2],[3,1,2]])
     2
     """
+
     def find(x: int, parent: list[int]) -> int:
         while True:
             if parent[x] == x:
@@ -2095,7 +2096,7 @@ def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
             bg = union(s - 1, t - 1, bob_graph)
             if not (ag or bg):
                 total_edges += 1
- 
+
     for edge_type, s, t in edges:
         if edge_type == 1:
             if not union(s - 1, t - 1, alice_graph):
