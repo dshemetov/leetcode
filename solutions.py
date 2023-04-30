@@ -2,20 +2,17 @@
 import math
 from array import array
 from bisect import bisect_left, insort
-from collections.abc import Generator, Iterable
+from collections.abc import Generator
 from collections import Counter, defaultdict, deque, namedtuple
 from fractions import Fraction
-from functools import reduce
-from operator import mul
-from typing import Callable, Iterable, Literal
+from typing import Callable, Literal
 
 import numpy as np
 
 
 # %% 1. Two Sum https://leetcode.com/problems/two-sum/
 def two_sum(nums: list[int], target: int) -> list[int]:
-    """1. Two Sum https://leetcode.com/problems/two-sum/
-
+    """
     Examples:
     >>> two_sum([3, 3], 6)
     [0, 1]
@@ -42,8 +39,7 @@ class ListNode:
 
 
 def add_two_numbers(l1: ListNode | None, l2: ListNode | None) -> ListNode | None:
-    """2. Add Two Numbers https://leetcode.com/problems/add-two-numbers/
-
+    """
     Examples:
     >>> list_to_int(add_two_numbers(int_to_list(0), int_to_list(15)))
     15
@@ -104,8 +100,7 @@ def list_to_int(l: ListNode) -> int:
 
 # %% 3. Longest Substring Without Repeating Characters https://leetcode.com/problems/longest-substring-without-repeating-characters/
 def length_of_longest_substring(s: str) -> int:
-    """3. Longest Substring Without Repeating Characters https://leetcode.com/problems/longest-substring-without-repeating-characters/
-
+    """
     Examples:
     >>> length_of_longest_substring("a")
     1
@@ -154,22 +149,23 @@ def length_of_longest_substring(s: str) -> int:
 
 
 # %% 4. Median of Two Sorted Arrays https://leetcode.com/problems/median-of-two-sorted-arrays/
+# Lessons learned:
+# - I spent weeks thinking about this problem before giving up and looking for a solution.
+# - NeetCode has a great explanation: https://www.youtube.com/watch?v=q6IEA26hvXc.
+# - The key is to think of the median as the partition point with the property that half the elements are less than it
+#   and half are greater than it. This perspective allows us to see that find the media here is a binary search for
+#   a particular partition of the two arrays. Specifically, we are looking for the partition (mid1, mid2) that satisfies:
+#
+#       len(nums1[:mid1]) + len(nums2[:mid2]) == len(nums1[mid1:]) + len(nums2[mid2:])
+#       nums1[mid1 - 1] <= nums2[mid2]
+#       nums2[mid2 - 1] <= nums1[mid1]
+#
+#   The middle condition ensures that elements in nums2[mid2:] are bigger than elements in nums1[:mid1] and
+#   analogously for the last condition.
+# - Swapping two variables in Python is fast and swaps pointers under the hood using an auxiliary variable:
+#   https://stackoverflow.com/a/62038590/4784655.
 def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
-    """4. Median of Two Sorted Arrays https://leetcode.com/problems/median-of-two-sorted-arrays/
-
-    Lessons learned:
-    - Swapping two variables in Python is fast and swaps pointers under the hood using an auxiliary variable: https://stackoverflow.com/a/62038590/4784655.
-    - I had a decent idea at first, but needed a hint about partition finding to really figure it out.
-    - Thanks to NeetCode https://www.youtube.com/watch?v=q6IEA26hvXc for the explanation.
-
-    The key is to do a binary search on joint partitions of the arrays.
-    A partition on nums1 is given by all elements nums[:mid1] and nums[mid1:].
-    Similarly on nums2 with mid2.
-    The median is the partition that satisfies:
-    - len(nums1[:mid1]) + len(nums2[:mid2]) == len(nums1[mid1:]) + len(nums2[mid2:])
-    - nums1[mid1 - 1] <= nums2[mid2]
-    - nums2[mid2 - 1] <= nums1[mid1]
-
+    """
     Examples:
     >>> find_median_sorted_arrays([1, 3], [2])
     2.0
@@ -237,11 +233,11 @@ def get_median_sorted(nums: list[int]) -> float:
 
 # %% 5. Longest Palindromic Substring https://leetcode.com/problems/longest-palindromic-substring/
 # Lessons learned:
-# - In longestPalindrome, I tried an approach with three pointers and expanding outwards if the characters
-#   matched. The edge case I couldn't figure out is long runs of the same character. The issue there is that
+# - I tried an approach with three pointers and expanding outwards if the characters matched. The edge case
+#   that stumped me was handling long runs of the same character such as "aaaaaaaaa". The issue there is that
 #   you need to keep changing the palindrome center. I gave up on that approach and looked at the solution.
-# - The expand_center solution is straightforward and clear and I probably would have thought of it, if I 
-#   didn't get stuck trying to fix the three pointer approach.
+# - The solution is straightforward and I probably would have thought of it, if I didn't get stuck trying to
+#   fix the three pointer approach.
 def longestPalindrome(s: str) -> str:
     """
     Examples:
@@ -294,13 +290,12 @@ def longestPalindrome(s: str) -> str:
         return s[0]
     else:
         lo, hi = max_length_location
-        return s[lo:hi+1]
+        return s[lo : hi + 1]
 
 
 # %% 8. String to Integer (atoi) https://leetcode.com/problems/string-to-integer-atoi/
 def my_atoi(s: str) -> int:
-    """8. String to Integer (atoi) https://leetcode.com/problems/string-to-integer-atoi/
-
+    """
     Examples:
     >>> my_atoi("42")
     42
@@ -362,8 +357,7 @@ def my_atoi(s: str) -> int:
 
 # %% 9. Palindrome Number https://leetcode.com/problems/palindrome-number/
 def is_palindrome(x: int) -> bool:
-    """9. Palindrome Number https://leetcode.com/problems/palindrome-number/
-
+    """
     Examples:
     >>> is_palindrome(121)
     True
@@ -402,8 +396,7 @@ def is_palindrome(x: int) -> bool:
 
 # %% 13. Roman to Integer https://leetcode.com/problems/roman-to-integer/
 def roman_to_int(s: str) -> int:
-    """13. Roman to Integer https://leetcode.com/problems/roman-to-integer/
-
+    """
     Examples:
     >>> roman_to_int("III")
     3
@@ -430,8 +423,7 @@ def roman_to_int(s: str) -> int:
 
 # %% 14. Longest Common Prefix https://leetcode.com/problems/longest-common-prefix/
 def longest_common_prefix(strs: list[str]) -> str:
-    """14. Longest Common Prefix https://leetcode.com/problems/longest-common-prefix/
-
+    """
     Examples:
     >>> longest_common_prefix(["flower","flow","flight"])
     'fl'
@@ -457,8 +449,7 @@ class ListNode:
 
 
 def remove_nth_from_end(head: ListNode | None, n: int) -> ListNode | None:
-    """19.  Remove Nth Node From End of List https://leetcode.com/problems/remove-nth-node-from-end-of-list/
-
+    """
     Examples:
     >>> listnode_to_list(remove_nth_from_end(list_to_listnode([1, 2, 3, 4, 5]), 1))
     [1, 2, 3, 4]
@@ -526,8 +517,7 @@ def listnode_to_list(head: ListNode) -> list[int]:
 
 # %% 26. Remove Duplicates from Sorted Array https://leetcode.com/problems/remove-duplicates-from-sorted-array/
 def remove_duplicates(nums: list[int]) -> int:
-    """26. Remove Duplicates from Sorted Array https://leetcode.com/problems/remove-duplicates-from-sorted-array/
-
+    """
     Examples:
     >>> remove_duplicates([1, 1, 2])
     2
@@ -600,15 +590,30 @@ def groupAnagrams(strs: list[str]) -> list[list[str]]:
 
 
 # %% 91. Decode Ways https://leetcode.com/problems/decode-ways/
-valid_codes = {str(x) for x in range(1, 27)}
-
-
+# Lessons learned:
+# - My first observation was that characters in "34567890" acted as separators, where I could split the string
+#   into substrings that could be decoded independently. My second observation was that the number of ways to
+#   decode a string of nothing but "1" and "2" characters was the Fibonacci number F(n+1), where n is the number
+#   of characters in the string. Combining these two speedups with recursion gave me the first solution, which had
+#   middle of the pack runtime and memory usage.
+# - The second solution is a very clean dynamic programming approach I lifted from the discussion section. It
+#   relies on the recurrence relation D(n) = D(n-1) + D(n-2), where D(n) is the number of ways to decode a string
+#   of length n, with D(0) = 1 and D(1) = 1, but this relation is constrained by the fact that the string must be a valid
+#   encoding.
+# - Fun fact: the number of binary strings of length n with no consecutive zeros corresponds to the Fibonacci number
+#   F(n+2). This diagram helps visualize the recursion:
+#   https://en.wikipedia.org/wiki/Composition_(combinatorics)#/media/File:Fibonacci_climbing_stairs.svg.
 def get_fibonacci_number(n: int) -> int:
+    """Return the nth Fibonacci number, where F(0) = 0 and F(1) = 1.
+
+    Examples:
+    >>> [get_fibonacci_number(i) for i in range(10)]
+    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+    """
     phi = (1 + 5**0.5) / 2
     return int(phi**n / 5**0.5 + 0.5)
 
 
-# Each one corresponds to a way to decode a string where your tokens are either length 1 or 2.
 def get_binary_strings_no_consecutive_zeros(n: int) -> list[str]:
     """
     Examples:
@@ -652,112 +657,88 @@ def numDecodings(s: str) -> int:
     >>> numDecodings("2022322")
     6
     """
+    valid_codes = {str(x) for x in range(1, 27)}
 
-    def get_substrings(s: str) -> Iterable[str]:
-        prev = 0
-        for i, c in enumerate(s):
-            if c in "34567890":
-                yield s[prev : i + 1]
-                prev = i + 1
-        if s[prev:]:
-            yield s[prev:]
-
-    return reduce(mul, (num_decodings_recursive(x) for x in get_substrings(s)))
-
-
-def num_decodings_recursive(s: str) -> int:
-    """
-    Examples:
-    >>> num_decodings_recursive("0")
-    0
-    >>> num_decodings_recursive("06")
-    0
-    >>> num_decodings_recursive("1")
-    1
-    >>> num_decodings_recursive("12")
-    2
-    >>> num_decodings_recursive("111")
-    3
-    >>> num_decodings_recursive("35")
-    1
-    >>> num_decodings_recursive("226")
-    3
-    >>> num_decodings_recursive("2020")
-    1
-    >>> num_decodings_recursive("2021")
-    2
-    >>> num_decodings_recursive("2022322")
-    6
-    """
-    if s[0] == "0":
-        return 0
-
-    if len(s) == 1:
-        return 1
-
-    if len(s) == 2:
-        if int(s) <= 26 and s[1] != "0":
-            return 2
-        elif int(s) <= 26 and s[1] == "0":
-            return 1
-        elif int(s) > 26 and s[1] != "0":
-            return 1
-        else:
+    def recurse(s1: str) -> int:
+        if s1[0] == "0":
             return 0
 
-    if set(s) <= {"1", "2"}:
-        return get_fibonacci_number(len(s) + 1)
+        if len(s1) == 1:
+            return 1
 
-    if s[:2] in valid_codes:
-        return num_decodings_recursive(s[1:]) + num_decodings_recursive(s[2:])
-    else:
-        return num_decodings_recursive(s[1:])
+        if len(s1) == 2:
+            if int(s1) <= 26 and s1[1] != "0":
+                return 2
+            elif int(s1) <= 26 and s1[1] == "0":
+                return 1
+            elif int(s1) > 26 and s1[1] != "0":
+                return 1
+            else:
+                return 0
+
+        if set(s1) <= {"1", "2"}:
+            return get_fibonacci_number(len(s1) + 1)
+
+        if s1[:2] in valid_codes:
+            return recurse(s1[1:]) + recurse(s1[2:])
+        else:
+            return recurse(s1[1:])
+
+    total = 1
+    prev = 0
+    for i, c in enumerate(s):
+        if c in "34567890":
+            total *= recurse(s[prev : i + 1])
+            prev = i + 1
+
+    if s[prev:]:
+        total *= recurse(s[prev:])
+
+    return total
 
 
-# A dynamic programming approach from the discussion section.
-# See this diagram: https://en.wikipedia.org/wiki/Composition_(combinatorics)#/media/File:Fibonacci_climbing_stairs.svg
-# Really comes to the recursive formula d[n] = d[n-1] + d[n-2].
-def numDecodings3(s: str) -> int:
+def numDecodings2(s: str) -> int:
     """
     Examples:
-    >>> numDecodings3("0")
+    >>> numDecodings2("0")
     0
-    >>> numDecodings3("06")
+    >>> numDecodings2("06")
     0
-    >>> numDecodings3("1")
+    >>> numDecodings2("1")
     1
-    >>> numDecodings3("12")
+    >>> numDecodings2("12")
     2
-    >>> numDecodings3("111")
+    >>> numDecodings2("111")
     3
-    >>> numDecodings3("35")
+    >>> numDecodings2("35")
     1
-    >>> numDecodings3("226")
+    >>> numDecodings2("226")
     3
-    >>> numDecodings3("2020")
+    >>> numDecodings2("2020")
     1
-    >>> numDecodings3("2021")
+    >>> numDecodings2("2021")
     2
-    >>> numDecodings3("2022322")
+    >>> numDecodings2("2022322")
     6
     """
     if not s or s[0] == "0":
         return 0
 
     d = [0] * (len(s) + 1)
-
-    # base case initialization
     d[0:2] = [1, 1]
 
     for i in range(2, len(s) + 1):
-        # One step jump
-        if 0 < int(s[i - 1 : i]):  # (2)
+        # For a one step jump, the last character can't be 0
+        if s[i - 1] != "0":
             d[i] = d[i - 1]
-        # Two step jump
-        if 10 <= int(s[i - 2 : i]) <= 26:  # (3)
+        # For a two step jump, the last two characters must be between 10 and 26 inclusive
+        if "10" <= s[i - 2 : i] <= "26":
             d[i] += d[i - 2]
 
     return d[-1]
+
+
+numDecodings2("2022322")
 
 
 # %% 133. Clone Graph https://leetcode.com/problems/clone-graph/
@@ -1017,7 +998,8 @@ def findWords(board: list[list[str]], words: list[str]) -> list[str]:
 
 # %% 222. Count Complete Tree Nodes https://leetcode.com/problems/count-complete-tree-nodes/
 # Lessons learned:
-# - "A complete binary tree is a binary tree in which every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible."
+# - A complete binary tree is a binary tree in which every level, except possibly the last, is completely filled,
+#   and all nodes in the last level are as far left as possible.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -1110,20 +1092,6 @@ def addDigits(num: int) -> int:
     >>> addDigits(0)
     0
     """
-    s = str(num)
-    while len(s) > 1:
-        s = str(sum(int(x) for x in s))
-    return int(s)
-
-
-def addDigits2(num: int) -> int:
-    """
-    Examples:
-    >>> addDigits(38)
-    2
-    >>> addDigits(0)
-    0
-    """
     if num == 0:
         return num
     elif num % 9 == 0:
@@ -1132,6 +1100,7 @@ def addDigits2(num: int) -> int:
         return num % 9
 
 
+# %% 263. Ugly Number https://leetcode.com/problems/ugly-number/
 def isUgly(n: int) -> bool:
     if n < 1:
         return False
@@ -1191,8 +1160,9 @@ class MedianFinder:
 
 # %% 316. Remove Duplicate Letters https://leetcode.com/problems/remove-duplicate-letters/
 # 1081. https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
-# - Another one where the solution heuristic is not obvious without a few examples
-# - Jumped to a solution hint for this one and verified it
+# - In this one, the solution heuristic can be established with a few examples. The key is that
+#   we can greedily remove left-most duplicated letters that are larger than the next letter.
+#   For example, if we have cbxxx and we can remove c or another letter, then we will have bxxx < cbxx.
 def removeDuplicateLetters(s: str) -> str:
     """
     Examples:
@@ -1218,9 +1188,9 @@ def removeDuplicateLetters(s: str) -> str:
 
 
 # %% 319. Bulb Switcher https://leetcode.com/problems/bulb-switcher/
-# - Testing the array at n=50, I saw that only square numbers remained.
-# - It was easy to prove that square numbers are the only ones with an odd number of factors.
-# - So this is counting the number of perfect squares <= n, counting 1.
+# - Testing the array at n=50, I saw that only square numbers remained. From there it was easy to prove that
+#   square numbers are the only ones with an odd number of factors. So this problem is just counting the number
+#   of perfect squares <= n.
 def bulbSwitch(n: int) -> int:
     """
     Examples:
@@ -1256,6 +1226,7 @@ def bulbSwitch2(n: int) -> int:
     return int(np.sqrt(n))
 
 
+# %% 345. Reverse Vowels of a String https://leetcode.com/problems/reverse-vowels-of-a-string/
 def reverseVowels(s: str) -> str:
     """
     Examples:
@@ -1361,9 +1332,7 @@ def removeKdigits(num: str, k: int) -> str:
     return "".join(stack).lstrip("0") or "0"
 
 
-removeKdigits("112", 1)
-
-
+# %% 433. Minimum Genetic Mutation https://leetcode.com/problems/minimum-genetic-mutation/
 def minMutation(startGene: str, endGene: str, bank: list[str]) -> int:
     """
     Examples:
@@ -1611,6 +1580,12 @@ run(cmds, inputs)
 
 
 # %% 658. Find k Closest Elements https://leetcode.com/problems/find-k-closest-elements/
+# Lessons learned:
+# - My solution uses a straightforward binary search to find the closest element to x and iterated from there.
+# - I include a clever solution from the discussion that uses binary search to find the leftmost index of the k
+#   closest elements.
+# - I had some vague intuition that it could be framed as a minimization problem, but I couldn't find
+#   the loss function.
 def findClosestElements(arr: list[int], k: int, x: int) -> list[int]:
     """
     Examples:
@@ -1644,6 +1619,7 @@ def findClosestElements(arr: list[int], k: int, x: int) -> list[int]:
         lst = arr[-k:]
     else:
         lo, hi = ix - 1, ix
+
         while len(lst) < k:
             if lo < 0:
                 lst.append(arr[hi])
@@ -1657,15 +1633,12 @@ def findClosestElements(arr: list[int], k: int, x: int) -> list[int]:
             elif abs(x - arr[lo]) > abs(x - arr[hi]):
                 lst.append(arr[hi])
                 hi += 1
+
     return sorted(lst)
 
 
 def findClosestElements2(arr: list[int], k: int, x: int) -> list[int]:
     """
-    Faster, binary search on the window itself.
-
-    I had the idea that this problem is like a minimization problem, but I couldn't make the details work.
-
     Examples:
     >>> findClosestElements2([1, 2, 3, 4, 5], 4, 3)
     [1, 2, 3, 4]
@@ -1681,6 +1654,7 @@ def findClosestElements2(arr: list[int], k: int, x: int) -> list[int]:
     lo, hi = 0, len(arr) - k
     while lo < hi:
         mid = (lo + hi) // 2
+        # Equivalently x > (arr[mid] + arr[mid + k]) / 2
         if x - arr[mid] > arr[mid + k] - x:
             lo = mid + 1
         else:
@@ -1759,8 +1733,11 @@ def numSimilarGroups(strs: list[str]) -> int:
     return len(set(find(i) for i in range(n)))
 
 
-# A total troll problem that was spoiled a bit by Github Copilot. I thought it hinted an obviously wrong solution, but on further thought
-# it made me realize that the solution is dead simple.
+# %% 899. Orderly Queue https://leetcode.com/problems/orderly-queue/
+# Lessons learned:
+# - This problem is such a troll. At first I thought I found a totally ridiculous Copilot suggestion,
+#   but then I realized that the solution was actually dead simple - you can use the rightmost character
+#   as a register and rotate the string until the correct insertion point.
 def orderlyQueue(s: str, k: int) -> str:
     """
     Examples:
@@ -1787,8 +1764,7 @@ def orderlyQueue(s: str, k: int) -> str:
 
 # %% 901. Online Stock Span https://leetcode.com/problems/online-stock-span/
 # Lessons learned:
-# - this uses a monotonically decreasing stack (in the first coordinate); the complexity of an MDS is linear
-# - we don't need the full stack, so we compress into (value, number of elements before a bigger value); not sure how to analyze the complexity
+# - This uses a monotonically decreasing stack (MDS) to keep track of the previous stock prices and their spans.
 class StockSpanner:
     """
     Examples:
@@ -1822,9 +1798,8 @@ class StockSpanner:
 
 # %% 947. Most Stones Removed With Same Row or Column https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 # Lessons learned:
-# - The key idea is that we can remove all stones in each connected component except one
-# - We can use dfs to find the connected components
-# - You can avoid dfs recursion using a stack
+# - The key idea is that we can remove all stones in each connected component except one. We can use dfs to find the
+#   connected components. Fun fact: the dfs can avoid recursion by using a stack.
 def removeStones(stones: list[list[int]]) -> int:
     """
     Examples:
@@ -1932,6 +1907,7 @@ def lastStoneWeight(stones: list[int]) -> int:
     return sorted_stones[0] if sorted_stones else 0
 
 
+# %% 1047. Remove All Adjacent Duplicates in String https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
 def remove_duplicates(s: str) -> str:
     """
     Examples:
@@ -2047,13 +2023,12 @@ def makeGood(s: str) -> str:
 
 # %% 1579. Remove Max Number of Edges to Keep Graph Fully Traversable https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/
 # Lessons learned:
+# - We can build a spanning tree greedily by adding edges when they don't create a cycle. We can detect when
+#   an edge would create a cycle, by using a disjoint set. Counting these edges gives us the number removable edges.
+#   This problem adds a minor complication by having three types of edges. This complication can be dealth with by keeping
+#   track of two graphs. Since sometimes one edge of type 3 can make two edges of type 1 and 2 obsolete, we prioritize
+#   adding edges of type 3 first.
 # - A spanning tree always has the minimum number of edges to connect all nodes, which is V - 1 for a graph with V nodes
-# - We can build a spanning tree greedily by adding edges when they don't create a cycle
-# - We can detect when an edge would create a cycle, by using a disjoint set
-# - Counting these edges gives us the number of removable edges
-# - This problem adds a minor complication by having three types of edges
-# - This complication can be dealth with by keeping track of two graphs
-# - Since sometimes one edge of type 3 can make two edges of type 1 and 2 obsolete, we prioritize adding edges of type 3 first
 def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
     """
     Examples:
@@ -2066,6 +2041,7 @@ def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
     >>> maxNumEdgesToRemove(2, [[1,1,2],[2,1,2],[3,1,2]])
     2
     """
+
     def find(x: int, parent: list[int]) -> int:
         while True:
             if parent[x] == x:
@@ -2090,7 +2066,7 @@ def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
             bg = union(s - 1, t - 1, bob_graph)
             if not (ag or bg):
                 total_edges += 1
- 
+
     for edge_type, s, t in edges:
         if edge_type == 1:
             if not union(s - 1, t - 1, alice_graph):
@@ -2110,6 +2086,7 @@ def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
     return total_edges
 
 
+# %% 1680. Concatenation of Consecutive Binary Numbers https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 def concatenatedBinary(n: int) -> int:
     """
     Examples:
@@ -2128,7 +2105,49 @@ def concatenatedBinary(n: int) -> int:
     return total
 
 
-# %% 1706. https://leetcode.com/problems/where-will-the-ball-fall/
+# %% 1697. Checking Existence of Edge Length Limited Paths https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
+# Lessons learned:
+# - This problem is a connected component problem, though the weighted edges may throw you off. Since we're not
+#   looking for total path distance, for each query in order of increasing threshold, we can build a graph and
+#   calculate the connected components given by the query threshold. This lets us build on the work done for
+#   previous queries.
+def distanceLimitedPathsExist(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[bool]:
+    """
+    Examples:
+    >>> distanceLimitedPathsExist(3, [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], [[0,1,2],[0,2,5]])
+    [False, True]
+    >>> distanceLimitedPathsExist(5, [[0,1,10],[1,2,5],[2,3,9],[3,4,13]], [[0,4,14],[1,4,13]])
+    [True, False]
+    >>> distanceLimitedPathsExist(3, [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], [[0,2,1], [0,2,7]])
+    [False, True]
+    """
+    parent = list(range(n))
+
+    def find(x: int) -> int:
+        while True:
+            if x == parent[x]:
+                return x
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+
+    def union(x: int, y: int) -> None:
+        parent[find(x)] = find(y)
+
+    edgeList.sort(key=lambda x: x[2])
+    queries = sorted((q[2], q[0], q[1], i) for i, q in enumerate(queries))
+
+    result = [False] * len(queries)
+    i = 0
+    for d, q0, q1, j in queries:
+        while i < len(edgeList) and edgeList[i][2] < d:
+            union(edgeList[i][0], edgeList[i][1])
+            i += 1
+        result[j] = find(q0) == find(q1)
+
+    return result
+
+
+# %% 1706. Where Will The Ball Fall https://leetcode.com/problems/where-will-the-ball-fall/
 def findBall(grid: list[list[int]]) -> list[int]:
     """
     Examples:
