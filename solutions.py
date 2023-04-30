@@ -1702,7 +1702,63 @@ def isToeplitzMatrix(matrix: list[list[int]]) -> bool:
     return all(r == 0 or c == 0 or matrix[r - 1][c - 1] == val for r, row in enumerate(matrix) for c, val in enumerate(row))
 
 
-# %% 899. https://leetcode.com/problems/orderly-queue/
+# %% 839. Similar String Groups https://leetcode.com/problems/similar-string-groups/
+def is_similar(s1: str, s2: str) -> bool:
+    """
+    Examples:
+    >>> is_similar("abc", "abc")
+    True
+    >>> is_similar("abc", "acb")
+    True
+    >>> is_similar("abc", "abcd")
+    False
+    >>> is_similar("abc", "abd")
+    False
+    """
+    if len(s1) != len(s2):
+        return False
+    diff_chars = sum(c1 != c2 for c1, c2 in zip(s1, s2))
+    return diff_chars == 2 or diff_chars == 0
+
+
+def numSimilarGroups(strs: list[str]) -> int:
+    """
+    Examples:
+    >>> numSimilarGroups(["tars","rats","arts","star"])
+    2
+    >>> numSimilarGroups(["omv","ovm"])
+    1
+    >>> numSimilarGroups(["a"])
+    1
+    >>> numSimilarGroups(["abc","abc"])
+    1
+    >>> numSimilarGroups(["abc","acb","abc","acb","abc","acb"])
+    1
+    """
+    n = len(strs)
+    parent: dict[int, int] = dict({i: i for i in range(n)})
+
+    def find(x: str) -> str:
+        y = x
+        while True:
+            if y != parent[y]:
+                y = parent[y]
+                continue
+            break
+        parent[x] = y
+        return parent[x]
+
+    def union(x: int, y: int) -> None:
+        parent[find(x)] = find(y)
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            if is_similar(strs[i], strs[j]):
+                union(i, j)
+
+    return len(set(find(i) for i in range(n)))
+
+
 # A total troll problem that was spoiled a bit by Github Copilot. I thought it hinted an obviously wrong solution, but on further thought
 # it made me realize that the solution is dead simple.
 def orderlyQueue(s: str, k: int) -> str:
