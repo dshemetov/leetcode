@@ -742,10 +742,19 @@ def spiralOrder(matrix: list[list[int]]) -> list[int]:
 #   decode a string of nothing but "1" and "2" characters was the Fibonacci number F(n+1), where n is the number
 #   of characters in the string. Combining these two speedups with recursion gave me the first solution, which had
 #   middle of the pack runtime and memory usage.
-# - The second solution is a very clean dynamic programming approach I lifted from the discussion section. It
-#   relies on the recurrence relation D(n) = D(n-1) + D(n-2), where D(n) is the number of ways to decode a string
-#   of length n, with D(0) = 1 and D(1) = 1, but this relation is constrained by the fact that the string must be a valid
-#   encoding.
+# - The second solution is a very clean dynamic programming approach I lifted from the discussion section. Define
+#
+#       dp(i) = number of ways to decode the substring s[:i]
+#
+#   The recurrence relation is
+#
+#       dp(i) = dp(i-1) + dp(i-2) if "11" <= s[i-2:i] <= "26" and s[i-2:i] != "20"
+#             = dp(i-1) if s[i-1] != "0" and s[i-2:i] > "26"
+#             = dp(i-2) if "10" == s[i-2:i] or "20" == s[i-2:i]
+#             = 0 otherwise
+#       dp(0) = 1
+#       dp(1) = 1 if s[0] != "0" else 0
+#
 # - Fun fact: the number of binary strings of length n with no consecutive zeros corresponds to the Fibonacci number
 #   F(n+2). This diagram helps visualize the recursion:
 #   https://en.wikipedia.org/wiki/Composition_(combinatorics)#/media/File:Fibonacci_climbing_stairs.svg.
@@ -870,21 +879,18 @@ def numDecodings2(s: str) -> int:
     if not s or s[0] == "0":
         return 0
 
-    d = [0] * (len(s) + 1)
-    d[0:2] = [1, 1]
+    dp = [0] * (len(s) + 1)
+    dp[0:2] = [1, 1]
 
     for i in range(2, len(s) + 1):
-        # For a one step jump, the last character can't be 0
-        if s[i - 1] != "0":
-            d[i] = d[i - 1]
-        # For a two step jump, the last two characters must be between 10 and 26 inclusive
-        if "10" <= s[i - 2 : i] <= "26":
-            d[i] += d[i - 2]
+        if "11" <= s[i - 2 : i] <= "19" or "21" <= s[i - 2 : i] <= "26":
+            dp[i] = dp[i - 1] + dp[i - 2]
+        elif s[i - 1] != "0":
+            dp[i] = dp[i - 1]
+        elif "10" == s[i - 2 : i] or "20" == s[i - 2 : i]:
+            dp[i] = dp[i - 2]
 
-    return d[-1]
-
-
-numDecodings2("2022322")
+    return dp[-1]
 
 
 # %% 133. Clone Graph https://leetcode.com/problems/clone-graph/
