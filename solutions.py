@@ -2876,6 +2876,19 @@ def longestPalindrome2(words: list[str]) -> int:
     return total
 
 
+# %% 2215. Find the Difference of Two Arrays https://leetcode.com/problems/find-the-difference-of-two-arrays/
+def findDifference(nums1: list[int], nums2: list[int]) -> list[list[int]]:
+    """
+    Examples:
+    >>> findDifference([1,2,3], [2,4,6])
+    [[1, 3], [4, 6]]
+    >>> findDifference([1,2,3,3], [1,1,2,2])
+    [[3], []]
+    """
+    nums1, nums2 = set(nums1), set(nums2)
+    return [[n for n in nums1 if n not in nums2], [n for n in nums2 if n not in nums1]]
+
+
 # %% 2269. Find The k-Beauty of a Number https://leetcode.com/problems/find-the-k-beauty-of-a-number/
 def divisorSubstrings(num: int, k: int) -> int:
     result = 0
