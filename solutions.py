@@ -2816,6 +2816,26 @@ def findBall(grid: list[list[int]]) -> list[int]:
     return [find_ball(i) for i in range(len(grid[0]))]
 
 
+# %% 1822. Sign of the Product of an Array https://leetcode.com/problems/sign-of-the-product-of-an-array/
+def arraySign(nums: list[int]) -> int:
+    """
+    Examples:
+    >>> arraySign([-1,-2,-3,-4,3,2,1])
+    1
+    >>> arraySign([1,5,0,2,-3])
+    0
+    >>> arraySign([-1,1,-1,1,-1])
+    -1
+    """
+    pos = 1
+    for n in nums:
+        if n < 0:
+            pos *= -1
+        elif n == 0:
+            return 0
+    return pos
+
+
 # %% 2131. Longest Palindrome by Concatenating Two Letter Words https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
 def longestPalindrome2(words: list[str]) -> int:
     """
