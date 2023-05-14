@@ -5,6 +5,7 @@ from bisect import bisect_left, insort
 from collections.abc import Generator
 from collections import Counter, defaultdict, deque, namedtuple
 from fractions import Fraction
+from itertools import cycle
 from typing import Callable, Literal
 
 import numpy as np
@@ -381,8 +382,8 @@ def reverse(x: int) -> int:
     >>> reverse(-10)
     -1
     """
-    int_max_div10 = (2 ** 31 - 1) // 10
-    int_min_div10 = (-2 ** 31) // 10 + 1
+    int_max_div10 = (2**31 - 1) // 10
+    int_min_div10 = (-(2**31)) // 10 + 1
 
     rx = 0
     while x != 0:
@@ -2157,13 +2158,46 @@ def remove_duplicates(s: str) -> str:
     return "".join(stack)
 
 
+# %% 1143. Longest Common Subsequence https://leetcode.com/problems/longest-common-subsequence/
+# Lessons learned:
+# - This is a classic dynamic programming problem. Define
+#
+#       dp(i, j) = length of longest common subsequence of text1[:i] and text2[:j]
+#
+#   The recursion is:
+#
+#       dp(i, j) = 1 + dp(i - 1, j - 1) if text1[i] == text2[j]
+#       dp(i, j) = max(dp(i - 1, j), dp(i, j - 1)) otherwise
+#       dp(i, j) = 0 if i == 0 or j == 0
+#
+# - To avoid recursion, we can use a bottom-up approach, where we start with the smallest
+#   subproblems and build up to the largest, storing the results in a table.
+def longestCommonSubsequence(text1: str, text2: str) -> int:
+    """
+    Examples:
+    >>> longestCommonSubsequence("abcde", "ace")
+    3
+    >>> longestCommonSubsequence("abc", "abc")
+    3
+    >>> longestCommonSubsequence("abc", "def")
+    0
+    """
+    dp_ = [[0 for _ in range(len(text2) + 1)] for _ in range(len(text1) + 1)]
+
+    for i in range(1, len(text1) + 1):
+        for j in range(1, len(text2) + 1):
+            if text1[i - 1] == text2[j - 1]:
+                dp_[i][j] = 1 + dp_[i - 1][j - 1]
+            else:
+                dp_[i][j] = max(dp_[i - 1][j], dp_[i][j - 1])
+
+    return dp_[-1][-1]
+
+
 # %% 1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
 # Lessons learned:
 # - You don't need a dictionary of best distances, just a set of visited nodes (since any first visit to a node is the best).
 # - You don't need a priority queue, just a queue.
-State = namedtuple("State", "steps k i j")
-
-
 def shortestPath(grid: list[list[int]], k: int) -> int:
     """
     Examples:
@@ -2174,6 +2208,7 @@ def shortestPath(grid: list[list[int]], k: int) -> int:
     >>> shortestPath([[0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,1,1,1,1,0,0,0],[0,1,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,0,1,0],[0,0,0,0,0,0,0,0,1,0]], 1)
     20
     """
+    State = namedtuple("State", "steps k i j")
     m, n = len(grid), len(grid[0])
 
     # Trivial solution: just pick a random Manhattan distance and blow everything up.
@@ -2499,6 +2534,3 @@ def divisorSubstrings(num: int, k: int) -> int:
         if num % sub == 0:
             result += 1
     return result
-
-
-# %%
