@@ -1747,6 +1747,45 @@ inputs = [[2], [1], [2], [], [3], [], [3], [], [3], [], []]
 run(cmds, inputs)
 
 
+# %% 649. Dota2 Senate https://leetcode.com/problems/dota2-senate/
+def predictPartyVictory(senate: str) -> str:
+    """
+    Examples:
+    >>> predictPartyVictory("RD")
+    'Radiant'
+    >>> predictPartyVictory("RDD")
+    'Dire'
+    >>> predictPartyVictory("DDRRR")
+    'Dire'
+    >>> predictPartyVictory("D")
+    'Dire'
+    >>> predictPartyVictory("R")
+    'Radiant'
+    """
+    if senate == "":
+        return ""
+
+    queue = deque(senate)
+    Rcount = queue.count("R")
+    Rvetoes, Dvetoes = 0, 0
+    while 0 < Rcount < len(queue):
+        s = queue.popleft()
+        if s == "R":
+            if Dvetoes > 0:
+                Dvetoes -= 1
+                Rcount -= 1
+                continue
+            Rvetoes += 1
+        else:
+            if Rvetoes > 0:
+                Rvetoes -= 1
+                continue
+            Dvetoes += 1
+        queue.append(s)
+
+    return "Radiant" if queue[0] == "R" else "Dire"
+
+
 # %% 658. Find k Closest Elements https://leetcode.com/problems/find-k-closest-elements/
 # Lessons learned:
 # - My solution uses a straightforward binary search to find the closest element to x and iterated from there.
