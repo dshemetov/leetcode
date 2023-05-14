@@ -5,6 +5,7 @@ from bisect import bisect_left, insort
 from collections.abc import Generator
 from collections import Counter, defaultdict, deque, namedtuple
 from fractions import Fraction
+from itertools import cycle
 from typing import Callable, Literal
 
 import numpy as np
