@@ -381,8 +381,8 @@ def reverse(x: int) -> int:
     >>> reverse(-10)
     -1
     """
-    int_max_div10 = (2 ** 31 - 1) // 10
-    int_min_div10 = (-2 ** 31) // 10 + 1
+    int_max_div10 = (2**31 - 1) // 10
+    int_min_div10 = (-(2**31)) // 10 + 1
 
     rx = 0
     while x != 0:
@@ -2197,9 +2197,6 @@ def longestCommonSubsequence(text1: str, text2: str) -> int:
 # Lessons learned:
 # - You don't need a dictionary of best distances, just a set of visited nodes (since any first visit to a node is the best).
 # - You don't need a priority queue, just a queue.
-State = namedtuple("State", "steps k i j")
-
-
 def shortestPath(grid: list[list[int]], k: int) -> int:
     """
     Examples:
@@ -2210,6 +2207,7 @@ def shortestPath(grid: list[list[int]], k: int) -> int:
     >>> shortestPath([[0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,1,1,1,1,0,0,0],[0,1,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,0,1,0],[0,0,0,0,0,0,0,0,1,0]], 1)
     20
     """
+    State = namedtuple("State", "steps k i j")
     m, n = len(grid), len(grid[0])
 
     # Trivial solution: just pick a random Manhattan distance and blow everything up.
@@ -2535,6 +2533,3 @@ def divisorSubstrings(num: int, k: int) -> int:
         if num % sub == 0:
             result += 1
     return result
-
-
-# %%
