@@ -6,7 +6,7 @@ from bisect import bisect_left, insort
 from collections.abc import Generator
 from collections import Counter, defaultdict, deque, namedtuple
 from fractions import Fraction
-from itertools import cycle
+from itertools import cycle, product
 from typing import Callable, Literal
 
 import numpy as np
@@ -151,21 +151,44 @@ def length_of_longest_substring(s: str) -> int:
 
 
 # %% 4. Median of Two Sorted Arrays https://leetcode.com/problems/median-of-two-sorted-arrays/
+
+
 # Lessons learned:
-# - I spent weeks thinking about this problem before giving up and looking for a solution.
-# - NeetCode has a great explanation: https://www.youtube.com/watch?v=q6IEA26hvXc.
-# - The key is to think of the median as the partition point with the property that half the elements are less than it
-#   and half are greater than it. This perspective allows us to see that find the media here is a binary search for
-#   a particular partition of the two arrays. Specifically, we are looking for the partition (mid1, mid2) that satisfies:
+# - I spent weeks thinking about this problem before giving up and looking for a
+#   solution.
+# - There are a few key insights to this problem. First, the median has the
+#   property of being the partition point where half the elements are less and
+#   half are greater. Second, a partition point in one array implies a partition
+#   point in the other array. Third, the median of two arrays is either the
+#   average of the max of the left partition and the min of the right partition
+#   (if the total number of elements is even) or the max of the left partition
+#   (if the total number of elements is odd).
+# - To expand more on the second insight, consider the following example:
+#
+#      nums1 = [1, 3, 5, 7, 9] nums2 = [2, 4, 6, 8, 10, 12, 14, 16]
+#
+#   Suppose we choose to partition at index 4 in nums1. Since the total number
+#   of elements is 13, half of which is 6.5, then 7 elements must be in the left
+#   partition and 6 elements must be in the right partition (breaking the tie
+#   arbitrarily). Since 4 elements are already in the left partition, we need to
+#   add 3 more elements to the left partition, which we can do choosing index 3.
+#   This corresponds to the left partition [1, 2, 3, 4, 5, 6, 7] and the right
+#   partition [8, 9, 10, 12, 14, 16]. In general, if we choose index i in nums1,
+#   then we need to choose index j in nums2 such that i + j = len(nums1) +
+#   len(nums2) // 2 + 1, which implies j = len(nums1) + len(nums2) // 2 + 1 - i.
+# - So our problem is solved if we can find a partition (mid1, mid2) with:
 #
 #       len(nums1[:mid1]) + len(nums2[:mid2]) == len(nums1[mid1:]) + len(nums2[mid2:])
 #       nums1[mid1 - 1] <= nums2[mid2]
 #       nums2[mid2 - 1] <= nums1[mid1]
 #
-#   The middle condition ensures that elements in nums2[mid2:] are bigger than elements in nums1[:mid1] and
-#   analogously for the last condition.
-# - Swapping two variables in Python is fast and swaps pointers under the hood using an auxiliary variable:
-#   https://stackoverflow.com/a/62038590/4784655.
+#   (The first condition ensures that the partition is balanced. The last two
+#   conditions ensures that elements in (nums[:mid1] + nums[:mid2]) are smaller
+#   than elements in (nums[mid1:] + nums[mid2:]).) The median is then the
+#   average of the max of the left partition and the min of the right partition.
+#   The final insight is that a
+# - Swapping two variables in Python is fast and swaps pointers under the hood
+#   using an auxiliary variable: https://stackoverflow.com/a/62038590/4784655.
 def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     """
     Examples:
@@ -200,11 +223,11 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     if len(nums1) > len(nums2):
         nums1, nums2 = nums2, nums1
 
+    total = len(nums1) + len(nums2)
     lo, hi = 0, len(nums1)
-    while lo <= hi:
+    while True:
         mid1 = (lo + hi) // 2
-        # This is not len(nums2) - mid1 because we are splitting the total number of elements in half.
-        mid2 = (len(nums1) + len(nums2) + 1) // 2 - mid1
+        mid2 = (total + 1) // 2 - mid1
 
         a_left = nums1[mid1 - 1] if mid1 > 0 else float("-inf")
         a_right = nums1[mid1] if mid1 < len(nums1) else float("inf")
@@ -212,7 +235,7 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
         b_right = nums2[mid2] if mid2 < len(nums2) else float("inf")
 
         if a_left <= b_right and b_left <= a_right:
-            if (len(nums1) + len(nums2)) % 2 == 0:
+            if total % 2 == 0:
                 return (max(a_left, b_left) + min(a_right, b_right)) / 2
             else:
                 return float(max(a_left, b_left))
@@ -234,12 +257,16 @@ def get_median_sorted(nums: list[int]) -> float:
 
 
 # %% 5. Longest Palindromic Substring https://leetcode.com/problems/longest-palindromic-substring/
+
+
 # Lessons learned:
-# - I tried an approach with three pointers and expanding outwards if the characters matched. The edge case
-#   that stumped me was handling long runs of the same character such as "aaaaaaaaa". The issue there is that
-#   you need to keep changing the palindrome center. I gave up on that approach and looked at the solution.
-# - The solution is straightforward and I probably would have thought of it, if I didn't get stuck trying to
-#   fix the three pointer approach.
+# - I tried an approach with three pointers and expanding outwards if the
+#   characters matched. The edge case that stumped me was handling long runs of
+#   the same character such as "aaaaaaaaa". The issue there is that you need to
+#   keep changing the palindrome center. I gave up on that approach and looked
+#   at the solution.
+# - The solution is straightforward and I probably would have thought of it, if
+#   I didn't get stuck trying to fix the three pointer approach.
 def longestPalindrome(s: str) -> str:
     """
     Examples:
@@ -296,11 +323,15 @@ def longestPalindrome(s: str) -> str:
 
 
 # %% 6. Zigzag Conversion https://leetcode.com/problems/zigzag-conversion/
+
+
 # Lessons learned:
-# - I went directly for figuring out the indexing patterns, since the matrix approach seemed too boring.
-#   After writing out a few examples for numRows = 3, 4, 5, I found the pattern.
-# - The second solution is a very clever solution from the discussion. It relies on the fact that each new
-#   character must be appended to one of the rows, so it just keeps track of which row to append to.
+# - I went directly for figuring out the indexing patterns, since the matrix
+#   approach seemed too boring. After writing out a few examples for numRows =
+#   3, 4, 5, I found the pattern.
+# - The second solution is a very clever solution from the discussion. It relies
+#   on the fact that each new character must be appended to one of the rows, so
+#   it just keeps track of which row to append to.
 def convert(s: str, numRows: int) -> str:
     """
     Examples:
@@ -358,17 +389,21 @@ def convert2(s: str, numRows: int) -> str:
 
 
 # %% 7. Reverse Integer https://leetcode.com/problems/reverse-integer/
+
+
 # Lessons learned:
-# - The most interesting part of this problem is finding out how to check for overflow without
-#   overflowing. This can be done by checking whether the multiplication by 10 will overflow
-#   or if the the multiplication by 10 will bring you right to the edge and the next digit will
-#   overflow.
-# - Another interesting part is that Python's modulo operator behaves differently than in C. The
-#   modulo operator performs Euclidean division a = b * q + r, where r is the remainder and q is
-#   the quotient. In Python, the remainder r is always positive, whereas in C, the remainder r
-#   has the same sign as the dividend a. This in turn, implies that in C, q = truncate(a/b), while
-#   in Python, q = floor(a/b). So in Python, -(-x % n) = -((n - x % n) % n), while in C, we have
-#   (-x % n) = -(x % n). Also, in Python, -(-x // n) = (x - 1) // n + 1.
+# - The most interesting part of this problem is finding out how to check for
+#   overflow without overflowing. This can be done by checking whether the
+#   multiplication by 10 will overflow or if the the multiplication by 10 will
+#   bring you right to the edge and the next digit will overflow.
+# - Another interesting part is that Python's modulo operator behaves
+#   differently than in C. The modulo operator performs Euclidean division a = b
+#   * q + r, where r is the remainder and q is the quotient. In Python, the
+#   remainder r is always positive, whereas in C, the remainder r has the same
+#   sign as the dividend a. This in turn, implies that in C, q = truncate(a/b),
+#   while in Python, q = floor(a/b). So in Python, -(-x % n) = -((n - x % n) %
+#   n), while in C, we have (-x % n) = -(x % n). Also, in Python, -(-x // n) =
+#   (x - 1) // n + 1.
 def reverse(x: int) -> int:
     """
     Examples:
@@ -507,6 +542,8 @@ def is_palindrome(x: int) -> bool:
 
 
 # %% 10. Regular Expression Matching https://leetcode.com/problems/regular-expression-matching/
+
+
 # Lessons learned:
 # - I looked at the solution and rewrote it. The key is the recursive structure
 #
@@ -515,8 +552,8 @@ def is_palindrome(x: int) -> bool:
 #                        is_match(s[0], p[0]) and is_match(s[1:], p)
 #       is_match(s, p) = False                                           otherwise
 #
-# - With a little work, we can turn this into a dynamic programming solution. Defining dp[i][j] as
-#   is_match(s[i:], p[j:]), we have
+# - With a little work, we can turn this into a dynamic programming solution.
+#   Defining dp[i][j] as is_match(s[i:], p[j:]), we have
 #
 #       dp[i][j] = dp[i+1][j+1]                                         if s[i] == p[j] or p[j] == "."
 #       dp[i][j] = dp[i][j+2] or                                        if p[j+1] == "*"
@@ -548,11 +585,15 @@ def is_match(s: str, p: str) -> bool:
 
 
 # %% 11. Container With Most Water https://leetcode.com/problems/container-with-most-water/
+
+
 # Lessons learned:
-# - The trick to the O(n) solution relies on the following insight: if we shorten the container
-#   but change the height of the larger side, the area will not increase. Therefore, we can
-#   start with the widest possible container and do at most one comparison per index.
-# - This feels like a trick problem and I didn't feel like I learned much from it.
+# - The trick to the O(n) solution relies on the following insight: if we
+#   shorten the container but change the height of the larger side, the area
+#   will not increase. Therefore, we can start with the widest possible
+#   container and do at most one comparison per index.
+# - This feels like a trick problem and I didn't feel like I learned much from
+#   it.
 def max_area(height: list[int]) -> int:
     """
     Examples:
@@ -722,6 +763,95 @@ def three_sum_closest(nums: list[int], target: int) -> int:
                 return target
 
     return res + target
+
+
+# %% 17. Letter Combinations of a Phone Number https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+
+# Lessons learned:
+# - Implement the Cartesian product, they say! It's fun, they say! And it turns
+#   out, that it is kinda fun.
+def letter_combinations(digits: str) -> list[str]:
+    """
+    Examples:
+    >>> letter_combinations("23")
+    ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
+    >>> letter_combinations("")
+    []
+    >>> letter_combinations("2")
+    ['a', 'b', 'c']
+    """
+    if not digits:
+        return []
+
+    letter_map = {
+        "2": "abc",
+        "3": "def",
+        "4": "ghi",
+        "5": "jkl",
+        "6": "mno",
+        "7": "pqrs",
+        "8": "tuv",
+        "9": "wxyz",
+    }
+
+    res = product(*[letter_map[c] for c in digits])
+    return ["".join(t) for t in res]
+
+    # res = []
+    # for c in digits:
+    #     if not res:
+    #         res = [l for l in letter_map[c]]
+    #     else:
+    #         res = [a + b for a in res for b in letter_map[c]]
+
+    # return res
+
+
+# %% 18. 4Sum https://leetcode.com/problems/4sum/
+
+
+# Lessons learned:
+# - The ideas are the same as in 3Sum, but with a few more edge cases.
+def four_sum(nums: list[int], target: int) -> list[list[int]]:
+    """
+    Examples:
+    >>> four_sum([1,0,-1,0,-2,2], 0)
+    [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]]
+    >>> four_sum([2,2,2,2,2], 8)
+    [[2, 2, 2, 2]]
+    >>> four_sum([-2,-1,-1,1,1,2,2], 0)
+    [[-2, -1, 1, 2], [-1, -1, 1, 1]]
+    """
+    nums.sort()
+    res = []
+    for i in range(len(nums) - 1):
+        for j in range(i + 1, len(nums)):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+
+            if j > i + 1 and nums[j] == nums[j - 1]:
+                continue
+
+            lo, hi = j + 1, len(nums) - 1
+            while lo < hi:
+                s = nums[i] + nums[j] + nums[lo] + nums[hi]
+                if s < target:
+                    lo += 1
+                elif s > target:
+                    hi -= 1
+                else:
+                    res.append([nums[i], nums[j], nums[lo], nums[hi]])
+
+                    while lo < hi and nums[lo] == nums[lo + 1]:
+                        lo += 1
+                    while lo < hi and nums[hi] == nums[hi - 1]:
+                        hi -= 1
+
+                    lo += 1
+                    hi -= 1
+
+    return res
 
 
 # %% 19. Remove Nth Node From End of List https://leetcode.com/problems/remove-nth-node-from-end-of-list/
@@ -909,13 +1039,18 @@ def spiralOrder(matrix: list[list[int]]) -> list[int]:
 
 
 # %% 91. Decode Ways https://leetcode.com/problems/decode-ways/
+
+
 # Lessons learned:
-# - My first observation was that characters in "34567890" acted as separators, where I could split the string
-#   into substrings that could be decoded independently. My second observation was that the number of ways to
-#   decode a string of nothing but "1" and "2" characters was the Fibonacci number F(n+1), where n is the number
-#   of characters in the string. Combining these two speedups with recursion gave me the first solution, which had
-#   middle of the pack runtime and memory usage.
-# - The second solution is a very clean dynamic programming approach I lifted from the discussion section. Define
+# - My first observation was that characters in "34567890" acted as separators,
+#   where I could split the string into substrings that could be decoded
+#   independently. My second observation was that the number of ways to decode a
+#   string of nothing but "1" and "2" characters was the Fibonacci number
+#   F(n+1), where n is the number of characters in the string. Combining these
+#   two speedups with recursion gave me the first solution, which had middle of
+#   the pack runtime and memory usage.
+# - The second solution is a very clean dynamic programming approach I lifted
+#   from the discussion section. Define
 #
 #       dp(i) = number of ways to decode the substring s[:i]
 #
@@ -928,8 +1063,9 @@ def spiralOrder(matrix: list[list[int]]) -> list[int]:
 #       dp(0) = 1
 #       dp(1) = 1 if s[0] != "0" else 0
 #
-# - Fun fact: the number of binary strings of length n with no consecutive zeros corresponds to the Fibonacci number
-#   F(n+2). This diagram helps visualize the recursion:
+# - Fun fact: the number of binary strings of length n with no consecutive zeros
+#   corresponds to the Fibonacci number F(n+2). This diagram helps visualize the
+#   recursion:
 #   https://en.wikipedia.org/wiki/Composition_(combinatorics)#/media/File:Fibonacci_climbing_stairs.svg.
 def get_fibonacci_number(n: int) -> int:
     """Return the nth Fibonacci number, where F(0) = 0 and F(1) = 1.
@@ -1067,7 +1203,6 @@ def numDecodings2(s: str) -> int:
 
 
 # %% 133. Clone Graph https://leetcode.com/problems/clone-graph/
-# Definition for a Node.
 class Node:
     def __init__(self, val: int = 0, neighbors: list["Node"] | None = None):
         self.val = val
@@ -1150,6 +1285,8 @@ def cloneGraph(node: "Node") -> "Node":
 
 
 # %% 151. Reverse Words In A String https://leetcode.com/problems/reverse-words-in-a-string/
+
+
 # Lesson learned:
 # - Python string built-ins are fast.
 def reverseWords(s: str) -> str:
@@ -1211,6 +1348,28 @@ def reverseWords2(s: str) -> str:
             lo += 1
 
     return "".join(a[:lo])
+
+
+# %% 167. Two Sum II - Input Array Is Sorted https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+def twoSum(numbers: list[int], target: int) -> list[int]:
+    """
+    Examples:
+    >>> twoSum([2,7,11,15], 9)
+    [1, 2]
+    >>> twoSum([2,3,4], 6)
+    [1, 3]
+    >>> twoSum([-1,0], -1)
+    [1, 2]
+    """
+    lo, hi = 0, len(numbers) - 1
+    while lo < hi:
+        s = numbers[lo] + numbers[hi]
+        if s < target:
+            lo += 1
+        elif s > target:
+            hi -= 1
+        else:
+            return [lo + 1, hi + 1]
 
 
 # %% 200. Number of Islands https://leetcode.com/problems/number-of-islands/
@@ -1322,8 +1481,11 @@ def findWords(board: list[list[str]], words: list[str]) -> list[str]:
 
 
 # %% 222. Count Complete Tree Nodes https://leetcode.com/problems/count-complete-tree-nodes/
+
+
 # Lessons learned:
-# - A complete binary tree is a binary tree in which every level, except possibly the last, is completely filled,
+# - A complete binary tree is a binary tree in which every level, except
+# - possibly the last, is completely filled,
 #   and all nodes in the last level are as far left as possible.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -1408,6 +1570,9 @@ def isAnagram(s: str, t: str) -> bool:
 
 
 # %% 258. Add Digits https://leetcode.com/problems/add-digits/
+
+
+# Lessons learned:
 # - Turns out this can be solved with modular arithmetic because 10 ** n == 1 mod 9
 def addDigits(num: int) -> int:
     """
@@ -1485,9 +1650,13 @@ class MedianFinder:
 
 # %% 316. Remove Duplicate Letters https://leetcode.com/problems/remove-duplicate-letters/
 # 1081. https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
-# - In this one, the solution heuristic can be established with a few examples. The key is that
-#   we can greedily remove left-most duplicated letters that are larger than the next letter.
-#   For example, if we have cbxxx and we can remove c or another letter, then we will have bxxx < cbxx.
+
+
+# Lessons learned:
+# - In this one, the solution heuristic can be established with a few examples.
+#   The key is that we can greedily remove left-most duplicated letters that are
+#   larger than the next letter. For example, if we have cbxxx and we can remove
+#   c or another letter, then we will have bxxx < cbxx.
 def removeDuplicateLetters(s: str) -> str:
     """
     Examples:
@@ -1513,9 +1682,13 @@ def removeDuplicateLetters(s: str) -> str:
 
 
 # %% 319. Bulb Switcher https://leetcode.com/problems/bulb-switcher/
-# - Testing the array at n=50, I saw that only square numbers remained. From there it was easy to prove that
-#   square numbers are the only ones with an odd number of factors. So this problem is just counting the number
-#   of perfect squares <= n.
+
+
+# Lessons learned:
+# - Testing the array at n=50, I saw that only square numbers remained. From
+#   there it was easy to prove that square numbers are the only ones with an odd
+#   number of factors. So this problem is just counting the number of perfect
+#   squares <= n.
 def bulbSwitch(n: int) -> int:
     """
     Examples:
@@ -1578,6 +1751,7 @@ def reverseVowels(s: str) -> str:
 
 
 # %% 374. Guess Number Higher or Lower https://leetcode.com/problems/guess-number-higher-or-lower/
+
 # Lessons learned:
 # - bisect_left has a 'key' argument as of 3.10.
 __pick__ = 6
@@ -1618,11 +1792,12 @@ def guessNumber2(n: int) -> int:
     >>> guessNumber2(10)
     6
     """
-
     return bisect_left(range(0, n), 0, lo=0, hi=n, key=lambda x: -guess(x))
 
 
 # %% 402. Remove k Digits https://leetcode.com/problems/remove-k-digits/
+
+
 # Lessons learned:
 # - try to build up a heuristic algorithm from a few examples
 def removeKdigits(num: str, k: int) -> str:
@@ -1709,12 +1884,20 @@ def findPoisonedDuration(timeSeries: list[int], duration: int) -> int:
 
 
 # %% 587. Erect the Fence https://leetcode.com/problems/erect-the-fence/
+
+
 # Lessons learned:
-# - A broad class of computational geometry algorithms solve this: https://en.wikipedia.org/wiki/Convex_hull_algorithms#Algorithms
-# - The Graham scan is easy to understand and decently fast: https://en.wikipedia.org/wiki/Graham_scan
-# - Tip from a graphics guy: avoid representing angles with degrees/radians, stay in fractions
-# - The atan2 function was invented back in the Fortran days and makes for a stable polar angle definition
-# - The edge-cases of the Graham scan are tricky, especially all the cases with colinear points
+# - A broad class of computational geometry algorithms solve this:
+#   https://en.wikipedia.org/wiki/Convex_hull_algorithms#Algorithms
+# - The Graham scan is easy to understand and decently fast:
+#   https://en.wikipedia.org/wiki/Graham_scan
+# - Tip from a graphics guy: avoid representing angles with degrees/radians,
+#   stay in fractions. This avoids numerical issues with floating points, but
+#   it's not without its own problems.
+# - The atan2 function was invented back in the Fortran days and makes for a
+#   stable polar angle definition. It's also fast.
+# - The edge-cases of the Graham scan are tricky, especially all the cases with
+#   colinear points.
 def ccw(p1: tuple[int, int], p2: tuple[int, int], p3: tuple[int, int]) -> float:
     """
     Examples:
@@ -1983,12 +2166,15 @@ def predictPartyVictory(senate: str) -> str:
 
 
 # %% 658. Find k Closest Elements https://leetcode.com/problems/find-k-closest-elements/
+
+
 # Lessons learned:
-# - My solution uses a straightforward binary search to find the closest element to x and iterated from there.
-# - I include a clever solution from the discussion that uses binary search to find the leftmost index of the k
-#   closest elements.
-# - I had some vague intuition that it could be framed as a minimization problem, but I couldn't find
-#   the loss function.
+# - My solution uses a straightforward binary search to find the closest element
+#   to x and iterated from there.
+# - I include a clever solution from the discussion that uses binary search to
+#   find the leftmost index of the k closest elements.
+# - I had some vague intuition that it could be framed as a minimization
+#   problem, but I couldn't find the loss function.
 def findClosestElements(arr: list[int], k: int, x: int) -> list[int]:
     """
     Examples:
@@ -2137,10 +2323,13 @@ def numSimilarGroups(strs: list[str]) -> int:
 
 
 # %% 899. Orderly Queue https://leetcode.com/problems/orderly-queue/
+
+
 # Lessons learned:
-# - This problem is such a troll. At first I thought I found a totally ridiculous Copilot suggestion,
-#   but then I realized that the solution was actually dead simple - you can use the rightmost character
-#   as a register and rotate the string until the correct insertion point.
+# - This problem is such a troll. At first I thought I found a totally
+#   ridiculous Copilot suggestion, but then I realized that the solution was
+#   actually dead simple - you can use the rightmost character as a register and
+#   rotate the string until the correct insertion point.
 def orderlyQueue(s: str, k: int) -> str:
     """
     Examples:
@@ -2166,8 +2355,11 @@ def orderlyQueue(s: str, k: int) -> str:
 
 
 # %% 901. Online Stock Span https://leetcode.com/problems/online-stock-span/
+
+
 # Lessons learned:
-# - This uses a monotonically decreasing stack (MDS) to keep track of the previous stock prices and their spans.
+# - This uses a monotonically decreasing stack (MDS) to keep track of the
+#   previous stock prices and their spans.
 class StockSpanner:
     """
     Examples:
@@ -2200,9 +2392,12 @@ class StockSpanner:
 
 
 # %% 947. Most Stones Removed With Same Row or Column https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
+
+
 # Lessons learned:
-# - The key idea is that we can remove all stones in each connected component except one. We can use dfs to find the
-#   connected components. Fun fact: the dfs can avoid recursion by using a stack.
+# - The key idea is that we can remove all stones in each connected component
+#   except one. We can use dfs to find the connected components. Fun fact: the
+#   dfs can avoid recursion by using a stack.
 def removeStones(stones: list[list[int]]) -> int:
     """
     Examples:
@@ -2246,11 +2441,14 @@ def removeStones(stones: list[list[int]]) -> int:
 
 
 # %% 990. Satisfiability of Equality Equations https://leetcode.com/problems/satisfiability-of-equality-equations/
+
+
 # Lessons learned:
-# - This was clearly a graph problem underneath, where you need to find the connected components given
-#   by the equality statements
-# - Efficiently calculating the connected components was hard for me though, so learning about the
-#   disjoint set data structure was key (also referred to as union find):
+# - This was clearly a graph problem underneath, where you need to find the
+#   connected components given by the equality statements
+# - Efficiently calculating the connected components was hard for me though, so
+#   learning about the disjoint set data structure was key (also referred to as
+#   union find):
 #   https://cp-algorithms.com/data_structures/disjoint_set_union.html
 def equationsPossible(equations: list[str]) -> bool:
     """
@@ -2292,6 +2490,8 @@ def equationsPossible(equations: list[str]) -> bool:
 
 
 # %% 1035. Uncrossed Lines https://leetcode.com/problems/uncrossed-lines/
+
+
 # Lessons learned:
 # - The solution is identical to (1143 Longest Common Subsequence).
 def maxUncrossedLines(nums1: list[int], nums2: list[int]) -> int:
@@ -2354,6 +2554,8 @@ def remove_duplicates(s: str) -> str:
 
 
 # %% 1143. Longest Common Subsequence https://leetcode.com/problems/longest-common-subsequence/
+
+
 # Lessons learned:
 # - This is a classic dynamic programming problem. Define
 #
@@ -2365,8 +2567,9 @@ def remove_duplicates(s: str) -> str:
 #       dp(i, j) = max(dp(i - 1, j), dp(i, j - 1)) otherwise
 #       dp(i, j) = 0 if i == 0 or j == 0
 #
-# - To avoid recursion, we can use a bottom-up approach, where we start with the smallest
-#   subproblems and build up to the largest, storing the results in a table.
+# - To avoid recursion, we can use a bottom-up approach, where we start with the
+#   smallest subproblems and build up to the largest, storing the results in a
+#   table.
 def longestCommonSubsequence(text1: str, text2: str) -> int:
     """
     Examples:
@@ -2390,8 +2593,11 @@ def longestCommonSubsequence(text1: str, text2: str) -> int:
 
 
 # %% 1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
+
+
 # Lessons learned:
-# - You don't need a dictionary of best distances, just a set of visited nodes (since any first visit to a node is the best).
+# - You don't need a dictionary of best distances, just a set of visited nodes
+#   (since any first visit to a node is the best).
 # - You don't need a priority queue, just a queue.
 def shortestPath(grid: list[list[int]], k: int) -> int:
     """
@@ -2440,6 +2646,8 @@ def shortestPath(grid: list[list[int]], k: int) -> int:
 
 
 # %% 1323. Maximum 69 Number https://leetcode.com/problems/maximum-69-number/
+
+
 # Lessons learned:
 # - Converting to a string and using replace is surprisingly fast.
 # - Just need to accept that Python string built-ins are in C-land.
@@ -2464,8 +2672,11 @@ def maximum69Number2(num: int) -> int:
 
 
 # %% 1456. Maximum Number of Vowels in a Substring of Given Length https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/
+
+
 # Lessons learned:
-# - Sliding window and no need for a queue here, because sum statistics are easy to update.
+# - Sliding window and no need for a queue here, because sum statistics are easy
+#   to update.
 def maxVowels(s: str, k: int) -> int:
     """
     Examples:
@@ -2493,8 +2704,11 @@ def maxVowels(s: str, k: int) -> int:
 
 
 # %% 1491. Average Salary Excluding the Minimum and Maximum Salary https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/
+
+
 # Lessons learned:
-# - Slightly surprised the single pass Python-loop approach is slightly faster than the three pass approach using built-ins.
+# - Slightly surprised the single pass Python-loop approach is slightly faster
+#   than the three pass approach using built-ins.
 def average(salary: list[int]) -> float:
     """
     Examples:
@@ -2529,6 +2743,8 @@ def average2(salary: list[int]) -> float:
 
 
 # %% 1498. Number of Subsequences That Satisfy the Given Sum Condition https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
+
+
 # Lessons learned:
 # - I had the rough idea, but I was tired, so I looked at a hint.
 # - 1 << n is much faster in Python than 2**n.
@@ -2577,7 +2793,6 @@ def makeGood(s: str) -> str:
 
 
 # %% 1572. Matrix Diagonal Sum https://leetcode.com/problems/matrix-diagonal-sum/
-# Lessons learned:
 def diagonalSum(mat: list[list[int]]) -> int:
     """
     Examples:
@@ -2603,13 +2818,18 @@ def diagonalSum(mat: list[list[int]]) -> int:
 
 
 # %% 1579. Remove Max Number of Edges to Keep Graph Fully Traversable https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/
+
+
 # Lessons learned:
-# - We can build a spanning tree greedily by adding edges when they don't create a cycle. We can detect when
-#   an edge would create a cycle, by using a disjoint set. Counting these edges gives us the number removable edges.
-#   This problem adds a minor complication by having three types of edges. This complication can be dealth with by keeping
-#   track of two graphs. Since sometimes one edge of type 3 can make two edges of type 1 and 2 obsolete, we prioritize
-#   adding edges of type 3 first.
-# - A spanning tree always has the minimum number of edges to connect all nodes, which is V - 1 for a graph with V nodes
+# - We can build a spanning tree greedily by adding edges when they don't create
+#   a cycle. We can detect when an edge would create a cycle, by using a
+#   disjoint set. Counting these edges gives us the number removable edges. This
+#   problem adds a minor complication by having three types of edges. This
+#   complication can be dealth with by keeping track of two graphs. Since
+#   sometimes one edge of type 3 can make two edges of type 1 and 2 obsolete, we
+#   prioritize adding edges of type 3 first.
+# - A spanning tree always has the minimum number of edges to connect all nodes,
+#   which is V - 1 for a graph with V nodes
 def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
     """
     Examples:
@@ -2687,11 +2907,14 @@ def concatenatedBinary(n: int) -> int:
 
 
 # %% 1697. Checking Existence of Edge Length Limited Paths https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
+
+
 # Lessons learned:
-# - This problem is a connected component problem, though the weighted edges may throw you off. Since we're not
-#   looking for total path distance, for each query in order of increasing threshold, we can build a graph and
-#   calculate the connected components given by the query threshold. This lets us build on the work done for
-#   previous queries.
+# - This problem is a connected component problem, though the weighted edges may
+#   throw you off. Since we're not looking for total path distance, for each
+#   query in order of increasing threshold, we can build a graph and calculate
+#   the connected components given by the query threshold. This lets us build on
+#   the work done for previous queries.
 def distanceLimitedPathsExist(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[bool]:
     """
     Examples:
@@ -2729,20 +2952,24 @@ def distanceLimitedPathsExist(n: int, edgeList: list[list[int]], queries: list[l
 
 
 # %% 1703. Minimum Adjacent Swaps for K Consecutive Ones https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/
+
+
 # Lesson learned:
-# - The first solution is not fast enough, but has the right general idea. It uses
-#   a sliding window of size k that records the indices of the 1s and finds the
-#   the absolute value of the distances to the median index in that window.
-# - The second solution makes two changes. The first is to change focus from storing the
-#   indices of the 1s to storing the gaps between the indices of the 1s. This is because
-#   the absolute value distance to the median has a formula in terms of the differences
-#   between the indices. For example, with nums = [1, 1, 0, 0, 1, 0, 1, 0, 1], we have
-#   gaps = [1, 3, 2, 2], so for k = 5, the distance to the median (the third 1) is
-#   1 + 2 * 3 + 2 * 2 + 2 = 13. In general, we have
+# - The first solution is not fast enough, but has the right general idea. It
+#   uses a sliding window of size k that records the indices of the 1s and finds
+#   the the absolute value of the distances to the median index in that window.
+# - The second solution makes two changes. The first is to change focus from
+#   storing the indices of the 1s to storing the gaps between the indices of the
+#   1s. This is because the absolute value distance to the median has a formula
+#   in terms of the differences between the indices. For example, with nums =
+#   [1, 1, 0, 0, 1, 0, 1, 0, 1], we have gaps = [1, 3, 2, 2], so for k = 5, the
+#   distance to the median (the third 1) is 1 + 2 * 3 + 2 * 2 + 2 = 13. In
+#   general, we have
 #
 #       av(j)   = sum_{i=0}^{k-2} min(i + 1, k - (i + 1)) * gaps[j + i]
 #
-#   Furthermore, d1(j) = av(j) - av(j-1) and d2(j) = d1(j) - d1(j-1) can be expressed as
+#   Furthermore, d1(j) = av(j) - av(j-1) and d2(j) = d1(j) - d1(j-1) can be
+#   expressed as
 #
 #       d1(j)   = - sum_{i=0}^{k//2 - 1} gaps[j + i - 1] +                          if k is odd
 #                   sum_{i=k//2}^{k-1} gaps[j + i - 1],
@@ -2751,34 +2978,36 @@ def distanceLimitedPathsExist(n: int, edgeList: list[list[int]], queries: list[l
 #       d2(j)   = gaps[j] - gaps[j + k//2] - gaps[j + k//2 + 1] + gaps[j + k],      if k is odd
 #               = gaps[j] - 2 * gaps[j + k//2] + gaps[j + k],                       else
 #
-#   This means that if we calculate the first two absolute value distances, we can calculate
-#   the subsequent ones via the formula
+#   This means that if we calculate the first two absolute value distances, we
+#   can calculate the subsequent ones via the formula
 #
 #       av(j)   = av(j-1) + d1(j-1) + d2(j-1),          j >= 2
 #       d1(1)   = av(1) - av(0).
 #
-#   This update step requires us to sum only up to 4 elements from the gaps array, as opposed
-#   to k.
+#   This update step requires us to sum only up to 4 elements from the gaps
+#   array, as opposed to k.
 # - The absolute value distance needs a correction to equal the swap distance
 #
 #       av      = swap - T(L) - T(R), where T(x) = x * (x + 1) // 2
 #
-#   where L, R are number of neighbors on the left and right of the median, respectively.
-#   For example, if the k-stack is [1, 1, 0, 0, 1, 0, 1], the absolute value distance to
-#   the median is 9, while the actual swaps needed is 5. The correction factor can be found
-#   T(L) + T(R) = T(2) + T(1) = 3 + 1 = 4.
+#   where L, R are number of neighbors on the left and right of the median,
+#   respectively. For example, if the k-stack is [1, 1, 0, 0, 1, 0, 1], the
+#   absolute value distance to the median is 9, while the actual swaps needed is
+#   5. The correction factor can be found T(L) + T(R) = T(2) + T(1) = 3 + 1 = 4.
 # - I solved this problem on my own, so I feel pretty proud of it.
-# - Taking a look at other people's solutions, I see simpler approaches. For example, it turns out
-#   that the absolute value distance to the median can be expressed as
+# - Taking a look at other people's solutions, I see simpler approaches. For
+#   example, it turns out that the absolute value distance to the median can be
+#   expressed as
 #
 #       av(j)   = sum(pos[j+k//2:j+k]) - sum(pos[j:j+k//2])
 #       pos(j)  = position of the jth 1 in nums
 #
-#   from which it would be much easier to calculate the iterative approach. The way to arrive at this,
-#   is to notice that the median point has half the 1s to its left and half to its right.
-# - There is a competitive programming trick to convert a problem from "min sum of moves to make
-#   numbers consecutive" to "max sum of moves to a single point" and that is to transform
-#   pos(j) to pos(j) - j. This is because
+#   from which it would be much easier to calculate the iterative approach. The
+#   way to arrive at this, is to notice that the median point has half the 1s to
+#   its left and half to its right.
+# - There is a competitive programming trick to convert a problem from "min sum
+#   of moves to make numbers consecutive" to "max sum of moves to a single
+#   point" and that is to transform pos(j) to pos(j) - j. This is because
 #
 #       sum pos(j) - j = sum pos(j) - sum j = sum pos(j) - k * (k + 1) // 2
 #
@@ -3012,6 +3241,8 @@ def findBall(grid: list[list[int]]) -> list[int]:
 
 
 # %% 1721. Swapping Nodes in a Linked List https://leetcode.com/problems/swapping-nodes-in-a-linked-list/
+
+
 # Lessons learned:
 # - Two pointers allows you to do this in one pass.
 class ListNode:
@@ -3062,10 +3293,12 @@ def arraySign(nums: list[int]) -> int:
 
 
 # %% 2130. Maximum Twin Sum of a Linked List https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/
+
+
 # Lessons learned:
 # - Finding the midpoint of a linked list can be done with two pointers.
-# - Reversing a linked list is pretty easy.
-# - The steps above can be done in one pass.
+#   Reversing a linked list is pretty easy. These steps above can be done in one
+#   pass.
 def maxTwinSum(head: ListNode | None) -> int:
     """
     Examples:
