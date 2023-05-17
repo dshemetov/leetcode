@@ -7,5 +7,7 @@ include = '\.py'
 minversion = "6.0"
 addopts = "--doctest-modules --doctest-continue-on-failure"
 
-[tool.pylint.'FORMAT']
-max-line-length=180
+[tool.pylint]
+    [tool.pylint.'MESSAGES CONTROL']
+    max-line-length = 180
+    disable = ['C0103,R0903,E0102,C0116,C0302,C0115']
