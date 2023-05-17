@@ -2,6 +2,7 @@ black
 jupyter
 matplotlib
 numpy
+pylint
 pytest
 scalene
 scipy
