@@ -1,3 +1,4 @@
+"""LeetCode solutions."""
 # %%
 import math
 from array import array
@@ -538,10 +539,10 @@ def is_match(s: str, p: str) -> bool:
     for i in range(len(s), -1, -1):
         for j in range(len(p) - 1, -1, -1):
             first_match = i < len(s) and (s[i] == p[j] or p[j] == ".")
-            if j + 1 < len(p) and p[j+1] == "*":
-                dp[i][j] = dp[i][j+2] or first_match and dp[i+1][j]
+            if j + 1 < len(p) and p[j + 1] == "*":
+                dp[i][j] = dp[i][j + 2] or first_match and dp[i + 1][j]
             else:
-                dp[i][j] = first_match and dp[i+1][j+1]
+                dp[i][j] = first_match and dp[i + 1][j + 1]
 
     return dp[0][0]
 
@@ -599,7 +600,7 @@ def int_to_roman(num: int) -> str:
         400: "CD",
         500: "D",
         900: "CM",
-        1000: "M"
+        1000: "M",
     }
     s = ""
     for k in sorted(letter_map.keys(), reverse=True):
@@ -654,6 +655,73 @@ def longest_common_prefix(strs: list[str]) -> str:
         if prefix == "":
             break
     return prefix
+
+
+# %% 15. 3Sum https://leetcode.com/problems/3sum/
+def three_sum(nums: list[int]) -> list[list[int]]:
+    """
+    Examples:
+    >>> three_sum([-1,0,1,2,-1,-4])
+    [[-1, -1, 2], [-1, 0, 1]]
+    >>> three_sum([0, 1, 1])
+    []
+    >>> three_sum([0, 0, 0])
+    [[0, 0, 0]]
+    """
+    nums.sort()
+    res = []
+    for i in range(len(nums) - 2):
+        if i > 0 and nums[i] == nums[i - 1]:
+            continue
+
+        lo, hi = i + 1, len(nums) - 1
+        while lo < hi:
+            s = nums[i] + nums[lo] + nums[hi]
+            if s < 0:
+                lo += 1
+            elif s > 0:
+                hi -= 1
+            else:
+                res.append([nums[i], nums[lo], nums[hi]])
+
+                while lo < hi and nums[lo] == nums[lo + 1]:
+                    lo += 1
+                while lo < hi and nums[hi] == nums[hi - 1]:
+                    hi -= 1
+
+                lo += 1
+                hi -= 1
+
+    return res
+
+
+# %% 16. 3Sum Closest https://leetcode.com/problems/3sum-closest/
+def three_sum_closest(nums: list[int], target: int) -> int:
+    """
+    Examples:
+    >>> three_sum_closest([-1,2,1,-4], 1)
+    2
+    >>> three_sum_closest([0,0,0], 1)
+    0
+    """
+    nums.sort()
+    res = float("inf")
+    for i in range(len(nums) - 2):
+        if i > 0 and nums[i] == nums[i - 1]:
+            continue
+
+        lo, hi = i + 1, len(nums) - 1
+        while lo < hi:
+            s = nums[i] + nums[lo] + nums[hi] - target
+            res = s if abs(s) < abs(res) else res
+            if s < 0:
+                lo += 1
+            elif s > 0:
+                hi -= 1
+            else:
+                return target
+
+    return res + target
 
 
 # %% 19. Remove Nth Node From End of List https://leetcode.com/problems/remove-nth-node-from-end-of-list/
@@ -1843,11 +1911,34 @@ def run(cmds, inputs):
             print(obj.isFull())
 
 
-cmds = ["MyCircularQueue", "enQueue", "enQueue", "enQueue", "enQueue", "Rear", "isFull", "deQueue", "enQueue", "Rear"]
+cmds = [
+    "MyCircularQueue",
+    "enQueue",
+    "enQueue",
+    "enQueue",
+    "enQueue",
+    "Rear",
+    "isFull",
+    "deQueue",
+    "enQueue",
+    "Rear",
+]
 inputs = [[3], [1], [2], [3], [4], [], [], [], [4], []]
 run(cmds, inputs)
 
-cmds = ["MyCircularQueue", "enQueue", "enQueue", "deQueue", "enQueue", "deQueue", "enQueue", "deQueue", "enQueue", "deQueue", "Front"]
+cmds = [
+    "MyCircularQueue",
+    "enQueue",
+    "enQueue",
+    "deQueue",
+    "enQueue",
+    "deQueue",
+    "enQueue",
+    "deQueue",
+    "enQueue",
+    "deQueue",
+    "Front",
+]
 inputs = [[2], [1], [2], [], [3], [], [3], [], [3], [], []]
 run(cmds, inputs)
 
@@ -2920,6 +3011,36 @@ def findBall(grid: list[list[int]]) -> list[int]:
     return [find_ball(i) for i in range(len(grid[0]))]
 
 
+# %% 1721. Swapping Nodes in a Linked List https://leetcode.com/problems/swapping-nodes-in-a-linked-list/
+# Lessons learned:
+# - Two pointers allows you to do this in one pass.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+
+def swapNodes(head: ListNode, k: int) -> ListNode:
+    """
+    Examples:
+    >>> listnode_to_list(swapNodes(list_to_listnode([1,2,3,4,5]), 2))
+    [1, 4, 3, 2, 5]
+    >>> listnode_to_list(swapNodes(list_to_listnode([7,9,6,6,7,8,3,0,9,5]), 5))
+    [7, 9, 6, 6, 8, 7, 3, 0, 9, 5]
+    """
+    p1 = head
+    for _ in range(k - 1):
+        p1 = p1.next
+    node1 = p1
+    p2 = head
+    while p1.next:
+        p1 = p1.next
+        p2 = p2.next
+    node2 = p2
+    node1.val, node2.val = node2.val, node1.val
+    return head
+
+
 # %% 1822. Sign of the Product of an Array https://leetcode.com/problems/sign-of-the-product-of-an-array/
 def arraySign(nums: list[int]) -> int:
     """
@@ -2938,6 +3059,42 @@ def arraySign(nums: list[int]) -> int:
         elif n == 0:
             return 0
     return pos
+
+
+# %% 2130. Maximum Twin Sum of a Linked List https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/
+# Lessons learned:
+# - Finding the midpoint of a linked list can be done with two pointers.
+# - Reversing a linked list is pretty easy.
+# - The steps above can be done in one pass.
+def maxTwinSum(head: ListNode | None) -> int:
+    """
+    Examples:
+    >>> maxTwinSum(list_to_listnode([5,4,2,1]))
+    6
+    >>> maxTwinSum(list_to_listnode([4,2,2,3]))
+    7
+    >>> maxTwinSum(list_to_listnode([1,100000]))
+    100001
+    """
+    # Find the midpoint
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+
+    # Reverse the second half
+    prev = None
+    while slow:
+        slow.next, prev, slow = prev, slow, slow.next
+
+    # Find the maximum sum
+    m = 0
+    while prev:
+        m = max(m, prev.val + head.val)
+        prev = prev.next
+        head = head.next
+
+    return m
 
 
 # %% 2131. Longest Palindrome by Concatenating Two Letter Words https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
