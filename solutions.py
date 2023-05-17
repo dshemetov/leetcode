@@ -6,7 +6,7 @@ from bisect import bisect_left, insort
 from collections.abc import Generator
 from collections import Counter, defaultdict, deque, namedtuple
 from fractions import Fraction
-from itertools import cycle
+from itertools import cycle, product
 from typing import Callable, Literal
 
 import numpy as np
@@ -724,6 +724,91 @@ def three_sum_closest(nums: list[int], target: int) -> int:
     return res + target
 
 
+# %% 17. Letter Combinations of a Phone Number https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+# Lessons learned:
+# - Implement the Cartesian product, they say! It's fun, they say!
+#   And it turns out, that it is kinda fun.
+def letter_combinations(digits: str) -> list[str]:
+    """
+    Examples:
+    >>> letter_combinations("23")
+    ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
+    >>> letter_combinations("")
+    []
+    >>> letter_combinations("2")
+    ['a', 'b', 'c']
+    """
+    if not digits:
+        return []
+
+    letter_map = {
+        "2": "abc",
+        "3": "def",
+        "4": "ghi",
+        "5": "jkl",
+        "6": "mno",
+        "7": "pqrs",
+        "8": "tuv",
+        "9": "wxyz",
+    }
+
+    res = product(*[letter_map[c] for c in digits])
+    return ["".join(t) for t in res]
+
+    # res = []
+    # for c in digits:
+    #     if not res:
+    #         res = [l for l in letter_map[c]]
+    #     else:
+    #         res = [a + b for a in res for b in letter_map[c]]
+
+    # return res
+
+
+# %% 18. 4Sum https://leetcode.com/problems/4sum/
+# Lessons learned:
+# - The ideas are the same as in 3Sum, but with a few more edge cases.
+def four_sum(nums: list[int], target: int) -> list[list[int]]:
+    """
+    Examples:
+    >>> four_sum([1,0,-1,0,-2,2], 0)
+    [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]]
+    >>> four_sum([2,2,2,2,2], 8)
+    [[2, 2, 2, 2]]
+    >>> four_sum([-2,-1,-1,1,1,2,2], 0)
+    [[-2, -1, 1, 2], [-1, -1, 1, 1]]
+    """
+    nums.sort()
+    res = []
+    for i in range(len(nums) - 1):
+        for j in range(i + 1, len(nums)):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+
+            if j > i + 1 and nums[j] == nums[j - 1]:
+                continue
+
+            lo, hi = j + 1, len(nums) - 1
+            while lo < hi:
+                s = nums[i] + nums[j] + nums[lo] + nums[hi]
+                if s < target:
+                    lo += 1
+                elif s > target:
+                    hi -= 1
+                else:
+                    res.append([nums[i], nums[j], nums[lo], nums[hi]])
+
+                    while lo < hi and nums[lo] == nums[lo + 1]:
+                        lo += 1
+                    while lo < hi and nums[hi] == nums[hi - 1]:
+                        hi -= 1
+
+                    lo += 1
+                    hi -= 1
+
+    return res
+
+
 # %% 19. Remove Nth Node From End of List https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -1211,6 +1296,28 @@ def reverseWords2(s: str) -> str:
             lo += 1
 
     return "".join(a[:lo])
+
+
+# %% 167. Two Sum II - Input Array Is Sorted https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+def twoSum(numbers: list[int], target: int) -> list[int]:
+    """
+    Examples:
+    >>> twoSum([2,7,11,15], 9)
+    [1, 2]
+    >>> twoSum([2,3,4], 6)
+    [1, 3]
+    >>> twoSum([-1,0], -1)
+    [1, 2]
+    """
+    lo, hi = 0, len(numbers) - 1
+    while lo < hi:
+        s = numbers[lo] + numbers[hi]
+        if s < target:
+            lo += 1
+        elif s > target:
+            hi -= 1
+        else:
+            return [lo + 1, hi + 1]
 
 
 # %% 200. Number of Islands https://leetcode.com/problems/number-of-islands/
