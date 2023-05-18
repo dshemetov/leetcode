@@ -159,36 +159,57 @@ def length_of_longest_substring(s: str) -> int:
 # - There are a few key insights to this problem. First, the median has the
 #   property of being the partition point where half the elements are less and
 #   half are greater. Second, a partition point in one array implies a partition
-#   point in the other array. Third, the median of two arrays is either the
-#   average of the max of the left partition and the min of the right partition
-#   (if the total number of elements is even) or the max of the left partition
-#   (if the total number of elements is odd).
+#   point in the other array, which means we can find the partition point via
+#   binary search on one array.
+# - We use the following notation in the code:
+#
+#       A refers to the shorter array,
+#       B refers to the longer array,
+#       midA refers to a partition point in A,
+#       midB refers to a partition point in B,
+#       Aleft = A[midA - 1], refers to the largest element in the left partition of A, A[:midA]
+#       Aright = A[midA], refers to the smallest element in the right partition of A, A[midA:]
+#       Bleft = B[midB - 1], refers to the largest element in the left partition of B, B[:midB]
+#       Bright = B[midB], refers to the smallest element in the right partition of B, B[midB:]
+#
 # - To expand more on the second insight, consider the following example:
 #
-#      nums1 = [1, 3, 5, 7, 9] nums2 = [2, 4, 6, 8, 10, 12, 14, 16]
+#      A = [1, 3, 5, 7, 9], B = [2, 4, 6, 8, 10, 12, 14, 16]
 #
-#   Suppose we choose to partition at index 4 in nums1. Since the total number
-#   of elements is 13, half of which is 6.5, then 7 elements must be in the left
-#   partition and 6 elements must be in the right partition (breaking the tie
-#   arbitrarily). Since 4 elements are already in the left partition, we need to
-#   add 3 more elements to the left partition, which we can do choosing index 3.
-#   This corresponds to the left partition [1, 2, 3, 4, 5, 6, 7] and the right
-#   partition [8, 9, 10, 12, 14, 16]. In general, if we choose index i in nums1,
-#   then we need to choose index j in nums2 such that i + j = len(nums1) +
-#   len(nums2) // 2 + 1, which implies j = len(nums1) + len(nums2) // 2 + 1 - i.
-# - So our problem is solved if we can find a partition (mid1, mid2) with:
+#   Suppose we choose midA = 4. Since the total number of elements is 13, half
+#   of which is 6.5, then, breaking the tie arbitrarily, 7 elements must be in
+#   the left partition and 6 elements must be in the right partition. Since 4
+#   elements are already in the left partition, we need to add 3 more elements
+#   to the left partition, which we can do choosing midB = 3. This corresponds
+#   to the total left partition [1, 2, 3, 4, 5, 6, 7] and the total right
+#   partition [8, 9, 10, 12, 14, 16].
+# - In general, we have
 #
-#       len(nums1[:mid1]) + len(nums2[:mid2]) == len(nums1[mid1:]) + len(nums2[mid2:])
-#       nums1[mid1 - 1] <= nums2[mid2]
-#       nums2[mid2 - 1] <= nums1[mid1]
+#       midA + midB = (len(A) + len(B) + 1) // 2,
 #
-#   (The first condition ensures that the partition is balanced. The last two
-#   conditions ensures that elements in (nums[:mid1] + nums[:mid2]) are smaller
-#   than elements in (nums[mid1:] + nums[mid2:]).) The median is then the
-#   average of the max of the left partition and the min of the right partition.
-#   The final insight is that a
-# - Swapping two variables in Python is fast and swaps pointers under the hood
-#   using an auxiliary variable: https://stackoverflow.com/a/62038590/4784655.
+#   which implies
+#
+#       midB = (len(A) + len(B) + 1) // 2 - midA.
+#
+# - Note that having the +1 inside the divfloor covers the cases correctly for
+#   odd and even total number of elements. For example, if the total number of
+#   elements is 13 and i = 4, then j = (13 + 1) // 2 - 4 = 3, which is correct.
+#   If the total number of elements is 12 and i = 4, then j = (12 + 1) // 2 - 4
+#   = 2, which is also correct. If the +1 was not inside the divfloor, then the
+#   second case would be incorrect.
+# - So our problem is solved if we can find a partition (midA, midB) with:
+#
+#       len(A[:midA]) + len(B[:midB]) == len(A[midA:]) + len(B[midB:]),
+#       Aleft <= Bright,
+#       Bleft <= Aright.
+#
+# - The median is then
+#
+#       median = max(Aleft, Bleft)                               if len(A) + len(B) odd
+#              = (max(Aleft, Bleft) + min(Aright, Bright)) / 2.  else
+#
+# - Swapping two variables in Python swaps pointers under the hood:
+#   https://stackoverflow.com/a/62038590/4784655.
 def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     """
     Examples:
@@ -220,29 +241,31 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     if not nums2:
         return get_median_sorted(nums1)
 
-    if len(nums1) > len(nums2):
-        nums1, nums2 = nums2, nums1
+    A, B = nums1, nums2
 
-    total = len(nums1) + len(nums2)
-    lo, hi = 0, len(nums1)
+    if len(A) > len(B):
+        A, B = B, A
+
+    total = len(A) + len(B)
+    lo, hi = 0, len(A)
     while True:
-        mid1 = (lo + hi) // 2
-        mid2 = (total + 1) // 2 - mid1
+        midA = (lo + hi) // 2
+        midB = (total + 1) // 2 - midA
 
-        a_left = nums1[mid1 - 1] if mid1 > 0 else float("-inf")
-        a_right = nums1[mid1] if mid1 < len(nums1) else float("inf")
-        b_left = nums2[mid2 - 1] if mid2 > 0 else float("-inf")
-        b_right = nums2[mid2] if mid2 < len(nums2) else float("inf")
+        Aleft = A[midA - 1] if midA > 0 else float("-inf")
+        Aright = A[midA] if midA < len(A) else float("inf")
+        Bleft = B[midB - 1] if midB > 0 else float("-inf")
+        Bright = B[midB] if midB < len(B) else float("inf")
 
-        if a_left <= b_right and b_left <= a_right:
+        if Aleft <= Bright and Bleft <= Aright:
             if total % 2 == 0:
-                return (max(a_left, b_left) + min(a_right, b_right)) / 2
+                return (max(Aleft, Bleft) + min(Aright, Bright)) / 2
             else:
-                return float(max(a_left, b_left))
-        elif a_left > b_right:
-            hi = mid1 - 1
+                return float(max(Aleft, Bleft))
+        elif Aleft > Bright:
+            hi = midA - 1
         else:
-            lo = mid1 + 1
+            lo = midA + 1
 
 
 def get_median_sorted(nums: list[int]) -> float:
@@ -296,7 +319,7 @@ def longestPalindrome(s: str) -> str:
 
     lo, hi = 0, 1
     max_length = 1
-    max_length_location = None
+    res_string = s[0]
 
     def expand_center(lo, hi):
         while lo >= 0 and hi < len(s) and s[lo] == s[hi]:
@@ -308,18 +331,14 @@ def longestPalindrome(s: str) -> str:
         lo, hi = expand_center(i - 1, i + 1)
         if hi - lo + 1 > max_length:
             max_length = hi - lo + 1
-            max_length_location = lo, hi
+            res_string = s[lo : hi + 1]
 
         lo, hi = expand_center(i - 1, i)
         if hi - lo + 1 > max_length:
             max_length = hi - lo + 1
-            max_length_location = lo, hi
+            res_string = s[lo : hi + 1]
 
-    if max_length == 1:
-        return s[0]
-    else:
-        lo, hi = max_length_location
-        return s[lo : hi + 1]
+    return res_string
 
 
 # %% 6. Zigzag Conversion https://leetcode.com/problems/zigzag-conversion/
@@ -926,6 +945,60 @@ def listnode_to_list(head: ListNode) -> list[int]:
         head = head.next
 
     return l
+
+
+# %% 20. Valid Parentheses https://leetcode.com/problems/valid-parentheses/
+def isValid(s: str) -> bool:
+    """
+    Examples:
+    >>> isValid("()")
+    True
+    >>> isValid("()[]{}")
+    True
+    >>> isValid("(]")
+    False
+    """
+    stack = deque()
+    bracket_map = {"(": ")", "[": "]", "{": "}"}
+    for c in s:
+        if c in bracket_map:
+            stack.append(c)
+        elif not stack or bracket_map[stack.pop()] != c:
+            return False
+
+    return not stack
+
+
+# %% 21. Merge Two Sorted Lists https://leetcode.com/problems/merge-two-sorted-lists/
+def mergeTwoLists(list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
+    """
+    Examples:
+    >>> listnode_to_list(mergeTwoLists(list_to_listnode([1, 2, 4]), list_to_listnode([1, 3, 4])))
+    [1, 1, 2, 3, 4, 4]
+    >>> listnode_to_list(mergeTwoLists(list_to_listnode([]), list_to_listnode([])))
+    []
+    >>> listnode_to_list(mergeTwoLists(list_to_listnode([]), list_to_listnode([0])))
+    [0]
+    """
+    head = ListNode()
+    pointer = head
+
+    while list1 and list2:
+        if list1.val < list2.val:
+            pointer.next = list1
+            list1 = list1.next
+        else:
+            pointer.next = list2
+            list2 = list2.next
+        pointer = pointer.next
+
+    if list1:
+        pointer.next = list1
+
+    if list2:
+        pointer.next = list2
+
+    return head.next
 
 
 # %% 26. Remove Duplicates from Sorted Array https://leetcode.com/problems/remove-duplicates-from-sorted-array/
@@ -2790,6 +2863,28 @@ def makeGood(s: str) -> str:
         else:
             stack.append(c)
     return "".join(stack)
+
+
+# %% 1557. Minimum Number of Vertices to Reach All Nodes https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/
+
+
+# Lessons learned:
+# - At first I thought this required union find, but that is for partitions /
+#   undirected graphs. After fiddling with a modification of union find for a
+#   while, I saw that the solution was actually really simple.
+def findSmallestSetOfVertices(n: int, edges: list[list[int]]) -> list[int]:
+    """
+    Examples:
+    >>> findSmallestSetOfVertices(6, [[0,1],[0,2],[2,5],[3,4],[4,2]])
+    [0, 3]
+    >>> findSmallestSetOfVertices(5, [[0,1],[2,1],[3,1],[1,4],[2,4]])
+    [0, 2, 3]
+    """
+    nodes_with_parents = set()
+    for u, v in edges:
+        nodes_with_parents.add(v)
+
+    return [i for i in range(n) if i not in nodes_with_parents]
 
 
 # %% 1572. Matrix Diagonal Sum https://leetcode.com/problems/matrix-diagonal-sum/
