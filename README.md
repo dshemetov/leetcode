@@ -1,6 +1,6 @@
 # Leet Code Solutions
 
-Behold, the mono-file!
+Puzzles. Solutions. Tests.
 
 ## Usage
 
@@ -11,8 +11,8 @@ Use Python >=3.10.
 python -m venv venv
 source venv/bin/activate
 pip install wheel
-pip install -r requirements.txt
+pip install -r requirements.txt pytest
 
 # Run tests (mostly docstrings).
-pytest 
+pytest
 ```
