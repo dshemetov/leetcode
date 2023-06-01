@@ -10,4 +10,14 @@ addopts = "--doctest-modules --doctest-continue-on-failure"
 [tool.pylint]
     [tool.pylint.'MESSAGES CONTROL']
     max-line-length = 180
-    disable = ['C0103,R0903,E0102,C0116,C0302,C0115']
+    disable = [
+        'invalid-name',
+        'missing-module-docstring',
+        'missing-class-docstring',
+        'missing-function-docstring',
+        'too-few-public-methods',
+        'too-many-arguments',
+        'too-many-lines',
+        'too-many-return-statements',
+        'unused-import'
+    ]
