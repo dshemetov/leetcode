@@ -108,10 +108,15 @@ def outerTrees(trees: list[list[int]]) -> list[list[int]]:
     """
     lowest_left_point = (math.inf, math.inf)
     for x, y in trees:
-        if y < lowest_left_point[1] or (y == lowest_left_point[1] and x < lowest_left_point[0]):
+        if y < lowest_left_point[1] or (
+            y == lowest_left_point[1] and x < lowest_left_point[0]
+        ):
             lowest_left_point = (x, y)
 
-    trees_by_slope = partition_by(trees, lambda p: atan2notan(p[1] - lowest_left_point[1], p[0] - lowest_left_point[0]))
+    trees_by_slope = partition_by(
+        trees,
+        lambda p: atan2notan(p[1] - lowest_left_point[1], p[0] - lowest_left_point[0]),
+    )
     slopes = sorted(trees_by_slope.keys())
 
     # Handles many colinear cases; order doesn't matter for leetcode
@@ -122,12 +127,18 @@ def outerTrees(trees: list[list[int]]) -> list[list[int]]:
         return np.linalg.norm((p1[1] - p2[1], p1[0] - p2[0]))
 
     # The right-most line should sort by increasing distance from lowest left point
-    trees_by_slope[slopes[0]] = sorted(trees_by_slope[slopes[0]], key=lambda p: distance(p, lowest_left_point))
+    trees_by_slope[slopes[0]] = sorted(
+        trees_by_slope[slopes[0]], key=lambda p: distance(p, lowest_left_point)
+    )
     # The left-most line should sort by decreasing distance from lowest left point
-    trees_by_slope[slopes[-1]] = sorted(trees_by_slope[slopes[-1]], key=lambda p: -distance(p, lowest_left_point))
+    trees_by_slope[slopes[-1]] = sorted(
+        trees_by_slope[slopes[-1]], key=lambda p: -distance(p, lowest_left_point)
+    )
     # The rest should sort by increasing distance from lowest left point
     for slope in slopes[1:-1]:
-        trees_by_slope[slope] = sorted(trees_by_slope[slope], key=lambda p: distance(p, lowest_left_point))
+        trees_by_slope[slope] = sorted(
+            trees_by_slope[slope], key=lambda p: distance(p, lowest_left_point)
+        )
 
     stack = []
     for slope in slopes:

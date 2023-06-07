@@ -25,7 +25,7 @@ def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
     """
 
     def find(x: int, parent: list[int]) -> int:
-        while True:  # pylint: disable=duplicate-code
+        while True:
             if parent[x] == x:
                 return x
             parent[x] = parent[parent[x]]

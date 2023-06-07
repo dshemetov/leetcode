@@ -42,7 +42,10 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
 
     for i in range(3):
         for j in range(3):
-            if not (np.bincount(mat[3 * i : 3 * i + 3, 3 * j : 3 * j + 3].flatten())[1:] <= 1).all():
+            if not (
+                np.bincount(mat[3 * i : 3 * i + 3, 3 * j : 3 * j + 3].flatten())[1:]
+                <= 1
+            ).all():
                 return False
 
     return True

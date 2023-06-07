@@ -11,7 +11,11 @@ def minMutation(startGene: str, endGene: str, bank: list[str]) -> int:
     """
 
     def get_mutations(gene: str, bank: set[str]) -> set[str]:
-        return {mutation for mutation in bank if sum(1 for i in range(len(mutation)) if mutation[i] != gene[i]) == 1}
+        return {
+            mutation
+            for mutation in bank
+            if sum(1 for i in range(len(mutation)) if mutation[i] != gene[i]) == 1
+        }
 
     bank = set(bank)
     explored = set()

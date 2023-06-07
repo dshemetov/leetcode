@@ -2,22 +2,22 @@
 from collections import Counter
 
 
-def longestPalindrome2(words: list[str]) -> int:
+def longestPalindrome(words: list[str]) -> int:
     """
     Examples:
-    >>> longestPalindrome2(["ab","ba","aa","bb","cc"])
+    >>> longestPalindrome(["ab","ba","aa","bb","cc"])
     6
-    >>> longestPalindrome2(["ab","ba","cc","ab","ba","cc"])
+    >>> longestPalindrome(["ab","ba","cc","ab","ba","cc"])
     12
-    >>> longestPalindrome2(["aa","ba"])
+    >>> longestPalindrome(["aa","ba"])
     2
-    >>> longestPalindrome2(["ba", "ce"])
+    >>> longestPalindrome(["ba", "ce"])
     0
-    >>> longestPalindrome2(["lc","cl","gg"])
+    >>> longestPalindrome(["lc","cl","gg"])
     6
-    >>> longestPalindrome2(["ab","ty","yt","lc","cl","ab"])
+    >>> longestPalindrome(["ab","ty","yt","lc","cl","ab"])
     8
-    >>> longestPalindrome2(["cc","ll","xx"])
+    >>> longestPalindrome(["cc","ll","xx"])
     2
     """
     d: Counter[str] = Counter()

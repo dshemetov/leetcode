@@ -10,7 +10,12 @@ def numIslands(grid: list[list[str]]) -> int:
             visited.add((i_, j_))
 
             for i__, j__ in [(i_ + 1, j_), (i_ - 1, j_), (i_, j_ + 1), (i_, j_ - 1)]:
-                if 0 <= i__ < n and 0 <= j__ < m and (i__, j__) not in visited and grid[i__][j__] == "1":
+                if (
+                    0 <= i__ < n
+                    and 0 <= j__ < m
+                    and (i__, j__) not in visited
+                    and grid[i__][j__] == "1"
+                ):
                     unexplored.add((i__, j__))
 
     islands = 0

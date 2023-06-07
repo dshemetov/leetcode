@@ -1,9 +1,3 @@
-black
-jupyter
 matplotlib
 numpy
-pre-commit
-pylint
-pytest
-scalene
 scipy

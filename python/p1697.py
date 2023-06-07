@@ -7,7 +7,9 @@
 #   query in order of increasing threshold, we can build a graph and calculate
 #   the connected components given by the query threshold. This lets us build on
 #   the work done for previous queries.
-def distanceLimitedPathsExist(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[bool]:
+def distanceLimitedPathsExist(
+    n: int, edgeList: list[list[int]], queries: list[list[int]]
+) -> list[bool]:
     """
     Examples:
     >>> distanceLimitedPathsExist(3, [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], [[0,1,2],[0,2,5]])

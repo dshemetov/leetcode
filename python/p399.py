@@ -2,7 +2,9 @@
 from collections import defaultdict, deque
 
 
-def calcEquation(equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+def calcEquation(
+    equations: list[list[str]], values: list[float], queries: list[list[str]]
+) -> list[float]:
     """
     Examples:
     >>> calcEquation([["a","b"],["b","c"]], [2.0,3.0], [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]])

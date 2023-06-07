@@ -35,7 +35,14 @@ def findWords(board: list[list[str]], words: list[str]) -> list[str]:
                 else:
                     break
 
-    def dfs(i: int, j: int, node: dict, path: str, board: list[list[str]], found_words: set[str]) -> None:
+    def dfs(
+        i: int,
+        j: int,
+        node: dict,
+        path: str,
+        board: list[list[str]],
+        found_words: set[str],
+    ) -> None:
         if node.get("#"):
             found_words.add(path)
             trie.remove(path)
@@ -44,8 +51,20 @@ def findWords(board: list[list[str]], words: list[str]) -> list[str]:
 
         for di, dj in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             ni, nj = (i + di, j + dj)
-            if 0 <= ni < len(board) and 0 <= nj < len(board[0]) and board[ni][nj] in node and len(path) < 12:
-                dfs(ni, nj, node[board[ni][nj]], path + board[ni][nj], board, found_words)
+            if (
+                0 <= ni < len(board)
+                and 0 <= nj < len(board[0])
+                and board[ni][nj] in node
+                and len(path) < 12
+            ):
+                dfs(
+                    ni,
+                    nj,
+                    node[board[ni][nj]],
+                    path + board[ni][nj],
+                    board,
+                    found_words,
+                )
 
         board[i][j] = path[-1]
 
