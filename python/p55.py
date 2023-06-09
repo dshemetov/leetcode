@@ -5,8 +5,8 @@
 # - The forward version of the dynamic programming solution is more intuitive,
 #   but it is slow. The backward version is much faster.
 # - The second version is even better, avoiding the second for loop. The
-#   intuition there is that we only need to keep track of the minimum index
-#   that can reach the end.
+#   intuition there is that we only need to keep track of the minimum index that
+#   can reach the end.
 def canJump(nums: list[int]) -> bool:
     """
     Examples:
@@ -20,7 +20,7 @@ def canJump(nums: list[int]) -> bool:
     n = len(nums)
     reachable = [0] * (n - 1) + [1]
     for i in range(n - 2, -1, -1):
-        for j in range(i, min(n, i + nums[i] + 1)):
+        for j in range(i + 1, min(n, i + nums[i] + 1)):
             if reachable[j]:
                 reachable[i] = 1
                 break
