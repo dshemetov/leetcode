@@ -28,10 +28,6 @@ def swapPairs(head: ListNode | None) -> ListNode | None:
 
     # 1 2 3 4
     # 2 1 4 3
-    # one = p
-    # two = p.n
-    # three = p.n.n
-    # four = p.n.n.n
     while pointer and pointer.next:
         one = pointer
         two = pointer.next
