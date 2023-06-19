@@ -2,7 +2,7 @@
 
 
 # Lessons learned:
-# - I looked at the solution and rewrote it. The key is the recursive structure
+# - I looked at the solution and then wrote it from scratch. The key is the recursive structure
 #
 #       is_match(s, p) = is_match(s[1:], p[1:])                         if s[0] == p[0] or p[0] == "."
 #       is_match(s, p) = is_match(s, p[2:]) or                          if p[1] == "*"

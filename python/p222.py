@@ -2,9 +2,8 @@
 
 
 # Lessons learned:
-# - A complete binary tree is a binary tree in which every level, except
-# - possibly the last, is completely filled,
-#   and all nodes in the last level are as far left as possible.
+# - A complete binary tree is a binary tree in which every level is completely
+#   filled, except for the last where the nodes must be as far left as possible.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val

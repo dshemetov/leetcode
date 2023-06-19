@@ -20,4 +20,4 @@ def two_sum(nums: list[int], target: int) -> list[int]:
                 return ix_map.get(target - x)
             if x != target - x:
                 return [ix_map.get(x)[0], ix_map.get(target - x)[0]]
-    return 0
+    return [0]

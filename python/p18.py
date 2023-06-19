@@ -2,7 +2,7 @@
 
 
 # Lessons learned:
-# - The ideas are the same as in 3Sum, but with a few more edge cases.
+# - The idea is the same as in 3Sum, but with an extra index.
 def four_sum(nums: list[int], target: int) -> list[list[int]]:
     """
     Examples:
