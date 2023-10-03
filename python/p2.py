@@ -5,12 +5,12 @@ class ListNode:
         self.next = next
 
 
-def list_to_listnode(l: list[int]) -> ListNode:
-    if not l:
+def list_to_listnode(lst: list[int]) -> ListNode | None:
+    if not lst:
         return None
 
-    original_head = head = ListNode(l[0])
-    for x in l[1:]:
+    original_head = head = ListNode(lst[0])
+    for x in lst[1:]:
         head.next = ListNode(x)
         head = head.next
 
@@ -23,12 +23,12 @@ def listnode_to_list(head: ListNode) -> list[int]:
     >>> listnode_to_list(list_to_listnode([1, 2, 3, 4, 5]))
     [1, 2, 3, 4, 5]
     """
-    l = []
+    lst = []
     while head:
-        l.append(head.val)
+        lst.append(head.val)
         head = head.next
 
-    return l
+    return lst
 
 
 def add_two_numbers(l1: ListNode | None, l2: ListNode | None) -> ListNode | None:
@@ -68,7 +68,7 @@ def int_to_list(i: int) -> ListNode:
     return num_list
 
 
-def list_to_int(l: ListNode) -> int:
+def list_to_int(lst: ListNode) -> int:
     """
     Examples:
     >>> list_to_int(int_to_list(0))
@@ -84,8 +84,8 @@ def list_to_int(l: ListNode) -> int:
     """
     num = 0
     digit = 0
-    while l:
-        num += l.val * 10**digit
+    while lst:
+        num += lst.val * 10**digit
         digit += 1
-        l = l.next
+        lst = lst.next
     return num

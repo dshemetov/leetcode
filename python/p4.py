@@ -15,10 +15,10 @@
 #       B refers to the longer array,
 #       midA refers to a partition point in A,
 #       midB refers to a partition point in B,
-#       Aleft = A[midA - 1], refers to the largest element in the left partition of A, A[:midA]
-#       Aright = A[midA], refers to the smallest element in the right partition of A, A[midA:]
-#       Bleft = B[midB - 1], refers to the largest element in the left partition of B, B[:midB]
-#       Bright = B[midB], refers to the smallest element in the right partition of B, B[midB:]
+#       Aleft = A[midA - 1], refers to the largest element in the left partition of A
+#       Aright = A[midA], refers to the smallest element in the right partition of A
+#       Bleft = B[midB - 1], refers to the largest element in the left partition of B
+#       Bright = B[midB], refers to the smallest element in the right partition of B
 #
 # - To expand more on the second insight, consider the following example:
 #

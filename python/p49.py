@@ -1,9 +1,19 @@
 # %% 49. Group Anagrams https://leetcode.com/problems/group-anagrams/
-from collections import Counter, defaultdict
+from collections import defaultdict
 
 
 def groupAnagrams(strs: list[str]) -> list[list[str]]:
-    def group_key(s: str) -> Counter:
+    """
+    Examples:
+    >>> groupAnagrams(["eat","tea","tan","ate","nat","bat"])
+    [['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]
+    >>> groupAnagrams([""])
+    [['']]
+    >>> groupAnagrams(["a"])
+    [['a']]
+    """
+
+    def group_key(s: str) -> tuple[str, ...]:
         return tuple(sorted(s))
 
     groups = defaultdict(list)
