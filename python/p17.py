@@ -1,68 +1,66 @@
-# %% 17. Letter Combinations of a Phone Number https://leetcode.com/problems/letter-combinations-of-a-phone-number/
-from itertools import product
+import math
 
 
-# Lessons learned:
-# - Implement the Cartesian product, they say! It's fun, they say! And it turns
-#   out, that it is kinda fun.
-# - The second solution is a little more manual, but worth knowing.
-def letter_combinations(digits: str) -> list[str]:
+def p1680(n: int) -> int:
     """
+    1680. Concatenation of Consecutive Binary Numbers https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
+
     Examples:
-    >>> letter_combinations("23")
-    ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
-    >>> letter_combinations("")
-    []
-    >>> letter_combinations("2")
-    ['a', 'b', 'c']
+    >>> p1680(1)
+    1
+    >>> p1680(3)
+    27
+    >>> p1680(12)
+    505379714
     """
-    if not digits:
-        return []
+    M = 10**9 + 7
+    total = 1
+    for i in range(2, n + 1):
+        total = ((total << math.floor(math.log2(i)) + 1) + i) % M
 
-    letter_map = {
-        "2": "abc",
-        "3": "def",
-        "4": "ghi",
-        "5": "jkl",
-        "6": "mno",
-        "7": "pqrs",
-        "8": "tuv",
-        "9": "wxyz",
-    }
-
-    res = product(*[letter_map[c] for c in digits])
-    return ["".join(t) for t in res]
+    return total
 
 
-def letter_combinations2(digits: str) -> list[str]:
+def p1697(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[bool]:
     """
+    1697. Checking Existence of Edge Length Limited Paths https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
+
+    Lessons learned:
+    - This problem is a connected component problem, though the weighted edges may
+    throw you off. Since we're not looking for total path distance, for each
+    query in order of increasing threshold, we can build a graph and calculate
+    the connected components given by the query threshold. This lets us build on
+    the work done for previous queries.
+
     Examples:
-    >>> letter_combinations("23")
-    ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
-    >>> letter_combinations("")
-    []
-    >>> letter_combinations("2")
-    ['a', 'b', 'c']
+    >>> p1697(3, [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], [[0,1,2],[0,2,5]])
+    [False, True]
+    >>> p1697(5, [[0,1,10],[1,2,5],[2,3,9],[3,4,13]], [[0,4,14],[1,4,13]])
+    [True, False]
+    >>> p1697(3, [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], [[0,2,1], [0,2,7]])
+    [False, True]
     """
-    if not digits:
-        return []
+    parent = list(range(n))
 
-    letter_map = {
-        "2": "abc",
-        "3": "def",
-        "4": "ghi",
-        "5": "jkl",
-        "6": "mno",
-        "7": "pqrs",
-        "8": "tuv",
-        "9": "wxyz",
-    }
+    def find(x: int) -> int:
+        while True:
+            if x == parent[x]:
+                return x
+            parent[x] = parent[parent[x]]
+            x = parent[x]
 
-    res = []
-    for c in digits:
-        if not res:
-            res = list(letter_map[c])
-        else:
-            res = [a + b for a in res for b in letter_map[c]]
+    def union(x: int, y: int) -> None:
+        parent[find(x)] = find(y)
 
-    return res
+    edgeList.sort(key=lambda x: x[2])
+    queries = sorted((q[2], q[0], q[1], i) for i, q in enumerate(queries))
+
+    result = [False] * len(queries)
+    i = 0
+    for d, q0, q1, j in queries:
+        while i < len(edgeList) and edgeList[i][2] < d:
+            union(edgeList[i][0], edgeList[i][1])
+            i += 1
+        result[j] = find(q0) == find(q1)
+
+    return result

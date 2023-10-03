@@ -1,25 +1,27 @@
-# %% 2493. Divide Nodes Into The Maximum Number of Groups https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/
 from collections import defaultdict, deque
 
 
-# Lessons learned:
-# - This problem is a pretty straightforward extension of (785 Bipartite Graph
-#   Checking).
-# - I spent a good 30-45 minutes not realizing that I was returning the minimum
-#   groups instead of maximum. Derp.
-# - Checking only nodes with minimum degree <= node degree <= minimum degree + 1
-#   in a given partition yields a substantial savings (98 percentile
-#   performance), but I don't quite know if this is a general property or just a
-#   heuristic that helps on this particular test set. The intuition is that we
-#   can maximize graph diameter by starting at a leaf, leaves have degree 1, and
-#   so maybe looking for the smallest degree nodes leads us to outer boundary of
-#   a graph. Not sure.
-def magnificentSets(n: int, edges: list[list[int]]) -> int:
+def p2493(n: int, edges: list[list[int]]) -> int:
     """
+    2493. Divide Nodes Into The Maximum Number of Groups https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/
+
+    Lessons learned:
+    - This problem is a pretty straightforward extension of (785 Bipartite Graph
+    Checking).
+    - I spent a good 30-45 minutes not realizing that I was returning the minimum
+    groups instead of maximum. Derp.
+    - Checking only nodes with minimum degree <= node degree <= minimum degree + 1
+    in a given partition yields a substantial savings (98 percentile
+    performance), but I don't quite know if this is a general property or just a
+    heuristic that helps on this particular test set. The intuition is that we
+    can maximize graph diameter by starting at a leaf, leaves have degree 1, and
+    so maybe looking for the smallest degree nodes leads us to outer boundary of
+    a graph. Not sure.
+
     Examples:
-    >>> magnificentSets(6, [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]])
+    >>> p2493(6, [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]])
     4
-    >>> magnificentSets(3, [[1,2],[2,3],[3,1]])
+    >>> p2493(3, [[1,2],[2,3],[3,1]])
     -1
     """
     # Convert from edge list to adjacency list
@@ -57,10 +59,7 @@ def magnificentSets(n: int, edges: list[list[int]]) -> int:
                 coloring[node] = color
 
                 for neighbor_node in graph[node]:
-                    if (
-                        neighbor_node in coloring
-                        and (coloring[neighbor_node] - color - 1) % 2 == 1
-                    ):
+                    if neighbor_node in coloring and (coloring[neighbor_node] - color - 1) % 2 == 1:
                         return False
                     if neighbor_node not in coloring:
                         queue.append((neighbor_node, color + 1))

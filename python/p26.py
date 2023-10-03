@@ -1,15 +1,25 @@
-# %% 26. Remove Duplicates from Sorted Array https://leetcode.com/problems/remove-duplicates-from-sorted-array/
-def remove_duplicates(nums: list[int]) -> int:
+def p2540(nums1: list[int], nums2: list[int]) -> int:
     """
+    2540. Minimum Common Value https://leetcode.com/problems/minimum-common-value/
+
     Examples:
-    >>> remove_duplicates([1, 1, 2])
+    >>> p2540([1, 2, 3], [2, 4])
     2
-    >>> remove_duplicates([0,0,1,1,1,2,2,3,3,4])
-    5
+    >>> p2540([1, 2, 3], [4, 5])
+    -1
+    >>> p2540([1, 2, 3, 6], [2, 3, 4, 5])
+    2
+    >>> p2540([1, 1, 2], [2, 4])
+    2
     """
-    k = 0
-    for i in range(1, len(nums)):
-        if nums[k] != nums[i]:
-            k += 1
-            nums[k] = nums[i]
-    return k + 1
+    n, m = len(nums1), len(nums2)
+    i, j = 0, 0
+    while i < n and j < m:
+        if nums1[i] == nums2[j]:
+            return nums1[i]
+        if nums1[i] < nums2[j]:
+            i += 1
+        else:
+            j += 1
+
+    return -1

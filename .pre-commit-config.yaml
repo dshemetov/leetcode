@@ -1,38 +1,21 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-    - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v3.2.0
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      # Ruff version.
+      rev: v0.3.2
       hooks:
-          - id: trailing-whitespace
-          - id: end-of-file-fixer
-          - id: check-yaml
-          - id: check-added-large-files
-          - id: debug-statements
-          - id: name-tests-test
-          - id: requirements-txt-fixer
+          # Disabled becaue it can't detect function use in doctests.
+          # # Run the linter.
+          # - id: ruff
+          #   args: [--fix]
+          # Run the formatter.
+          - id: ruff-format
 
     - repo: https://github.com/asottile/pyupgrade
       rev: v3.4.0
       hooks:
           - id: pyupgrade
-
-    - repo: https://github.com/psf/black
-      rev: 23.3.0
-      hooks:
-          - id: black
-
-    - repo: local
-      hooks:
-          - id: pylint
-            name: pylint
-            entry: pylint
-            language: system
-            types: [python]
-            args: [
-                    "-rn", # Only display messages
-                    "-sn", # Don't display the score
-                ]
 
 default_language_version:
     python: python3.10
