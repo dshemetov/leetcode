@@ -1,5 +1,5 @@
-from collections import Counter, defaultdict, deque
 from bisect import bisect_left
+from collections import Counter, defaultdict, deque
 
 import numpy as np
 
@@ -121,6 +121,36 @@ def p347(nums: list[int], k: int) -> list[int]:
     return [num for num, _ in c.most_common(k)]
 
 
+def p349(nums1: list[int], nums2: list[int]) -> list[int]:
+    """
+    349. Intersection of Two Arrays https://leetcode.com/problems/intersection-of-two-arrays
+
+    Examples:
+    >>> p349([1, 2, 2, 1], [2, 2])
+    [2]
+    >>> p349([4, 9, 5], [9, 4, 9, 8, 4])
+    [9, 4]
+    """
+    return list(set(nums1) & set(nums2))
+
+
+def p373(nums1: list[int], nums2: list[int], k: int) -> list[list[int]]:
+    """
+    373. Find K Pairs with Smallest Sums https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
+
+    TODO
+
+    # Examples:
+    # >>> p373([1,7,11], [2,4,6], 3)
+    # [[1, 2], [1, 4], [1, 6]]
+    # >>> p373([1,1,2], [1,2,3], 2)
+    # [[1, 1], [1, 1]]
+    # >>> p373([1,2], [3], 3)
+    # [[1, 3], [2, 3]]
+    """
+    ...
+
+
 __pick__ = 6
 
 
@@ -166,7 +196,9 @@ def p374_2(n: int) -> int:
     return bisect_left(range(0, n), 0, lo=0, hi=n, key=lambda x: -guess(x))
 
 
-def p399(equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+def p399(
+    equations: list[list[str]], values: list[float], queries: list[list[str]]
+) -> list[float]:
     """
     399. Evaluate Division https://leetcode.com/problems/evaluate-division/
 

@@ -1,6 +1,6 @@
 from collections import Counter
 
-from p01 import ListNode, list_to_listnode, listnode_to_list
+from p01 import ListNode
 
 
 def p2130(head: ListNode | None) -> int:
@@ -13,11 +13,11 @@ def p2130(head: ListNode | None) -> int:
       pass.
 
     Examples:
-    >>> p2130(list_to_listnode([5,4,2,1]))
+    >>> p2130(ListNode.from_list([5,4,2,1]))
     6
-    >>> p2130(list_to_listnode([4,2,2,3]))
+    >>> p2130(ListNode.from_list([4,2,2,3]))
     7
-    >>> p2130(list_to_listnode([1,100000]))
+    >>> p2130(ListNode.from_list([1,100000]))
     100001
     """
     if head is None:

@@ -170,7 +170,9 @@ def p222(root: TreeNode | None) -> int:
     return 2 ** (height) + lo - 1
 
 
-def p223(ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int) -> int:
+def p223(
+    ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int
+) -> int:
     """
     223. Rectangle Area https://leetcode.com/problems/rectangle-area/
     """

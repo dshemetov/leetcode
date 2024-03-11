@@ -67,6 +67,36 @@ def p1323_2(num: int) -> int:
     return int(str(num).replace("6", "9", 1))
 
 
+def p1340(arr: list[int], d: int) -> int:
+    """
+    1340. Jump Game V https://leetcode.com/problems/jump-game-v/
+
+    Lessons learned:
+    - Going to try a simple BFS first, just to build problem understanding.
+    - The hint suggests using DP, but I don't see it yet. The problem structure is
+
+          dp[i] = 1 + max(dp[j] for j in range(i - d, i + d + 1) if arr[j] < arr[i])
+
+    TODO
+
+    # Examples:
+    # >>> p1340([6,4,14,6,8,13,9,7,10,6,12], 2)
+    # 4
+    # >>> p1340([3,3,3,3,3], 3)
+    # 1
+    # >>> p1340([7,6,5,4,3,2,1], 1)
+    # 7
+    """
+    if len(arr) == 1:
+        return 1
+
+    value_ix = defaultdict(list)
+    for ix, val in enumerate(arr):
+        value_ix[val].append(ix)
+
+    # values = sorted(value_ix.keys())
+
+
 def p1345(arr: list[int]) -> int:
     """
     1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/

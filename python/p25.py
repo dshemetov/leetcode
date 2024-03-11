@@ -59,7 +59,10 @@ def p2493(n: int, edges: list[list[int]]) -> int:
                 coloring[node] = color
 
                 for neighbor_node in graph[node]:
-                    if neighbor_node in coloring and (coloring[neighbor_node] - color - 1) % 2 == 1:
+                    if (
+                        neighbor_node in coloring
+                        and (coloring[neighbor_node] - color - 1) % 2 == 1
+                    ):
                         return False
                     if neighbor_node not in coloring:
                         queue.append((neighbor_node, color + 1))

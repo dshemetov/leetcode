@@ -1,3 +1,8 @@
+from typing import Optional
+
+from p01 import ListNode, listnode_to_list
+
+
 def is_similar(s1: str, s2: str) -> bool:
     """
     Examples:
@@ -54,6 +59,26 @@ def p839(strs: list[str]) -> int:
                 union(i, j)
 
     return len({find(i) for i in range(n)})
+
+
+def p876(head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    876. Middle of the Linked List https://leetcode.com/problems/middle-of-the-linked-list
+
+    Examples:
+    >>> listnode_to_list(p876(ListNode.from_list([1, 2, 3, 4, 5])))
+    [3, 4, 5]
+    >>> listnode_to_list(p876(ListNode.from_list([1, 2, 3, 4, 5, 6])))
+    [4, 5, 6]
+    """
+    if not head or not head.next:
+        return head
+    slow = head
+    fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
 
 
 def p899(s: str, k: int) -> str:

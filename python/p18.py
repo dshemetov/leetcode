@@ -1,7 +1,7 @@
 from collections import deque
 from typing import Literal
 
-from p01 import ListNode, list_to_listnode, listnode_to_list
+from p01 import ListNode, listnode_to_list
 
 
 def get_gaps(nums: list[int]) -> list[int]:
@@ -302,9 +302,9 @@ def p1721(head: ListNode, k: int) -> ListNode:
     - Two pointers allows you to do this in one pass.
 
     Examples:
-    >>> listnode_to_list(p1721(list_to_listnode([1,2,3,4,5]), 2))
+    >>> listnode_to_list(p1721(ListNode.from_list([1,2,3,4,5]), 2))
     [1, 4, 3, 2, 5]
-    >>> listnode_to_list(p1721(list_to_listnode([7,9,6,6,7,8,3,0,9,5]), 5))
+    >>> listnode_to_list(p1721(ListNode.from_list([7,9,6,6,7,8,3,0,9,5]), 5))
     [7, 9, 6, 6, 8, 7, 3, 0, 9, 5]
     """
     p1 = head

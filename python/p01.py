@@ -1,8 +1,32 @@
 import math
 from collections import defaultdict, deque
 from itertools import cycle, product
+from typing import Optional
 
 import numpy as np
+
+
+def p1(nums: list[int], target: int) -> list[int]:
+    """
+    1. Two Sum https://leetcode.com/problems/two-sum/
+
+    Examples:
+    >>> p1([3, 3], 6)
+    [0, 1]
+    >>> p1([3, 2, 4], 7)
+    [0, 2]
+    """
+    ix_map = defaultdict(list)
+    for i, x in enumerate(nums):
+        ix_map[x].append(i)
+
+    for x in ix_map:
+        if ix_map.get(target - x):
+            if x == target - x and len(ix_map.get(x)) == 2:
+                return ix_map.get(target - x)
+            if x != target - x:
+                return [ix_map.get(x)[0], ix_map.get(target - x)[0]]
+    return 0
 
 
 class ListNode:
@@ -10,29 +34,30 @@ class ListNode:
         self.val = val
         self.next = next
 
+    @staticmethod
+    def from_list(lst: list[int]) -> Optional["ListNode"]:
+        if not lst:
+            return None
 
-def list_to_listnode(lst: list[int]) -> ListNode | None:
-    if not lst:
-        return None
+        original_head = head = ListNode(lst[0])
+        for x in lst[1:]:
+            head.next = ListNode(x)
+            head = head.next
 
-    original_head = head = ListNode(lst[0])
-    for x in lst[1:]:
-        head.next = ListNode(x)
-        head = head.next
-
-    return original_head
+        return original_head
 
 
-def listnode_to_list(head: ListNode) -> list[int]:
+def listnode_to_list(head) -> list[int]:
     """
     Examples:
-    >>> listnode_to_list(list_to_listnode([1, 2, 3, 4, 5]))
+    >>> listnode_to_list(ListNode.from_list([1, 2, 3, 4, 5]))
     [1, 2, 3, 4, 5]
     """
     lst = []
-    while head:
-        lst.append(head.val)
-        head = head.next
+    ptr = head
+    while ptr:
+        lst.append(ptr.val)
+        ptr = ptr.next
 
     return lst
 
@@ -913,21 +938,21 @@ def p19(head: ListNode | None, n: int) -> ListNode | None:
     19. Remove Nth Node From End of List https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 
     Examples:
-    >>> listnode_to_list(p19(list_to_listnode([1, 2, 3, 4, 5]), 1))
+    >>> listnode_to_list(p19(ListNode.from_list([1, 2, 3, 4, 5]), 1))
     [1, 2, 3, 4]
-    >>> listnode_to_list(p19(list_to_listnode([1, 2, 3, 4, 5]), 2))
+    >>> listnode_to_list(p19(ListNode.from_list([1, 2, 3, 4, 5]), 2))
     [1, 2, 3, 5]
-    >>> listnode_to_list(p19(list_to_listnode([1, 2, 3, 4, 5]), 3))
+    >>> listnode_to_list(p19(ListNode.from_list([1, 2, 3, 4, 5]), 3))
     [1, 2, 4, 5]
-    >>> listnode_to_list(p19(list_to_listnode([1, 2, 3, 4, 5]), 4))
+    >>> listnode_to_list(p19(ListNode.from_list([1, 2, 3, 4, 5]), 4))
     [1, 3, 4, 5]
-    >>> listnode_to_list(p19(list_to_listnode([1, 2, 3, 4, 5]), 5))
+    >>> listnode_to_list(p19(ListNode.from_list([1, 2, 3, 4, 5]), 5))
     [2, 3, 4, 5]
-    >>> listnode_to_list(p19(list_to_listnode([1]), 1))
+    >>> listnode_to_list(p19(ListNode.from_list([1]), 1))
     []
-    >>> listnode_to_list(p19(list_to_listnode([1, 2]), 1))
+    >>> listnode_to_list(p19(ListNode.from_list([1, 2]), 1))
     [1]
-    >>> listnode_to_list(p19(list_to_listnode([1, 2]), 2))
+    >>> listnode_to_list(p19(ListNode.from_list([1, 2]), 2))
     [2]
     """
     sz = 0
@@ -979,11 +1004,11 @@ def p21(list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
      21. Merge Two Sorted Lists https://leetcode.com/problems/merge-two-sorted-lists/
 
     Examples:
-    >>> listnode_to_list(p21(list_to_listnode([1, 2, 4]), list_to_listnode([1, 3, 4])))
+    >>> listnode_to_list(p21(ListNode.from_list([1, 2, 4]), ListNode.from_list([1, 3, 4])))
     [1, 1, 2, 3, 4, 4]
-    >>> listnode_to_list(p21(list_to_listnode([]), list_to_listnode([])))
+    >>> listnode_to_list(p21(ListNode.from_list([]), ListNode.from_list([])))
     []
-    >>> listnode_to_list(p21(list_to_listnode([]), list_to_listnode([0])))
+    >>> listnode_to_list(p21(ListNode.from_list([]), ListNode.from_list([0])))
     [0]
     """
     head = pointer = ListNode()
@@ -1040,11 +1065,11 @@ def p23(lists: list[ListNode | None]) -> ListNode | None:
     - Sometimes the hard problems aren't that hard.
 
     Examples:
-    >>> listnode_to_list(p23([list_to_listnode([1, 4, 5]), list_to_listnode([1, 3, 4]), list_to_listnode([2, 6])]))
+    >>> listnode_to_list(p23([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])]))
     [1, 1, 2, 3, 4, 4, 5, 6]
     >>> listnode_to_list(p23([]))
     []
-    >>> listnode_to_list(p23([list_to_listnode([])]))
+    >>> listnode_to_list(p23([ListNode.from_list([])]))
     []
     """
     head = pointer = ListNode()
@@ -1067,11 +1092,11 @@ def p23(lists: list[ListNode | None]) -> ListNode | None:
 def p23_2(lists: list[ListNode | None]) -> ListNode | None:
     """
     Examples:
-    >>> listnode_to_list(p23_2([list_to_listnode([1, 4, 5]), list_to_listnode([1, 3, 4]), list_to_listnode([2, 6])]))
+    >>> listnode_to_list(p23_2([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])]))
     [1, 1, 2, 3, 4, 4, 5, 6]
     >>> listnode_to_list(p23_2([]))
     []
-    >>> listnode_to_list(p23_2([list_to_listnode([])]))
+    >>> listnode_to_list(p23_2([ListNode.from_list([])]))
     []
     """
     if not lists:
@@ -1088,17 +1113,17 @@ def p24(head: ListNode | None) -> ListNode | None:
     24. Swap Nodes in Pairs https://leetcode.com/problems/swap-nodes-in-pairs/
 
     Examples:
-    >>> listnode_to_list(p24(list_to_listnode([])))
+    >>> listnode_to_list(p24(ListNode.from_list([])))
     []
-    >>> listnode_to_list(p24(list_to_listnode([1])))
+    >>> listnode_to_list(p24(ListNode.from_list([1])))
     [1]
-    >>> listnode_to_list(p24(list_to_listnode([1, 2])))
+    >>> listnode_to_list(p24(ListNode.from_list([1, 2])))
     [2, 1]
-    >>> listnode_to_list(p24(list_to_listnode([1, 2, 3])))
+    >>> listnode_to_list(p24(ListNode.from_list([1, 2, 3])))
     [2, 1, 3]
-    >>> listnode_to_list(p24(list_to_listnode([1, 2, 3, 4])))
+    >>> listnode_to_list(p24(ListNode.from_list([1, 2, 3, 4])))
     [2, 1, 4, 3]
-    >>> listnode_to_list(p24(list_to_listnode([1, 2, 3, 4, 5])))
+    >>> listnode_to_list(p24(ListNode.from_list([1, 2, 3, 4, 5])))
     [2, 1, 4, 3, 5]
     """
     if not head:
@@ -1123,6 +1148,15 @@ def p24(head: ListNode | None) -> ListNode | None:
         pointer = three
 
     return new_head
+
+
+def p25(head: Optional[ListNode], k: int) -> Optional[ListNode]:
+    """
+    25. Reverse Nodes in k-Group https://leetcode.com/problems/reverse-nodes-in-k-group/description/
+
+    TODO: Implement this.
+    """
+    ...
 
 
 def p26(nums: list[int]) -> int:
@@ -1186,7 +1220,8 @@ def p36(board: list[list[str]]) -> bool:
     for i in range(3):
         for j in range(3):
             if not (
-                np.bincount(mat[3 * i : 3 * i + 3, 3 * j : 3 * j + 3].flatten())[1:] <= 1
+                np.bincount(mat[3 * i : 3 * i + 3, 3 * j : 3 * j + 3].flatten())[1:]
+                <= 1
             ).all():
                 return False
 
@@ -1220,7 +1255,9 @@ def p45(nums: list[int]) -> int:
         for j in range(i + 1, min(n, i + nums[i] + 1)):
             if reachable[j]:
                 reachable[i] = (
-                    min(1 + reachable[j], reachable[i]) if reachable[i] != 0 else 1 + reachable[j]
+                    min(1 + reachable[j], reachable[i])
+                    if reachable[i] != 0
+                    else 1 + reachable[j]
                 )
 
     return reachable[0] - 1
