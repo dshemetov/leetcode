@@ -1,43 +1,11 @@
-[tool.black]
-target-version = ['py310']
-include = '\.py'
-extend-exclude = '''
-/(
-  | .env
-  | .venv
-  | venv
-  | \*.pyx
-)/
-'''
-
-[tool.pylint]
-[tool.pylint.'MESSAGES CONTROL']
-disable = [
-    'duplicate-code',
-    'invalid-name',
-    'line-too-long',
-    'missing-module-docstring',
-    'missing-class-docstring',
-    'missing-function-docstring',
-    'too-few-public-methods',
-    'too-many-arguments',
-    'too-many-lines',
-    'too-many-return-statements',
-    'unused-import',
-]
-
-[tool.pyright]
-reportUnboundVariable = false
-
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--doctest-modules --doctest-continue-on-failure"
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 
 [tool.ruff]
-line-length = 100
-ignore = ["E501"]
-select = ["E", "F", "I", "W"]
-fixable = ["E", "F", "I"]
+lint.ignore = ["E501"]
+lint.select = ["E", "F", "I", "W"]
+lint.fixable = ["E", "F", "I"]
 exclude = [".env", ".venv", "venv", "notebooks"]
-show-source = true
+output-format = "full"
