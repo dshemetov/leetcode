@@ -1,6 +1,0 @@
-black
-jupyter
-pre-commit
-pylint
-pytest
-scalene

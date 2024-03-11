@@ -1,17 +1,17 @@
 # Leet Code Solutions
 
-Puzzles. Solutions. Tests.
+Programming katas.
 
 ## Usage
 
-Use Python >=3.10.
+I recommend Python >=3.10.
 
 ```py
 # Make a venv and install deps.
 python -m venv venv
 source venv/bin/activate
 pip install wheel
-pip install -r requirements.txt pytest
+pip install -r requirements.txt
 
 # Run tests (mostly docstrings).
 pytest

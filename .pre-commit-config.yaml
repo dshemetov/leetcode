@@ -12,10 +12,5 @@ repos:
           # Run the formatter.
           - id: ruff-format
 
-    - repo: https://github.com/asottile/pyupgrade
-      rev: v3.4.0
-      hooks:
-          - id: pyupgrade
-
 default_language_version:
     python: python3.10
