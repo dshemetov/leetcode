@@ -1,25 +1,59 @@
-# %% 13. Roman to Integer https://leetcode.com/problems/roman-to-integer/
-def roman_to_int(s: str) -> int:
+from collections import deque, namedtuple
+from collections.abc import Generator
+
+
+def p1293(grid: list[list[int]], k: int) -> int:
     """
+    1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
+
+    Lessons learned:
+    - You don't need a dictionary of best distances, just a set of visited nodes
+    (since any first visit to a node is the best).
+    - You don't need a priority queue, just a queue.
+
     Examples:
-    >>> roman_to_int("III")
-    3
-    >>> roman_to_int("IV")
-    4
-    >>> roman_to_int("IX")
-    9
-    >>> roman_to_int("LVIII")
-    58
-    >>> roman_to_int("MCMXCIV")
-    1994
+    >>> p1293([[0,0,0],[1,1,0],[0,0,0],[0,1,1],[0,0,0]], 1)
+    6
+    >>> p1293([[0,1,1],[1,1,1],[1,0,0]], 1)
+    -1
+    >>> grid = [
+    ...     [0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],
+    ...     [0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,1,1,1,1,0,0,0],[0,1,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,0,1,0],[0,0,0,0,0,0,0,0,1,0]
+    ... ]
+    >>> p1293(grid, 1)
+    20
     """
-    d = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+    State = namedtuple("State", "steps k i j")
+    m, n = len(grid), len(grid[0])
 
-    total = 0
-    for i in range(len(s) - 1):
-        if d[s[i]] < d[s[i + 1]]:
-            total -= d[s[i]]
-        else:
-            total += d[s[i]]
+    # Trivial solution: just pick a random Manhattan distance and blow everything up.
+    if k >= m + n - 2:
+        return m + n - 2
 
-    return total + d[s[i + 1]]
+    def get_valid_neighbor_states(s: State) -> Generator[State]:
+        for di, dj in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+            i, j = s.i + di, s.j + dj
+            if 0 <= i < m and 0 <= j < n:
+                if grid[i][j] == 0:
+                    yield State(s.steps + 1, s.k, i, j)
+                elif s.k > 0:
+                    yield State(s.steps + 1, s.k - 1, i, j)
+
+    # Don't need a priority queue, since we're only ever visiting each node once.
+    # The states will naturally be ordered by steps.
+    queue = deque([State(0, k, 0, 0)])
+    # We can just use a set instead of a dict, since any first visit to a state has minimum steps.
+    seen = {(0, 0, k)}
+
+    while queue:
+        current_state = queue.popleft()
+
+        if (current_state.i, current_state.j) == (m - 1, n - 1):
+            return current_state.steps
+
+        for state in get_valid_neighbor_states(current_state):
+            if (state.i, state.j, state.k) not in seen:
+                seen.add((state.i, state.j, state.k))
+                queue.append(state)
+
+    return -1

@@ -1,51 +1,27 @@
-# %% 23. Merge k Sorted Lists https://leetcode.com/problems/merge-k-sorted-lists/
-# Lessons learned:
-# - Sometimes the hard problems aren't that hard.
-from p2 import ListNode, list_to_listnode, listnode_to_list
-from p21 import mergeTwoLists
-
-
-def mergeKLists(lists: list[ListNode | None]) -> ListNode | None:
+def p2215(nums1: list[int], nums2: list[int]) -> list[list[int]]:
     """
+    2215. Find the Difference of Two Arrays https://leetcode.com/problems/find-the-difference-of-two-arrays/
+
     Examples:
-    >>> listnode_to_list(mergeKLists([list_to_listnode([1, 4, 5]), list_to_listnode([1, 3, 4]), list_to_listnode([2, 6])]))
-    [1, 1, 2, 3, 4, 4, 5, 6]
-    >>> listnode_to_list(mergeKLists([]))
-    []
-    >>> listnode_to_list(mergeKLists([list_to_listnode([])]))
-    []
+    >>> p2215([1,2,3], [2,4,6])
+    [[1, 3], [4, 6]]
+    >>> p2215([1,2,3,3], [1,1,2,2])
+    [[3], []]
     """
-    head = pointer = ListNode()
-
-    while any(x for x in lists):
-        min_val = float("inf")
-        min_idx = -1
-        for i, x in enumerate(lists):
-            if x and x.val < min_val:
-                min_val = x.val
-                min_idx = i
-
-        pointer.next = lists[min_idx]
-        lists[min_idx] = lists[min_idx].next
-        pointer = pointer.next
-
-    return head.next
+    s1, s2 = set(nums1), set(nums2)
+    return [[n for n in s1 if n not in s2], [n for n in s2 if n not in s1]]
 
 
-def mergeKLists2(lists: list[ListNode | None]) -> ListNode | None:
+def p2269(num: int, k: int) -> int:
     """
-    Examples:
-    >>> listnode_to_list(mergeKLists2([list_to_listnode([1, 4, 5]), list_to_listnode([1, 3, 4]), list_to_listnode([2, 6])]))
-    [1, 1, 2, 3, 4, 4, 5, 6]
-    >>> listnode_to_list(mergeKLists2([]))
-    []
-    >>> listnode_to_list(mergeKLists2([list_to_listnode([])]))
-    []
+    2269. Find The k-Beauty of a Number https://leetcode.com/problems/find-the-k-beauty-of-a-number/
     """
-    if not lists:
-        return None
-
-    while len(lists) > 1:
-        lists.append(mergeTwoLists(lists.pop(0), lists.pop(0)))
-
-    return lists[0]
+    result = 0
+    digits = str(num)
+    for i in range(len(digits) - k + 1):
+        sub = int(digits[i : i + k])
+        if sub == 0:
+            continue
+        if num % sub == 0:
+            result += 1
+    return result

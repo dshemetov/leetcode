@@ -1,4 +1,3 @@
-# %% 587. Erect the Fence https://leetcode.com/problems/erect-the-fence/
 import math
 from collections import defaultdict
 from fractions import Fraction
@@ -8,18 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# Lessons learned:
-# - A broad class of computational geometry algorithms solve this:
-#   https://en.wikipedia.org/wiki/Convex_hull_algorithms#Algorithms
-# - The Graham scan is easy to understand and decently fast:
-#   https://en.wikipedia.org/wiki/Graham_scan
-# - Tip from a graphics guy: avoid representing angles with degrees/radians,
-#   stay in fractions. This avoids numerical issues with floating points, but
-#   it's not without its own problems.
-# - The atan2 function was invented back in the Fortran days and makes for a
-#   stable polar angle definition. It's also fast.
-# - The edge-cases of the Graham scan are tricky, especially all the cases with
-#   colinear points.
 def ccw(p1: tuple[int, int], p2: tuple[int, int], p3: tuple[int, int]) -> float:
     """
     Examples:
@@ -86,31 +73,42 @@ def plot_points(points: list[tuple[int, int]], hull: list[tuple[int, int]]):
     plt.show()
 
 
-def outerTrees(trees: list[list[int]]) -> list[list[int]]:
+def p587(trees: list[list[int]]) -> list[list[int]]:
     """
-    We are going to use a Graham scan to find the convex hull of the points.
+    587. Erect the Fence https://leetcode.com/problems/erect-the-fence/
+
+    Lessons learned:
+    - A broad class of computational geometry algorithms solve this:
+    https://en.wikipedia.org/wiki/Convex_hull_algorithms#Algorithms
+    - The Graham scan is easy to understand and decently fast:
+    https://en.wikipedia.org/wiki/Graham_scan
+    - Tip from a graphics guy: avoid representing angles with degrees/radians,
+    stay in fractions. This avoids numerical issues with floating points, but
+    it's not without its own problems.
+    - The atan2 function was invented back in the Fortran days and makes for a
+    stable polar angle definition. It's also fast.
+    - The edge-cases of the Graham scan are tricky, especially all the cases with
+    colinear points.
 
     Examples:
-    >>> outerTrees([[1,1],[2,2],[2,0],[2,4],[3,3],[4,2]])
+    >>> p587([[1,1],[2,2],[2,0],[2,4],[3,3],[4,2]])
     [[2, 0], [4, 2], [3, 3], [2, 4], [1, 1]]
-    >>> outerTrees([[1,2],[2,2],[4,2]])
+    >>> p587([[1,2],[2,2],[4,2]])
     [[1, 2], [2, 2], [4, 2]]
-    >>> outerTrees([[1,1],[2,2],[3,3],[2,1],[4,1],[2,3],[1,3]])
+    >>> p587([[1,1],[2,2],[3,3],[2,1],[4,1],[2,3],[1,3]])
     [[1, 1], [2, 1], [4, 1], [3, 3], [2, 3], [1, 3]]
-    >>> outerTrees([[3,0],[4,0],[5,0],[6,1],[7,2],[7,3],[7,4],[6,5],[5,5],[4,5],[3,5],[2,5],[1,4],[1,3],[1,2],[2,1],[4,2],[0,3]])
+    >>> p587([[3,0],[4,0],[5,0],[6,1],[7,2],[7,3],[7,4],[6,5],[5,5],[4,5],[3,5],[2,5],[1,4],[1,3],[1,2],[2,1],[4,2],[0,3]])
     [[3, 0], [4, 0], [5, 0], [6, 1], [7, 2], [7, 3], [7, 4], [6, 5], [5, 5], [4, 5], [3, 5], [2, 5], [1, 4], [0, 3], [1, 2], [2, 1]]
-    >>> outerTrees([[0,2],[0,1],[0,0],[1,0],[2,0],[1,1]])
+    >>> p587([[0,2],[0,1],[0,0],[1,0],[2,0],[1,1]])
     [[0, 0], [1, 0], [2, 0], [1, 1], [0, 2], [0, 1]]
-    >>> outerTrees([[0,2],[0,4],[0,5],[0,9],[2,1],[2,2],[2,3],[2,5],[3,1],[3,2],[3,6],[3,9],[4,2],[4,5],[5,8],[5,9],[6,3],[7,9],[8,1],[8,2],[8,5],[8,7],[9,0],[9,1],[9,6]])
+    >>> p587([[0,2],[0,4],[0,5],[0,9],[2,1],[2,2],[2,3],[2,5],[3,1],[3,2],[3,6],[3,9],[4,2],[4,5],[5,8],[5,9],[6,3],[7,9],[8,1],[8,2],[8,5],[8,7],[9,0],[9,1],[9,6]])
     [[9, 0], [9, 1], [9, 6], [7, 9], [5, 9], [3, 9], [0, 9], [0, 5], [0, 4], [0, 2], [2, 1]]
-    >>> outerTrees([[0,0],[0,1],[0,2],[1,2],[2,2],[3,2],[3,1],[3,0],[2,0],[1,0],[1,1],[3,3]])
+    >>> p587([[0,0],[0,1],[0,2],[1,2],[2,2],[3,2],[3,1],[3,0],[2,0],[1,0],[1,1],[3,3]])
     [[0, 0], [1, 0], [2, 0], [3, 0], [3, 1], [3, 2], [3, 3], [0, 2], [0, 1]]
     """
     lowest_left_point = (math.inf, math.inf)
     for x, y in trees:
-        if y < lowest_left_point[1] or (
-            y == lowest_left_point[1] and x < lowest_left_point[0]
-        ):
+        if y < lowest_left_point[1] or (y == lowest_left_point[1] and x < lowest_left_point[0]):
             lowest_left_point = (x, y)
 
     trees_by_slope = partition_by(
