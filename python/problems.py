@@ -187,6 +187,18 @@ def p3(s: str) -> int:
     return longest
 
 
+def get_median_sorted(nums: list[int]) -> float:
+    if len(nums) == 1:
+        return nums[0]
+
+    mid = len(nums) // 2
+
+    if len(nums) % 2 == 0:
+        return (nums[mid] + nums[mid - 1]) / 2
+
+    return nums[mid]
+
+
 def p4(nums1: list[int], nums2: list[int]) -> float:
     """
     4. Median of Two Sorted Arrays https://leetcode.com/problems/median-of-two-sorted-arrays/
@@ -303,18 +315,6 @@ def p4(nums1: list[int], nums2: list[int]) -> float:
             hi = midA - 1
         else:
             lo = midA + 1
-
-
-def get_median_sorted(nums: list[int]) -> float:
-    if len(nums) == 1:
-        return nums[0]
-
-    mid = len(nums) // 2
-
-    if len(nums) % 2 == 0:
-        return (nums[mid] + nums[mid - 1]) / 2
-
-    return nums[mid]
 
 
 def p5(s: str) -> str:
@@ -2207,21 +2207,19 @@ def p373(nums1: list[int], nums2: list[int], k: int) -> list[list[int]]:
 
     TODO
 
-    # Examples:
-    # >>> p373([1,7,11], [2,4,6], 3)
-    # [[1, 2], [1, 4], [1, 6]]
-    # >>> p373([1,1,2], [1,2,3], 2)
-    # [[1, 1], [1, 1]]
-    # >>> p373([1,2], [3], 3)
-    # [[1, 3], [2, 3]]
+    Examples:
+    >>> p373([1,7,11], [2,4,6], 3)
+    [[1, 2], [1, 4], [1, 6]]
+    >>> p373([1,1,2], [1,2,3], 2)
+    [[1, 1], [1, 1]]
+    >>> p373([1,2], [3], 3)
+    [[1, 3], [2, 3]]
     """
     ...
 
 
-__pick__ = 6
-
-
 def guess(num: int) -> int:
+    __pick__ = 6
     if num == __pick__:
         return 0
     if num > __pick__:
@@ -3366,6 +3364,23 @@ def p1143(text1: str, text2: str) -> int:
     return dp_[-1][-1]
 
 
+def p1171(head: Optional[ListNode]) -> Optional[ListNode]:
+    """
+    1171. Remove Zero Sum Consecutive Node from Linked List https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
+
+    TODO
+
+    Examples:
+    >>> listnode_to_list(p1171(ListNode.from_list([1,2,-3,3,1])))
+    [3, 1]
+    >>> listnode_to_list(p1171(ListNode.from_list([1,2,3,-3,4])))
+    [1, 2, 4]
+    >>> listnode_to_list(p1171(ListNode.from_list([1,2,3,-3,-2])))
+    [1]
+    """
+    ...
+
+
 def p1293(grid: list[list[int]], k: int) -> int:
     """
     1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
@@ -3499,13 +3514,13 @@ def p1340(arr: list[int], d: int) -> int:
 
     TODO
 
-    # Examples:
-    # >>> p1340([6,4,14,6,8,13,9,7,10,6,12], 2)
-    # 4
-    # >>> p1340([3,3,3,3,3], 3)
-    # 1
-    # >>> p1340([7,6,5,4,3,2,1], 1)
-    # 7
+    Examples:
+    >>> p1340([6,4,14,6,8,13,9,7,10,6,12], 2)
+    4
+    >>> p1340([3,3,3,3,3], 3)
+    1
+    >>> p1340([7,6,5,4,3,2,1], 1)
+    7
     """
     if len(arr) == 1:
         return 1
@@ -3514,7 +3529,7 @@ def p1340(arr: list[int], d: int) -> int:
     for ix, val in enumerate(arr):
         value_ix[val].append(ix)
 
-    # values = sorted(value_ix.keys())
+    values = sorted(value_ix.keys())
 
 
 def p1345(arr: list[int]) -> int:
@@ -3869,6 +3884,88 @@ def p1697(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[b
     return result
 
 
+def get_moves_list(nums: list[int], k: int) -> int:
+    """Test three ways to calculate the absolute value distance.
+
+    For testing 1703.
+
+    Examples:
+    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 2)
+    >>> a == b == c
+    True
+    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 3)
+    >>> a == b == c
+    True
+    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 4)
+    >>> a == b == c
+    True
+    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 5)
+    >>> a == b == c
+    True
+    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 6)
+    >>> a == b == c
+    True
+    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 8)
+    >>> a == b == c
+    True
+    """
+
+    def calc1(stack: deque, k: int) -> int:
+        """Calculate using the absolute value formula with the indices."""
+        mid = k // 2
+        return sum(abs(stack[mid] - i) for i in stack)
+
+    def method1(nums: list[int], k: int) -> list[int]:
+        """Calculate using the absolute value formula with the indices."""
+        if len(nums) == k or k == 1:
+            return 0
+
+        moves = []
+        stack = deque()
+        s = 0
+        for i, n in enumerate(nums):
+            if n == 1:
+                stack.append(i)
+                if stack and len(stack) > k:
+                    s = s - stack.popleft()
+                if len(stack) == k:
+                    moves.append(calc1(stack, k))
+
+        return moves
+
+    def calc2(gaps: list, k: int, j: int) -> int:
+        """Calculate using the absolute value formula with the differences between indices."""
+        return sum(min(i + 1, k - (i + 1)) * gaps[j + i] for i in range(k - 1))
+
+    def method2(nums: list[int], k: int) -> list[int]:
+        """Calculate using the absolute value formula with the differences between indices."""
+        gaps = get_gaps(nums)
+        moves = []
+        for j in range(len(gaps) - k + 2):
+            moves.append(calc2(gaps, k, j))
+        return moves
+
+    def method3(nums: list[int], k: int) -> list[int]:
+        """Calculate using a magic iterative approach."""
+        gaps = get_gaps(nums)
+
+        if len(gaps) == k - 1:
+            return [calc2(gaps, k, 0)]
+
+        moves = [calc2(gaps, k, 0), calc2(gaps, k, 1)]
+        delta1 = moves[-1] - moves[-2]
+        for j in range(0, len(gaps) - k):
+            if k % 2 == 1:
+                delta2 = gaps[j] - gaps[j + k // 2] - gaps[j + k // 2 + 1] + gaps[j + k]
+            else:
+                delta2 = gaps[j] - 2 * gaps[j + k // 2] + gaps[j + k]
+            delta1 = delta1 + delta2
+            moves.append(moves[-1] + delta1)
+        return moves
+
+    return method1(nums, k), method2(nums, k), method3(nums, k)
+
+
 def get_gaps(nums: list[int]) -> list[int]:
     gaps = []
     prev = -1
@@ -4046,86 +4143,6 @@ def p1703_2(nums: list[int], k: int) -> int:
     return m - correction_factor
 
 
-def get_moves_list(nums: list[int], k: int) -> int:
-    """Test three ways to calculate the absolute value distance.
-
-    Examples:
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 2)
-    >>> a == b == c
-    True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 3)
-    >>> a == b == c
-    True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 4)
-    >>> a == b == c
-    True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 5)
-    >>> a == b == c
-    True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 6)
-    >>> a == b == c
-    True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 8)
-    >>> a == b == c
-    True
-    """
-
-    def calc1(stack: deque, k: int) -> int:
-        """Calculate using the absolute value formula with the indices."""
-        mid = k // 2
-        return sum(abs(stack[mid] - i) for i in stack)
-
-    def method1(nums: list[int], k: int) -> list[int]:
-        """Calculate using the absolute value formula with the indices."""
-        if len(nums) == k or k == 1:
-            return 0
-
-        moves = []
-        stack = deque()
-        s = 0
-        for i, n in enumerate(nums):
-            if n == 1:
-                stack.append(i)
-                if stack and len(stack) > k:
-                    s = s - stack.popleft()
-                if len(stack) == k:
-                    moves.append(calc1(stack, k))
-
-        return moves
-
-    def calc2(gaps: list, k: int, j: int) -> int:
-        """Calculate using the absolute value formula with the differences between indices."""
-        return sum(min(i + 1, k - (i + 1)) * gaps[j + i] for i in range(k - 1))
-
-    def method2(nums: list[int], k: int) -> list[int]:
-        """Calculate using the absolute value formula with the differences between indices."""
-        gaps = get_gaps(nums)
-        moves = []
-        for j in range(len(gaps) - k + 2):
-            moves.append(calc2(gaps, k, j))
-        return moves
-
-    def method3(nums: list[int], k: int) -> list[int]:
-        """Calculate using a magic iterative approach."""
-        gaps = get_gaps(nums)
-
-        if len(gaps) == k - 1:
-            return [calc2(gaps, k, 0)]
-
-        moves = [calc2(gaps, k, 0), calc2(gaps, k, 1)]
-        delta1 = moves[-1] - moves[-2]
-        for j in range(0, len(gaps) - k):
-            if k % 2 == 1:
-                delta2 = gaps[j] - gaps[j + k // 2] - gaps[j + k // 2 + 1] + gaps[j + k]
-            else:
-                delta2 = gaps[j] - 2 * gaps[j + k // 2] + gaps[j + k]
-            delta1 = delta1 + delta2
-            moves.append(moves[-1] + delta1)
-        return moves
-
-    return method1(nums, k), method2(nums, k), method3(nums, k)
-
-
 def p1706(grid: list[list[int]]) -> list[int]:
     """
     1706. Where Will The Ball Fall https://leetcode.com/problems/where-will-the-ball-fall/
@@ -4212,8 +4229,8 @@ def p2130(head: ListNode | None) -> int:
 
     Lessons learned:
     - Finding the midpoint of a linked list can be done with two pointers.
-      Reversing a linked list is pretty easy. These steps above can be done in one
-      pass.
+    Reversing a linked list is pretty easy. These steps above can be done in one
+    pass.
 
     Examples:
     >>> p2130(ListNode.from_list([5,4,2,1]))
@@ -4450,11 +4467,11 @@ def p2608(n: int, edges: list[list[int]]) -> int:
 
     TODO
 
-    # Examples:
-    # >>> p2608(7, [[0,1],[1,2],[2,0],[3,4],[4,5],[5,6],[6,3]])
-    # 3
-    # >>> p2608(4, [[0,1],[0,2]])
-    # -1
+    Examples:
+    >>> p2608(7, [[0,1],[1,2],[2,0],[3,4],[4,5],[5,6],[6,3]])
+    3
+    >>> p2608(4, [[0,1],[0,2]])
+    -1
     """
     ...
 
