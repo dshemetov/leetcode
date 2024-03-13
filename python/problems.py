@@ -1679,6 +1679,55 @@ def p133(node: "Node") -> "Node":
     return clone_index[1]
 
 
+def p141(head: ListNode | None) -> bool:
+    """
+    141. Linked List Cycle https://leetcode.com/problems/linked-list-cycle/
+
+    Lessons learned:
+    - We use the classic two-pointer cycle detection algorithm known as Floyd's
+    Tortoise and Hare.
+    - One intuitive way to think about why this works is to consider the
+    tortoise as being ahead of the hare, once the tortoise is in the cycle, and
+    the hare gets closer to the tortoise with each step. Eventually, the hare
+    will catch up to the tortoise, and we will have a cycle.
+    - An algebraic proof: we want to show that
+
+        i  = n + m
+        2i = n + k * p + m
+        ------------------
+        n + m = k * p
+
+    has a solution in k >= 0 and m >= 0, where n is the number of nodes before
+    the cycle, p is the number of nodes in the cycle, and m is the number of
+    nodes in the cycle before the hare catches up to the tortoise. Setting k = n
+    and m = n * p - n, we have a solution. For instance, if n = 5 and p = 3,
+    this gives the solution k = 5 and m = 10, which translates to i = 15 and 2i
+    = 30, which works in the table below:
+
+        Tortoise index: 0, 1, 2, 3, 4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, ...
+        Tortoise node:  1, 2, 3, 4, 5,  6,  7,  5,  6,  7,  5,  6,  7,  5,  6,  7, ...
+        Hare index:     0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, ...
+        Hare node:      1, 3, 5, 7, 5,  7,  5,  7,  5,  7,  5,  7,  5,  7,  5,  7, ...
+
+    This is not the earliest solution, but it is an existence proof.
+
+    Examples:
+    >>> p141(ListNode.from_list([3, 2, 0, -4], 1))
+    True
+    >>> p141(ListNode.from_list([1, 2], 0))
+    True
+    >>> p141(ListNode.from_list([1], -1))
+    False
+    """
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow == fast:
+            return True
+    return False
+
+
 def p151(s: str) -> str:
     """
     151. Reverse Words In A String https://leetcode.com/problems/reverse-words-in-a-string/
@@ -3368,7 +3417,11 @@ def p1171(head: Optional[ListNode]) -> Optional[ListNode]:
     """
     1171. Remove Zero Sum Consecutive Node from Linked List https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
 
-    TODO
+    Lessons learned:
+    - The key here is to use a prefix sum map and make two passes through the
+    list. The first pass builds the prefix sum map and in the second pass, if we
+    find a prefix sum that we've seen before, we can remove the nodes between
+    the two occurrences.
 
     Examples:
     >>> listnode_to_list(p1171(ListNode.from_list([1,2,-3,3,1])))
@@ -3377,8 +3430,27 @@ def p1171(head: Optional[ListNode]) -> Optional[ListNode]:
     [1, 2, 4]
     >>> listnode_to_list(p1171(ListNode.from_list([1,2,3,-3,-2])))
     [1]
+    >>> listnode_to_list(p1171(ListNode.from_list([5,-3,-4,1,6,-2,-5])))
+    [5, -2, -5]
     """
-    ...
+    start = ListNode(0, head)
+    prefix_sum_to_node = {0: start}
+
+    current = start
+    prefix_sum = 0
+    while current:
+        prefix_sum += current.val
+        prefix_sum_to_node[prefix_sum] = current
+        current = current.next
+
+    current = start
+    prefix_sum = 0
+    while current:
+        prefix_sum += current.val
+        current.next = prefix_sum_to_node[prefix_sum].next
+        current = current.next
+
+    return start.next
 
 
 def p1293(grid: list[list[int]], k: int) -> int:
