@@ -10,8 +10,10 @@ from bisect import bisect_left, insort
 from collections import Counter, defaultdict, deque, namedtuple
 from collections.abc import Generator
 from fractions import Fraction
+from heapq import heappop, heappush
 from itertools import cycle, product
 from queue import PriorityQueue
+from string import ascii_lowercase
 from typing import Callable, Literal, Optional
 
 import matplotlib.pyplot as plt
@@ -1166,9 +1168,96 @@ def p25(head: Optional[ListNode], k: int) -> Optional[ListNode]:
     """
     25. Reverse Nodes in k-Group https://leetcode.com/problems/reverse-nodes-in-k-group/description/
 
-    TODO: Implement this.
+    Lessons learned:
+    - Walking through the k=3 case below while writing the algorithm was key.
+    - Variable naming is hard. It's nice to start with long descriptive names to
+    clarify each variable's intent, but then erase them with shorter ones, once
+    you're used to it. Short names make thinking easier for some reason, but are
+    harder to read.
+
+    Example with k = 3:
+
+    First iteration, after lookahead:
+
+    [1, 2, 3, 4, 5, 6, 7]
+     ^head
+     ^new_head
+     ^cur1
+              ^cur2
+
+    After reversal:
+
+    [1, 2, 3, 4, 5, 6, 7]
+     ^head
+     ^first_prev
+     ^first_cur
+           ^new_head
+              ^cur1
+              ^cur2
+
+    Second iteration, after lookahead:
+
+    [1, 2, 3, 4, 5, 6, 7]
+     ^head
+     ^first_prev
+           ^new_head
+              ^cur1
+                       ^cur2
+
+    After reversal:
+
+    [1, 2, 3, 4, 5, 6, 7]
+     ^head
+             ^first_prev
+           ^new_head
+              ^first_cur
+                       ^cur1
+                       ^cur2
+
+    >>> listnode_to_list(p25(ListNode.from_list([1,2,3,4,5]), 2))
+    [2, 1, 4, 3, 5]
+    >>> listnode_to_list(p25(ListNode.from_list([1,2,3,4,5]), 3))
+    [3, 2, 1, 4, 5]
+    >>> listnode_to_list(p25(ListNode.from_list([1,2,3,4,5]), 1))
+    [1, 2, 3, 4, 5]
     """
-    ...
+    # Start of new list
+    new_head = head
+    # Reversal pointer
+    cur1 = head
+    # Lookahead pointer
+    cur2 = head
+    # Pointer for linking two reversed segments together (e.g. 1 2 3 4 with k =
+    # 2, it stores 1 so we can link it to 4)
+    first_prev = None
+    first_reversal = True
+
+    while True:
+        # Look ahead
+        i = 0
+        while i < k and cur2:
+            cur2 = cur2.next
+            i += 1
+
+        if i < k:
+            return new_head
+
+        # Reverse section, see p2130
+        first_cur = cur1
+        i = 0
+        cur1_prev = None
+        while cur1 and i < k:
+            cur1.next, cur1_prev, cur1 = cur1_prev, cur1, cur1.next
+            i += 1
+
+        # If first reversal, update the new_head
+        if first_reversal:
+            new_head = cur1_prev
+            first_reversal = False
+        else:
+            first_prev.next = cur1_prev
+        first_prev = first_cur
+        first_cur.next = cur1
 
 
 def p26(nums: list[int]) -> int:
@@ -1187,6 +1276,42 @@ def p26(nums: list[int]) -> int:
             k += 1
             nums[k] = nums[i]
     return k + 1
+
+
+def p27(nums: list[int], val: int) -> int:
+    """
+    27. Remove Element https://leetcode.com/problems/remove-element
+
+    Examples:
+    >>> p27([3, 2, 2, 3], 3)
+    2
+    >>> p27([0,1,2,2,3,0,4,2], 2)
+    5
+    """
+    n = len(nums)
+    k = 0
+    for i in range(n):
+        if nums[i] != val:
+            nums[k] = nums[i]
+            k += 1
+    return k
+
+
+def p28(haystack: str, needle: str) -> int:
+    """
+    28. Find the Index of the First Occurrence in a String https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string
+
+    Examples:
+    >>> p28("sadbutsad", "sad")
+    0
+    >>> p28("sadbutsad", "but")
+    3
+    >>> p28("leetcode", "leeto")
+    -1
+    """
+    if needle in haystack:
+        return haystack.index(needle)
+    return -1
 
 
 def p36(board: list[list[str]]) -> bool:
@@ -1361,8 +1486,8 @@ def p55(nums: list[int]) -> bool:
     - The forward version of the dynamic programming solution is more intuitive,
     but it is slow. The backward version is much faster.
     - The second version is even better, avoiding the second for loop. The
-    intuition there is that we only need to keep track of the minimum index that
-    can reach the end.
+    intuition there is that we keep track of minimum known index that can reach
+    the end.
 
     Examples:
     >>> p55([2,3,1,1,4])
@@ -1564,13 +1689,63 @@ class TreeNode:
         self.left = left
         self.right = right
 
+    @staticmethod
+    def from_list(lst: list, recursive: bool = False) -> "TreeNode":
+        """Build TreeNode from a top-to-bottom, left-to-right traversal of the nodes.
+
+        With a 0-indexed array, a node at index i has left and right children at
+        index 2i+1 and 2i+2.
+        """
+        if recursive:
+            # Must be length 2 ** i - 1.
+            assert math.log2(len(lst) + 1) == int(math.log2(len(lst) + 1))
+            tree_depth = math.floor(math.log2(len(lst)))
+
+            if len(lst) == 1:
+                return TreeNode(lst[0])
+
+            if len(lst) == 3:
+                return TreeNode(
+                    lst[0],
+                    TreeNode(lst[1]) if lst[1] is not None else None,
+                    TreeNode(lst[2]) if lst[2] is not None else None,
+                )
+
+            left_lst = []
+            right_lst = []
+
+            for i in range(1, tree_depth + 1):
+                left_lst.extend(lst[2**i - 1 : 2**i - 1 + 2 ** (i - 1)])
+                right_lst.extend(lst[2**i - 1 + 2 ** (i - 1) : 2 ** (i + 1) - 1])
+
+            return TreeNode(
+                lst[0],
+                TreeNode.from_list(left_lst, recursive=True),
+                TreeNode.from_list(right_lst, recursive=True),
+            )
+
+        root = TreeNode(lst[0])
+        queue = [root]
+        i = 1
+        while i < len(lst):
+            node = queue.pop(0)
+            if lst[i] is not None:
+                node.left = TreeNode(lst[i])
+                queue.append(node.left)
+            i += 1
+            if i < len(lst) and lst[i] is not None:
+                node.right = TreeNode(lst[i])
+                queue.append(node.right)
+            i += 1
+        return root
+
 
 def p102(root: TreeNode | None) -> list[list[int]]:
     """
     102. Binary Tree Level Order Traversal https://leetcode.com/problems/binary-tree-level-order-traversal/
 
     Examples:
-    >>> p102(TreeNode(3, TreeNode(9), TreeNode(20, TreeNode(15), TreeNode(7))))
+    >>> p102(TreeNode.from_list([3, 9, 20, None, None, 15, 7]))
     [[3], [9, 20], [15, 7]]
     >>> p102(TreeNode(1))
     [[1]]
@@ -1601,54 +1776,48 @@ class Node:
         self.val = val
         self.neighbors = neighbors if neighbors is not None else []
 
+    @staticmethod
+    def from_adjacency_list(adjacency_list: list[list[int]]) -> "Node":
+        """Build a node-based graph from an adjacency list.
 
-def adjacency_list_to_node_graph(adjacency_list: list[list[int]]) -> "Node":
-    """Build a node-based graph from an adjacency list.
+        Examples:
+        >>> Node.from_adjacency_list([[1, 2], [1, 4], [2, 3], [3, 4]]).to_adjacency_list()
+        [[1, 2], [1, 4], [2, 3], [3, 4]]
+        """
+        if adjacency_list == [[]]:
+            return Node(1)
 
-    Examples:
-    >>> node_graph_to_adjacency_list(adjacency_list_to_node_graph([[1, 2], [1, 4], [2, 3], [3, 4]]))
-    [[1, 2], [1, 4], [2, 3], [3, 4]]
-    """
-    if adjacency_list == [[]]:
-        return Node(1)
+        node_index = {}
+        for x, y in adjacency_list:
+            if (xnode := node_index.get(x)) is None:
+                xnode = Node(x)
+                node_index[x] = xnode
+            if (ynode := node_index.get(y)) is None:
+                ynode = Node(y)
+                node_index[y] = ynode
 
-    node_index = {}
-    for x, y in adjacency_list:
-        if (xnode := node_index.get(x)) is None:
-            xnode = Node(x)
-            node_index[x] = xnode
-        if (ynode := node_index.get(y)) is None:
-            ynode = Node(y)
-            node_index[y] = ynode
+            xnode.neighbors.append(ynode)
+            ynode.neighbors.append(xnode)
 
-        xnode.neighbors.append(ynode)
-        ynode.neighbors.append(xnode)
+        return node_index[1]
 
-    return node_index[1]
+    def to_adjacency_list(self) -> list[list[int]]:
+        """Traverse through a graph and build an adjacency list."""
+        adjacency_list = set()
+        visited = set()
+        node_queue = deque([self])
 
+        while node_queue:
+            node = node_queue.popleft()
+            visited.add(node.val)
 
-def node_graph_to_adjacency_list(node: "Node") -> "Node":
-    """Traverse through a graph and build an adjacency list.
+            for neighbor in node.neighbors:
+                adjacency_list.add(tuple(sorted([node.val, neighbor.val])))
 
-    Examples:
-    >>> node_graph_to_adjacency_list(adjacency_list_to_node_graph([[1, 2], [1, 4], [2, 3], [3, 4]]))
-    [[1, 2], [1, 4], [2, 3], [3, 4]]
-    """
-    adjacency_list = set()
-    visited = set()
-    node_queue = deque([node])
+                if neighbor.val not in visited:
+                    node_queue.append(neighbor)
 
-    while node_queue:
-        node = node_queue.popleft()
-        visited.add(node.val)
-
-        for neighbor in node.neighbors:
-            adjacency_list.add(tuple(sorted([node.val, neighbor.val])))
-
-            if neighbor.val not in visited:
-                node_queue.append(neighbor)
-
-    return sorted([list(e) for e in adjacency_list], key=lambda x: (x[0], x[1]))
+        return sorted([list(e) for e in adjacency_list], key=lambda x: (x[0], x[1]))
 
 
 def p133(node: "Node") -> "Node":
@@ -1657,7 +1826,7 @@ def p133(node: "Node") -> "Node":
 
     Examples:
     >>> p133(None)
-    >>> node_graph_to_adjacency_list(p133(adjacency_list_to_node_graph([[1, 2], [1, 4], [2, 3], [3, 4]])))
+    >>> p133(Node.from_adjacency_list([[1, 2], [1, 4], [2, 3], [3, 4]])).to_adjacency_list()
     [[1, 2], [1, 4], [2, 3], [3, 4]]
     """
     if node is None:
@@ -1686,10 +1855,10 @@ def p141(head: ListNode | None) -> bool:
     Lessons learned:
     - We use the classic two-pointer cycle detection algorithm known as Floyd's
     Tortoise and Hare.
-    - One intuitive way to think about why this works is to consider the
-    tortoise as being ahead of the hare, once the tortoise is in the cycle, and
-    the hare gets closer to the tortoise with each step. Eventually, the hare
-    will catch up to the tortoise, and we will have a cycle.
+    - One intuitive way to think about why this works is to imagine the tortoise
+    as ahead of the hare once it enters the cycle section. Then, the hare gets
+    closer to the tortoise with each step and eventually it will catch up, since
+    their relative speed difference is 1.
     - An algebraic proof: we want to show that
 
         i  = n + m
@@ -1710,14 +1879,6 @@ def p141(head: ListNode | None) -> bool:
         Hare node:      1, 3, 5, 7, 5,  7,  5,  7,  5,  7,  5,  7,  5,  7,  5,  7, ...
 
     This is not the earliest solution, but it is an existence proof.
-
-    Examples:
-    >>> p141(ListNode.from_list([3, 2, 0, -4], 1))
-    True
-    >>> p141(ListNode.from_list([1, 2], 0))
-    True
-    >>> p141(ListNode.from_list([1], -1))
-    False
     """
     slow = fast = head
     while fast and fast.next:
@@ -1891,14 +2052,9 @@ def p212(board: list[list[str]], words: list[str]) -> list[str]:
                 else:
                     break
 
-    def dfs(
-        i: int,
-        j: int,
-        node: dict,
-        path: str,
-        board: list[list[str]],
-        found_words: set[str],
-    ) -> None:
+    found_words = set()
+
+    def dfs(i: int, j: int, node: dict, path: str, board: list[list[str]]) -> None:
         if node.get("#"):
             found_words.add(path)
             trie.remove(path)
@@ -1919,7 +2075,6 @@ def p212(board: list[list[str]], words: list[str]) -> list[str]:
                     node[board[ni][nj]],
                     path + board[ni][nj],
                     board,
-                    found_words,
                 )
 
         board[i][j] = path[-1]
@@ -1937,40 +2092,12 @@ def p212(board: list[list[str]], words: list[str]) -> list[str]:
         trie.insert(word)
 
     n, m = len(board), len(board[0])
-    found_words = set()
     for i in range(n):
         for j in range(m):
             if board[i][j] in trie.root:
-                dfs(i, j, trie.root[board[i][j]], board[i][j], board, found_words)
+                dfs(i, j, trie.root[board[i][j]], board[i][j], board)
 
     return list(found_words)
-
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
-
-def make_binary_tree(lst: list[int]) -> TreeNode:
-    """Fills a binary tree from left to right."""
-    if not lst:
-        return None
-    root = TreeNode(lst[0])
-    queue = [root]
-    i = 1
-    while i < len(lst):
-        node = queue.pop(0)
-        if lst[i] is not None:
-            node.left = TreeNode(lst[i])
-            queue.append(node.left)
-        i += 1
-        if i < len(lst) and lst[i] is not None:
-            node.right = TreeNode(lst[i])
-            queue.append(node.right)
-        i += 1
-    return root
 
 
 def p222(root: TreeNode | None) -> int:
@@ -1982,13 +2109,13 @@ def p222(root: TreeNode | None) -> int:
     filled, except for the last where the nodes must be as far left as possible.
 
     Examples:
-    >>> p222(make_binary_tree([1,2,3,4,5,6]))
+    >>> p222(TreeNode.from_list([1,2,3,4,5,6]))
     6
-    >>> p222(make_binary_tree([1,2,3,4,5,6,None]))
+    >>> p222(TreeNode.from_list([1,2,3,4,5,6,None]))
     6
-    >>> p222(make_binary_tree([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
+    >>> p222(TreeNode.from_list([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
     15
-    >>> p222(make_binary_tree([1,2,3,4,5,6,7,8,9,10,11,12,None,None,None]))
+    >>> p222(TreeNode.from_list([1,2,3,4,5,6,7,8,9,10,11,12,None,None,None]))
     12
     """
     if not root:
@@ -2031,6 +2158,29 @@ def p223(
     A2 = (bx2 - bx1) * (by2 - by1)
     I = max(min(ax2, bx2) - max(ax1, bx1), 0) * max(min(ay2, by2) - max(ay1, by1), 0)
     return A1 + A2 - I
+
+
+def p238(nums: list[int]) -> list[int]:
+    """
+    238. Product of Array Except Self https://leetcode.com/problems/product-of-array-except-self
+
+    Examples:
+    >>> p238([1,2,3,4])
+    [24, 12, 8, 6]
+    >>> p238([1,2,3,4,5])
+    [120, 60, 40, 30, 24]
+    >>> p238([-1,1,0,-3,3])
+    [0, 0, 9, 0, 0]
+    """
+    n = len(nums)
+    prefix_products = [1] * n
+    suffix_products = [1] * n
+    for i in range(1, n):
+        prefix_products[i] = prefix_products[i - 1] * nums[i - 1]
+    for i in range(n - 2, -1, -1):
+        suffix_products[i] = suffix_products[i + 1] * nums[i + 1]
+
+    return [prefix_products[i] * suffix_products[i] for i in range(n)]
 
 
 def p242(s: str, t: str) -> bool:
@@ -2254,8 +2404,6 @@ def p373(nums1: list[int], nums2: list[int], k: int) -> list[list[int]]:
     """
     373. Find K Pairs with Smallest Sums https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
 
-    TODO
-
     Examples:
     >>> p373([1,7,11], [2,4,6], 3)
     [[1, 2], [1, 4], [1, 6]]
@@ -2263,8 +2411,30 @@ def p373(nums1: list[int], nums2: list[int], k: int) -> list[list[int]]:
     [[1, 1], [1, 1]]
     >>> p373([1,2], [3], 3)
     [[1, 3], [2, 3]]
+    >>> p373([1,2,4,5,6],[3,5,7,9], 3)
+    [[1, 3], [2, 3], [1, 5]]
+    >>> p373([1,5,10],[2,7,9],6)
+    [[1, 2], [5, 2], [1, 7], [1, 9], [5, 7], [10, 2]]
     """
-    ...
+    if not nums1 or not nums2:
+        return []
+
+    pairs = []
+    heap = [[nums1[0] + nums2[0], 0, 0]]
+    visited = set()
+
+    while len(pairs) < k and heap:
+        _, i, j = heappop(heap)
+        if (i, j) in visited:
+            continue
+        pairs.append([nums1[i], nums2[j]])
+        visited.add((i, j))
+        if i + 1 < len(nums1):
+            heappush(heap, [nums1[i + 1] + nums2[j], i + 1, j])
+        if j + 1 < len(nums2):
+            heappush(heap, [nums1[i] + nums2[j + 1], i, j + 1])
+
+    return pairs
 
 
 def guess(num: int) -> int:
@@ -2555,6 +2725,30 @@ def plot_points(points: list[tuple[int, int]], hull: list[tuple[int, int]]):
     plt.show()
 
 
+def p560(nums: list[int], k: int) -> int:
+    """560. Subarray Sum Equals K https://leetcode.com/problems/subarray-sum-equals-k/
+
+    Same as 930.
+
+    Examples:
+    >>> p560([1,1,1], 2)
+    2
+    >>> p560([1,2,3], 3)
+    2
+    """
+    goal = k
+    prefix_sum = 0
+    count = 0
+    prefix_sum_counts = defaultdict(int)
+    for num in nums:
+        prefix_sum += num
+        if prefix_sum == goal:
+            count += 1
+        count += prefix_sum_counts[prefix_sum - goal]
+        prefix_sum_counts[prefix_sum] += 1
+    return count
+
+
 def p587(trees: list[list[int]]) -> list[list[int]]:
     """
     587. Erect the Fence https://leetcode.com/problems/erect-the-fence/
@@ -2630,6 +2824,68 @@ def p587(trees: list[list[int]]) -> list[list[int]]:
             stack.append(tree)
 
     return stack
+
+
+def p621(tasks: list[str], n: int) -> int:
+    """
+    621. Task Scheduler https://leetcode.com/problems/task-scheduler
+
+    Lessons learned:
+    - This problem can be solved using a greedy approach, where we prioritize
+    the most frequent tasks first, to start the cooldown period and fill in the
+    other tasks in between.
+
+    Example:
+
+    Suppose n = 2 and A is the most frequent task, with a frequency F = 4.
+    Then our proposed schedule looks like this, where X can be filled in by
+    another task
+
+        A X X A X X A X X A
+
+    Note that we have (F - 1) = 3 many periods of length (n + 1) = 3. Now we can
+    proceed by filling in the idle spots X with other tasks, making sure to
+    spread identical tasks across the periods to meet their cooldown period
+    requirement. Since A is the most frequent task, each task can be placed in
+    at least one period. If there are more other tasks than idle spots, then we
+    can start placing them at the end of each period like so
+
+        A X X B A X X B A X X C A
+
+    So in the case that we have no idle spots remaining, then the time taken is
+    just len(tasks). Otherwise, the time taken is the number of periods times
+    their length plus the number of elements that share max frequency, that is
+
+        (F - 1) * (n + 1) + #(elements with count F)
+
+    Examples:
+    >>> p621(["A","A","A","B","B","B"], 2)
+    8
+    >>> p621(["A","C","A","B","D","B"], 1)
+    6
+    >>> p621(["A","A","A","B","B","B"], 3)
+    10
+    >>> p621(["A", "A", "B", "B", "C", "C", "D", "D"], 1)
+    8
+    >>> p621(["A", "A", "B", "B", "C", "C", "D", "D"], 2)
+    8
+    >>> p621(["A", "A", "B", "B", "C", "C", "D", "D"], 3)
+    8
+    >>> p621(["A", "A", "B", "B", "C", "C", "D", "D"], 5)
+    10
+    >>> p621(["A","A","A","B","B","B","C","D","E","F","G","H","I","J","K"], 7)
+    18
+    """
+    if n == 0:
+        return len(tasks)
+
+    task_counts = Counter(tasks)
+    max_count = max(task_counts.values())
+    max_count_tasks = sum(1 for count in task_counts.values() if count == max_count)
+    return max(
+        len(tasks),
+        (max_count - 1) * (n + 1) + max_count_tasks,
+    )
 
 
 _empty = object()
@@ -3119,6 +3375,42 @@ class p901:
         return span
 
 
+def p930(nums: list[int], goal: int) -> int:
+    """
+    930. Binary Subarrays With Sum https://leetcode.com/problems/binary-subarrays-with-sum
+
+    Same as 560.
+
+    Lessons learned:
+    - The solution relies on prefix sums, which is a common technique for
+    counting subarrays with a certain sum. The prefix sum is the cumulative sum
+    of the elements up to a given point. As we run through the array, we can
+    look up how many times the prefix sum was equal to the difference between
+    the current prefix sum and the goal and add that to the count. This is
+    because starting from that point and ending at the current point, the prefix
+    sum will be
+
+        prefix_sum - (prefix_sum - goal) = goal
+
+    Examples:
+    >>> p930([1, 0, 1, 0, 1], 2)
+    4
+    >>> p930([0, 0, 0, 0, 0], 0)
+    15
+    >>> p930([1, 1, 1, 1, 1], 1)
+    5
+    """
+    prefix_sum = 0
+    count = 0
+    prefix_sum_counts = defaultdict(int)
+    prefix_sum_counts[0] = 1
+    for num in nums:
+        prefix_sum += num
+        count += prefix_sum_counts[prefix_sum - goal]
+        prefix_sum_counts[prefix_sum] += 1
+    return count
+
+
 def p934(grid: list[list[int]]) -> int:
     """
     934. Shortest Bridge https://leetcode.com/problems/shortest-bridge/
@@ -3257,6 +3549,32 @@ def p977(nums: list[int]) -> list[int]:
         i -= 1
 
     return res
+
+
+def p988(root: Optional[TreeNode]) -> str:
+    """
+    988. Smallest String Starting From Leaf https://leetcode.com/problems/smallest-string-starting-from-leaf
+
+    Examples:
+    >>> p988(TreeNode.from_list([0, 1, 2, 3, 4, 3, 4]))
+    'dba'
+    >>> p988(TreeNode.from_list([25, 1, 3, 1, 3, 0, 2]))
+    'adz'
+    >>> p988(TreeNode.from_list([2,2,1,None,1,0,None,0]))
+    'abc'
+    """
+    words = []
+
+    def dfs(path: list[int], node: TreeNode) -> list:
+        if not node.left and not node.right:
+            words.append(path[::-1])
+        if node.left:
+            dfs(path + [node.left.val], node.left)
+        if node.right:
+            dfs(path + [node.right.val], node.right)
+
+    dfs([root.val], root)
+    return "".join(ascii_lowercase[x] for x in min(words))
 
 
 def p990(equations: list[str]) -> bool:
@@ -3514,6 +3832,8 @@ def p1306(arr: list[int], start: int) -> bool:
     """
     1306. Jump Game III https://leetcode.com/problems/jump-game-iii/
 
+    Just a BFS.
+
     Examples:
     >>> p1306([4,2,3,0,3,1,2], 5)
     True
@@ -3579,12 +3899,14 @@ def p1340(arr: list[int], d: int) -> int:
     1340. Jump Game V https://leetcode.com/problems/jump-game-v/
 
     Lessons learned:
-    - Going to try a simple BFS first, just to build problem understanding.
-    - The hint suggests using DP, but I don't see it yet. The problem structure is
+    - I solved this using a DFS and DP. The problem structure is
 
-          dp[i] = 1 + max(dp[j] for j in range(i - d, i + d + 1) if arr[j] < arr[i])
+        dp[i] = 1 + max(dp[j] for j in possible_jumps[i])   if possible_jumps[i] is not empty
+              = 1                                           else
 
-    TODO
+        possible_jumps[i] = {j: max(i - d, 0) <= j <= min(i + d, n) and arr[j] < arr[i]}
+
+    where n = len(arr). This lends itself well to a recursive DFS solution.
 
     Examples:
     >>> p1340([6,4,14,6,8,13,9,7,10,6,12], 2)
@@ -3597,11 +3919,31 @@ def p1340(arr: list[int], d: int) -> int:
     if len(arr) == 1:
         return 1
 
-    value_ix = defaultdict(list)
-    for ix, val in enumerate(arr):
-        value_ix[val].append(ix)
+    dp = [-1] * len(arr)
 
-    values = sorted(value_ix.keys())
+    def dfs(i: int):
+        if dp[i] > -1:
+            return dp[i]
+
+        max_visits = 0
+        for i_ in range(i + 1, i + d + 1):
+            if not 0 <= i_ < len(arr) or not arr[i] > arr[i_]:
+                break
+            dfs(i_)
+            max_visits = max(max_visits, dp[i_])
+
+        for i_ in range(i - 1, i - d - 1, -1):
+            if not 0 <= i_ < len(arr) or not arr[i] > arr[i_]:
+                break
+            dfs(i_)
+            max_visits = max(max_visits, dp[i_])
+
+        dp[i] = 1 + max_visits
+
+    for i in range(len(arr)):
+        dfs(i)
+
+    return max(dp)
 
 
 def p1345(arr: list[int]) -> int:
@@ -3609,10 +3951,8 @@ def p1345(arr: list[int]) -> int:
     1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/
 
     Lessons learned:
-    - I did this with a priority queue, but it's not necessary. A BFS would work
-    just as well.
-    - You can also do a bidirectional BFS, which can be faster. This means
-    building a frontier of nodes from both the start and the end.
+    - This solution is very similar to Jump Game III. I added a priority queue,
+    but this problem could be done with BFS as well.
 
     Examples:
     >>> p1345([100,-23,-23,404,100,23,23,23,3,404])
@@ -3647,6 +3987,53 @@ def p1345(arr: list[int]) -> int:
                 queue.put((jumps + 1, ix_))
 
         del value_ix[arr[ix]]
+
+    return -1
+
+
+def p1345_2(arr: list[int]) -> int:
+    """
+    1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/
+
+    The BFS solution.
+
+    Examples:
+    >>> p1345_2([100,-23,-23,404,100,23,23,23,3,404])
+    3
+    >>> p1345_2([7])
+    0
+    >>> p1345_2([7,6,9,6,9,6,9,7])
+    1
+    >>> p1345_2([7,7,2,1,7,7,7,3,4,1])
+    3
+    """
+    if len(arr) == 1:
+        return 0
+
+    value_ix = defaultdict(list)
+    for ix, val in enumerate(arr):
+        value_ix[val].append(ix)
+
+    seen = {0}
+    cur = [0]
+    step = 0
+
+    while cur:
+        nex = []
+
+        for ix in cur:
+            if ix == len(arr) - 1:
+                return step
+
+            for ix_ in [ix - 1, ix + 1] + value_ix[arr[ix]]:
+                if 0 <= ix_ < len(arr) and ix_ not in seen:
+                    nex.append(ix_)
+                    seen.add(ix_)
+
+            del value_ix[arr[ix]]
+
+        cur = nex
+        step += 1
 
     return -1
 
@@ -4404,6 +4791,32 @@ def p2269(num: int, k: int) -> int:
         if num % sub == 0:
             result += 1
     return result
+
+
+def p2485(n: int) -> int:
+    """
+    2485. Find the Pivot Integer
+
+    Lessons learned:
+    - This one has a cute algebraic solution. Starting with the algebraic
+    definition of the point we're looking for i, we have
+
+        i (i + 1) / 2 = n (n + 1) / 2 - i (i + 1) / 2 + i
+        i (i + 1) - i = n (n + 1) / 2
+        i^2 = n (n + 1) / 2
+
+    So i has a solution iff n (n + 1) / 2 is a perfect square.
+
+    Examples:
+    >>> p2485(8)
+    6
+    >>> p2485(1)
+    1
+    >>> p2485(4)
+    -1
+    """
+    x = (n * (n + 1) // 2) ** 0.5
+    return int(x) if int(x) == x else -1
 
 
 def p2493(n: int, edges: list[list[int]]) -> int:

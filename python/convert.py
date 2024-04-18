@@ -14,32 +14,42 @@ TODO:
 - Unclear how to preserve comments. How does Black do it?
 https://github.com/psf/black/blob/6af7d1109693c4ad3af08ecbc34649c232b47a6d/src/black/comments.py#L34
 - Track dependencies and only include the necessary imports in each file.
+  - Dumb workaround: run Ruff on the file after writing it.
 - Fix the docstring issue.
-- Add a command line interface.
-- Write the reverse function.
 """
 
 import ast
 import re
 from pathlib import Path
 
+import typer
 
+app = typer.Typer(name="LeetCode Solution Converter", chain=True)
+
+
+@app.command("to-monofile")
 def convert_to_monofile() -> None:
-    """
-    Convert a multifile to a monofile.
-    """
+    """Convert a multifile to a monofile.
 
+    Currently just stitches together all the files in the problems directory.
+    """
     monofile_docstring = """
-    Python solutions to LeetCode problems.
+\"\"\"
+Python solutions to LeetCode problems.
 
-    Keeping it as a monofile because there's something funny about it.
+Keeping it as a monofile because there's something funny about it.
+\"\"\"
     """
-    raise NotImplementedError("This function is not implemented yet.")
+    with open("python/problems/monofile.py", "w") as f:
+        f.write(monofile_docstring)
+        for file in sorted(Path("python/problems/").glob("*.py")):
+            f.write("\n\n")
+            f.write(file.read_text())
 
 
+@app.command("to-multifile")
 def convert_to_multifile() -> None:
-    """
-    Convert a monofile to a multifile.
+    """Convert a monofile to a multifile.
 
     Assumes that all the code use by a problem precedes the problem function
     definition.
@@ -62,9 +72,9 @@ def convert_to_multifile() -> None:
             stack.append(x)
 
     Path("python/problems/").mkdir(exist_ok=True)
-    for problem_chunk in problem_chunks[:10]:
+    for problem_chunk in problem_chunks:
         import_text = "\n".join(ast.unparse(chunk) for chunk in import_statements)
-        problem_text = "\n".join(ast.unparse(chunk) for chunk in problem_chunk)
+        problem_text = "\n\n".join(ast.unparse(chunk) for chunk in problem_chunk)
         problem_number = re.search(r"p(\d+)", problem_chunk[-1].name).group(1)
 
         with open(f"python/problems/p{int(problem_number):04d}.py", "w") as f:
@@ -74,5 +84,4 @@ def convert_to_multifile() -> None:
 
 
 if __name__ == "__main__":
-    convert_to_multifile()
-    # convert_to_monofile()
+    app()
