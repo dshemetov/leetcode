@@ -3,10 +3,6 @@
 Small script to get the question details from Leetcode using their GraphQL API.
 GraphQL API details thanks to
 
-    https://github.com/skygragon/leetcode-cli
-
-Specifically:
-
     https://github.com/skygragon/leetcode-cli/blob/5245886992ceb64bfb322256b2bdc24184b36d76/lib/plugins/leetcode.js#L121-L147
 
 TODO:
