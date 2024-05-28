@@ -1,14 +1,14 @@
 """
 Convert between a monofile and a multifile for LeetCode problems.
 
-Automating indecision and learning about the ast module
+Automating indecision by learning about the ast module
 
     https://docs.python.org/3/library/ast.html#ast-helpers
 
 The comments are currently not preserved. We also don't track dependencies, so
 just dump all the dependencies in every file for now. This is a good start, but
 we can probably do better. Also for some reason function docstrings inherit an
-extra newline in every line, unsure why.
+extra newline in every line.
 
 TODO:
 - Unclear how to preserve comments. How does Black do it?
