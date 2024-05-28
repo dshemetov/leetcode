@@ -1,6 +1,6 @@
 # Leet Code Solutions
 
-Programming katas.
+Programming practice.
 
 ## Usage
 
