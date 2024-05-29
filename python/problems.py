@@ -3789,6 +3789,64 @@ def p1171(head: Optional[ListNode]) -> Optional[ListNode]:
     return start.next
 
 
+def p1208(s: str, t: str, maxCost: int) -> int:
+    """
+    1208. Get Equal Substrings Within Budget https://leetcode.com/problems/get-equal-substrings-within-budget
+
+    Lessons learned:
+    * The toughest part was correctly handling indices. I used half-open [lo, hi) intervals for a while, but things turned out cleaner with closed intervals [lo, hi].
+    * My first solution also shrunk the sliding window, until I realized that you don't need to.
+    * Worked example:
+
+    1010100100101, 2
+    [0 0] 1
+    [0 1] 1
+    [0 2] 0
+    [0 3] 0
+    [1 3] 1
+    [1 4] 0
+    [1 5] 0
+    [1 6] 0
+    [2 6] 0
+    [3 6] 1
+    [3 7] 0
+    [3 8] 0
+    [3 9] 0
+    [4 9] 0
+    [5 9] 1
+    [5 10] 0
+    [5 11] 0
+    [6 11] 0
+    [7 11] 0
+    [8 11] 1
+    [9 12] 0
+
+    Examples:
+    >>> p1208("abcd", "bcdf", 3)
+    3
+    >>> p1208("abcd", "cdef", 3)
+    1
+    >>> p1208("abcd", "acde", 0)
+    1
+    >>> p1208("ajte", "bjte", 3)
+    4
+    >>> p1208("abcd", "cdef", 1)
+    0
+    """
+    diffs = [abs(ord(x) - ord(y)) for x, y in zip(s, t)]
+    lo, hi, max_len = 0, 0, 0
+    currCost = maxCost
+    while hi < len(s):
+        currCost -= diffs[hi]
+        if currCost >= 0:
+            max_len = max(max_len, hi - lo + 1)
+        else:
+            currCost += diffs[lo]
+            lo += 1
+        hi += 1
+    return max_len
+
+
 def p1293(grid: list[list[int]], k: int) -> int:
     """
     1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
@@ -4056,6 +4114,38 @@ def p1345_2(arr: list[int]) -> int:
     return -1
 
 
+def p1404(s: str) -> int:
+    """
+    1404. Number of Steps to Reduce a Number in Binary Representation to One
+    https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one
+
+    Examples:
+    >>> p1404("1101")
+    6
+    >>> p1404("10")
+    1
+    >>> p1404("1")
+    0
+    >>> p1404("111")
+    4
+    """
+    s: deque = deque(s)
+    steps = 0
+    while len(s) > 1:
+        if s.pop() == "1":
+            steps += 1
+            i = len(s) - 1
+            while i >= 0 and s[i] == "1":
+                s[i] = "0"
+                i -= 1
+            if i == -1:
+                s.insert(0, "1")
+            else:
+                s[i] = "1"
+        steps += 1
+    return steps
+
+
 def p1456(s: str, k: int) -> int:
     """
     1456. Maximum Number of Vowels in a Substring of Given Length https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/
@@ -4294,6 +4384,34 @@ def p1579(n: int, edges: list[list[int]]) -> int:
         return -1
 
     return total_edges
+
+
+def p1608(nums: list[int]) -> int:
+    """
+    1608. Special Array With X Elements Greater Than or Equal X https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x
+
+    Examples:
+    >>> p1608([3,5])
+    2
+    >>> p1608([0,0])
+    -1
+    >>> p1608([0,4,3,0,4])
+    3
+    """
+    nums.sort()
+    lo, hi = 0, len(nums)
+    while lo <= hi:
+        x = (hi + lo) // 2
+        i = 0
+        while i < len(nums) and nums[i] < x:
+            i += 1
+        if x == len(nums) - i:
+            return x
+        if x > len(nums) - i:
+            hi -= 1
+        if x < len(nums) - i:
+            lo += 1
+    return -1
 
 
 def p1680(n: int) -> int:
