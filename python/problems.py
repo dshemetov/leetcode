@@ -5,6 +5,7 @@ Keeping it as a monofile because there's something funny about it.
 """
 
 import math
+import sys
 from array import array
 from bisect import bisect_left, insort
 from collections import Counter, defaultdict, deque, namedtuple
@@ -14,7 +15,7 @@ from heapq import heappop, heappush
 from itertools import cycle, product
 from queue import PriorityQueue
 from string import ascii_lowercase
-from typing import Callable, Literal, Optional
+from typing import Callable, Optional, cast
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,15 +37,17 @@ def p1(nums: list[int], target: int) -> list[int]:
 
     for x in ix_map:
         if ix_map.get(target - x):
-            if x == target - x and len(ix_map.get(x)) == 2:
-                return ix_map.get(target - x)
+            if x == target - x and len(ix_map[x]) == 2:
+                return ix_map[target - x]
             if x != target - x:
-                return [ix_map.get(x)[0], ix_map.get(target - x)[0]]
-    return 0
+                return [ix_map[x][0], ix_map[target - x][0]]
+    return []
 
 
 class ListNode:
-    def __init__(self, val=0, next=None):  # pylint: disable=redefined-builtin
+    def __init__(
+        self, val: int = 0, next: Optional["ListNode"] = None
+    ):  # pylint: disable=redefined-builtin
         self.val = val
         self.next = next
 
@@ -65,7 +68,7 @@ class ListNode:
         num_list = None
         for x in str(i):
             num_list = ListNode(val=int(x), next=num_list)
-        return num_list
+        return cast(ListNode, num_list)
 
 
 def listnode_to_list(head) -> list[int]:
@@ -83,7 +86,7 @@ def listnode_to_list(head) -> list[int]:
     return lst
 
 
-def list_to_int(lst: ListNode) -> int:
+def list_to_int(lst: Optional[ListNode]) -> int:
     """
     Examples:
     >>> list_to_int(ListNode.from_int(0))
@@ -430,7 +433,7 @@ def p6(s: str, numRows: int) -> str:
     return "".join(new_s)
 
 
-def p6_2(s: str, numRows: int) -> str:
+def p6b(s: str, numRows: int) -> str:
     if numRows == 1:
         return s
     rows = [""] * numRows
@@ -664,7 +667,7 @@ def p11(height: list[int]) -> int:
     1
     """
     lo, hi = 0, len(height) - 1
-    m = float("-inf")
+    m = -1
     while lo < hi:
         m = max(m, min(height[lo], height[hi]) * (hi - lo))
         if height[lo] < height[hi]:
@@ -812,7 +815,7 @@ def p16(nums: list[int], target: int) -> int:
     0
     """
     nums.sort()
-    res = float("inf")
+    res = sys.maxsize
     for i in range(len(nums) - 2):
         if i > 0 and nums[i] == nums[i - 1]:
             continue
@@ -867,14 +870,14 @@ def p17(digits: str) -> list[str]:
     return ["".join(t) for t in res]
 
 
-def p17_2(digits: str) -> list[str]:
+def p17b(digits: str) -> list[str]:
     """
     Examples:
-    >>> p17_2("23")
+    >>> p17b("23")
     ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
-    >>> p17_2("")
+    >>> p17b("")
     []
-    >>> p17_2("2")
+    >>> p17b("2")
     ['a', 'b', 'c']
     """
     if not digits:
@@ -969,6 +972,9 @@ def p19(head: ListNode | None, n: int) -> ListNode | None:
     >>> listnode_to_list(p19(ListNode.from_list([1, 2]), 2))
     [2]
     """
+    if not head:
+        return None
+
     sz = 0
     node = head
     while node:
@@ -1020,9 +1026,9 @@ def p21(list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
     Examples:
     >>> listnode_to_list(p21(ListNode.from_list([1, 2, 4]), ListNode.from_list([1, 3, 4])))
     [1, 1, 2, 3, 4, 4]
-    >>> listnode_to_list(p21(ListNode.from_list([]), ListNode.from_list([])))
+    >>> listnode_to_list(p21(None, None))
     []
-    >>> listnode_to_list(p21(ListNode.from_list([]), ListNode.from_list([0])))
+    >>> listnode_to_list(p21(None, ListNode.from_list([0])))
     [0]
     """
     head = pointer = ListNode()
@@ -1083,13 +1089,13 @@ def p23(lists: list[ListNode | None]) -> ListNode | None:
     [1, 1, 2, 3, 4, 4, 5, 6]
     >>> listnode_to_list(p23([]))
     []
-    >>> listnode_to_list(p23([ListNode.from_list([])]))
+    >>> listnode_to_list(p23([None]))
     []
     """
     head = pointer = ListNode()
 
     while any(x for x in lists):
-        min_val = float("inf")
+        min_val = sys.maxsize
         min_idx = -1
         for i, x in enumerate(lists):
             if x and x.val < min_val:
@@ -1103,14 +1109,14 @@ def p23(lists: list[ListNode | None]) -> ListNode | None:
     return head.next
 
 
-def p23_2(lists: list[ListNode | None]) -> ListNode | None:
+def p23b(lists: list[ListNode | None]) -> ListNode | None:
     """
     Examples:
-    >>> listnode_to_list(p23_2([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])]))
+    >>> listnode_to_list(p23b([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])]))
     [1, 1, 2, 3, 4, 4, 5, 6]
-    >>> listnode_to_list(p23_2([]))
+    >>> listnode_to_list(p23b([]))
     []
-    >>> listnode_to_list(p23_2([ListNode.from_list([])]))
+    >>> listnode_to_list(p23b([None]))
     []
     """
     if not lists:
@@ -1127,7 +1133,7 @@ def p24(head: ListNode | None) -> ListNode | None:
     24. Swap Nodes in Pairs https://leetcode.com/problems/swap-nodes-in-pairs/
 
     Examples:
-    >>> listnode_to_list(p24(ListNode.from_list([])))
+    >>> listnode_to_list(p24(None))
     []
     >>> listnode_to_list(p24(ListNode.from_list([1])))
     [1]
@@ -1460,6 +1466,91 @@ def p31(nums: list[int]) -> None:
         hi -= 1
 
 
+def p33(nums: list[int], target: int) -> int:
+    """
+    33. Search in Rotated Sorted Array https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+    Approach: find the shift index using binary search, then do a regular binary
+    search, translating indices.
+
+    Some worked examples:
+
+    34567012
+
+    lo  hi  mid
+    0   7   3
+    3   7   5
+    3   5   4
+
+    lo = 5, hi = 4
+
+    01234567
+
+    lo = 0, hi = 7
+
+    12345670
+
+    lo  hi  mid
+    0   7   3
+    3   7   5
+    5   7   6
+
+    lo = 7, hi = 6
+
+    70123456
+
+    lo  hi  mid
+    0   7   3
+    0   3   1
+
+    lo = 1, hi = 0
+
+    01234567, 2
+
+    lo  hi  mid
+    0   7   3
+    0   3   1
+    1   3   2
+
+    Examples:
+    >>> p33([4,5,6,7,0,1,2], 0)
+    4
+    >>> p33([4,5,6,7,0,1,2], 3)
+    -1
+    >>> p33([1], 0)
+    -1
+    >>> p33([4,5,1,2,3], 1)
+    2
+    >>> p33([5,1,3], 5)
+    0
+    """
+    lo, hi = 0, len(nums) - 1
+    if nums[lo] > nums[hi]:
+        while lo + 1 < hi:
+            mid = (lo + hi) // 2
+
+            if nums[mid] < nums[hi]:
+                hi = mid
+            elif nums[lo] < nums[mid]:
+                lo = mid
+        s = hi
+    else:
+        s = 0
+
+    lo, hi = 0, len(nums)
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        ix = (s + mid) % len(nums)
+
+        if nums[ix] == target:
+            return ix
+        if nums[ix] > target:
+            hi = mid - 1
+        if nums[ix] < target:
+            lo = mid + 1
+    return -1
+
+
 def p35(nums: list[int], target: int) -> int:
     """
     35. Search Insert Position https://leetcode.com/problems/search-insert-position
@@ -1564,7 +1655,7 @@ def p45(nums: list[int]) -> int:
     return reachable[0] - 1
 
 
-def p45_2(nums: list[int]) -> int:
+def p45b(nums: list[int]) -> int:
     # The starting range of the first jump is [0, 0]
     answer, n = 0, len(nums)
     cur_end, cur_far = 0, 0
@@ -1580,6 +1671,21 @@ def p45_2(nums: list[int]) -> int:
             cur_end = cur_far
 
     return answer
+
+
+def p46(nums: list[int]) -> list[list[int]]:
+    """
+    46. Permutations https://leetcode.com/problems/permutations/
+
+    Examples:
+    >>> p46([1,2,3])
+    [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+    >>> p46([0,1])
+    [[0,1],[1,0]]
+    >>> p46([1])
+    [[1]]
+    """
+    ...
 
 
 def p49(strs: list[str]) -> list[list[str]]:
@@ -1672,7 +1778,7 @@ def p55(nums: list[int]) -> bool:
     return reachable[0] == 1
 
 
-def p55_2(nums: list[int]) -> bool:
+def p55b(nums: list[int]) -> bool:
     n = len(nums)
     current = n - 1
     for i in range(n - 2, -1, -1):
@@ -1806,28 +1912,28 @@ def p91(s: str) -> int:
     return total
 
 
-def p91_2(s: str) -> int:
+def p91b(s: str) -> int:
     """
     Examples:
-    >>> p91_2("0")
+    >>> p91b("0")
     0
-    >>> p91_2("06")
+    >>> p91b("06")
     0
-    >>> p91_2("1")
+    >>> p91b("1")
     1
-    >>> p91_2("12")
+    >>> p91b("12")
     2
-    >>> p91_2("111")
+    >>> p91b("111")
     3
-    >>> p91_2("35")
+    >>> p91b("35")
     1
-    >>> p91_2("226")
+    >>> p91b("226")
     3
-    >>> p91_2("2020")
+    >>> p91b("2020")
     1
-    >>> p91_2("2021")
+    >>> p91b("2021")
     2
-    >>> p91_2("2022322")
+    >>> p91b("2022322")
     6
     """
     if not s or s[0] == "0":
@@ -1848,7 +1954,12 @@ def p91_2(s: str) -> int:
 
 
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(
+        self,
+        val: int = 0,
+        left: Optional["TreeNode"] = None,
+        right: Optional["TreeNode"] = None,
+    ):
         self.val = val
         self.left = left
         self.right = right
@@ -1969,7 +2080,7 @@ class Node:
         """Traverse through a graph and build an adjacency list."""
         adjacency_list = set()
         visited = set()
-        node_queue = deque([self])
+        node_queue: deque[Node] = deque([self])
 
         while node_queue:
             node = node_queue.popleft()
@@ -2077,16 +2188,16 @@ def p151(s: str) -> str:
     return " ".join(s.split()[::-1])
 
 
-def p151_2(s: str) -> str:
+def p151b(s: str) -> str:
     """
     Examples:
-    >>> p151_2("the sky is blue")
+    >>> p151b("the sky is blue")
     'blue is sky the'
-    >>> p151_2("  hello world!  ")
+    >>> p151b("  hello world!  ")
     'world! hello'
-    >>> p151_2("a good   example")
+    >>> p151b("a good   example")
     'example good a'
-    >>> p151_2("  Bob    Loves  Alice   ")
+    >>> p151b("  Bob    Loves  Alice   ")
     'Alice Loves Bob'
     """
     a = array("u", [])
@@ -2143,7 +2254,7 @@ def p167(numbers: list[int], target: int) -> list[int]:
             hi -= 1
         else:
             return [lo + 1, hi + 1]
-    return 0
+    return [0]
 
 
 def p200(grid: list[list[str]]) -> int:
@@ -2336,10 +2447,12 @@ def p223(
     """
     223. Rectangle Area https://leetcode.com/problems/rectangle-area/
     """
-    A1 = (ax2 - ax1) * (ay2 - ay1)
-    A2 = (bx2 - bx1) * (by2 - by1)
-    I = max(min(ax2, bx2) - max(ax1, bx1), 0) * max(min(ay2, by2) - max(ay1, by1), 0)
-    return A1 + A2 - I
+    a1 = (ax2 - ax1) * (ay2 - ay1)
+    a2 = (bx2 - bx1) * (by2 - by1)
+    intersection = max(min(ax2, bx2) - max(ax1, bx1), 0) * max(
+        min(ay2, by2) - max(ay1, by1), 0
+    )
+    return a1 + a2 - intersection
 
 
 def p238(nums: list[int]) -> list[int]:
@@ -2399,11 +2512,11 @@ def p263(n: int) -> bool:
     if n < 1:
         return False
     while n % 2 == 0:
-        n /= 2
+        n //= 2
     while n % 3 == 0:
-        n /= 3
+        n //= 3
     while n % 5 == 0:
-        n /= 5
+        n //= 5
     return n == 1
 
 
@@ -2513,16 +2626,16 @@ def p319(n: int) -> int:
     return sum(arr)
 
 
-def p319_2(n: int) -> int:
+def p319b(n: int) -> int:
     """
     Examples:
-    >>> p319_2(3)
+    >>> p319b(3)
     1
-    >>> p319_2(0)
+    >>> p319b(0)
     0
-    >>> p319_2(1)
+    >>> p319b(1)
     1
-    >>> p319_2(5)
+    >>> p319b(5)
     2
     """
     return int(np.sqrt(n))
@@ -2653,10 +2766,10 @@ def p374(n: int) -> int:
     return lo
 
 
-def p374_2(n: int) -> int:
+def p374b(n: int) -> int:
     """
     Examples:
-    >>> p374_2(10)
+    >>> p374b(10)
     6
     """
     return bisect_left(range(0, n), 0, lo=0, hi=n, key=lambda x: -guess(x))
@@ -2756,7 +2869,7 @@ def p433(startGene: str, endGene: str, bank: list[str]) -> int:
             if sum(1 for i in range(len(mutation)) if mutation[i] != gene[i]) == 1
         }
 
-    bank = set(bank)
+    bank2 = set(bank)
     explored = set()
     unexplored = set({startGene})
     steps = 0
@@ -2766,11 +2879,11 @@ def p433(startGene: str, endGene: str, bank: list[str]) -> int:
             if gene == endGene:
                 return steps
             explored |= {gene}
-            for mutations in get_mutations(gene, bank):
+            for mutations in get_mutations(gene, bank2):
                 if mutations not in explored:
                     new_unexplored |= {mutations}
         unexplored = new_unexplored
-        bank -= explored
+        bank2 -= explored
         steps += 1
 
     return -1
@@ -2864,12 +2977,15 @@ def polar_angle(p1: tuple[int, int], p2: tuple[int, int]) -> float:
     return np.arctan2(v1[1], v1[0])
 
 
-def point_sorter(p1: tuple[int, int], p2: tuple[int, int]) -> float:
+def point_sorter(p1: tuple[int, int], p2: tuple[int, int]) -> tuple[float, float]:
     """Sort by polar angle and break ties by distance."""
-    return (polar_angle(p1, p2), -np.linalg.norm((p2[0] - p1[0], p2[1] - p1[1])))
+    return (
+        polar_angle(p1, p2),
+        -math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2),
+    )
 
 
-def atan2notan(y: int, x: int) -> Fraction:
+def atan2notan(y: int, x: int) -> tuple[int, int | Fraction]:
     """A polar angle substitute without trigonometry or floating points.
 
     Imagine tracing out a circle counterclockwise and measuring the angle to the tracing vector
@@ -2891,10 +3007,10 @@ def atan2notan(y: int, x: int) -> Fraction:
     raise ValueError("How did you even get here?")
 
 
-def partition_by(l: list, f: Callable) -> dict:
+def partition_by(lst: list, f: Callable) -> dict:
     """Partition a list into lists based on a predicate."""
     d = defaultdict(list)
-    for item in l:
+    for item in lst:
         d[f(item)].append(item)
     return d
 
@@ -3300,18 +3416,18 @@ def p658(arr: list[int], k: int, x: int) -> list[int]:
     return sorted(lst)
 
 
-def p658_2(arr: list[int], k: int, x: int) -> list[int]:
+def p658b(arr: list[int], k: int, x: int) -> list[int]:
     """
     Examples:
-    >>> p658_2([1, 2, 3, 4, 5], 4, 3)
+    >>> p658b([1, 2, 3, 4, 5], 4, 3)
     [1, 2, 3, 4]
-    >>> p658_2([1, 2, 3, 4, 5], 4, -1)
+    >>> p658b([1, 2, 3, 4, 5], 4, -1)
     [1, 2, 3, 4]
-    >>> p658_2([1, 2, 3, 4, 5], 4, 4)
+    >>> p658b([1, 2, 3, 4, 5], 4, 4)
     [2, 3, 4, 5]
-    >>> p658_2([1, 2, 3, 4, 5], 2, 4)
+    >>> p658b([1, 2, 3, 4, 5], 2, 4)
     [3, 4]
-    >>> p658_2([1, 2, 3, 3, 4, 5, 90, 100], 3, 4)
+    >>> p658b([1, 2, 3, 3, 4, 5, 90, 100], 3, 4)
     [3, 3, 4]
     """
     lo, hi = 0, len(arr) - k
@@ -3447,7 +3563,7 @@ def p839(strs: list[str]) -> int:
     n = len(strs)
     parent: dict[int, int] = dict({i: i for i in range(n)})
 
-    def find(x: str) -> str:
+    def find(x: int) -> int:
         y = x
         while True:
             if y != parent[y]:
@@ -3717,17 +3833,17 @@ def p977(nums: list[int]) -> list[int]:
     >>> p977([-5,-3,-2,-1])
     [1, 4, 9, 25]
     """
-    l, r = 0, len(nums) - 1
+    le, ri = 0, len(nums) - 1
     res = [0] * len(nums)
     i = len(nums) - 1
-    while l <= r:
-        left, right = nums[l] ** 2, nums[r] ** 2
+    while le <= ri:
+        left, right = nums[le] ** 2, nums[ri] ** 2
         if left > right:
             res[i] = left
-            l += 1
+            le += 1
         else:
             res[i] = right
-            r -= 1
+            ri -= 1
         i -= 1
 
     return res
@@ -3745,9 +3861,12 @@ def p988(root: Optional[TreeNode]) -> str:
     >>> p988(TreeNode.from_list([2,2,1,None,1,0,None,0]))
     'abc'
     """
+    if not root:
+        return ""
+
     words = []
 
-    def dfs(path: list[int], node: TreeNode) -> list:
+    def dfs(path: list[int], node: TreeNode):
         if not node.left and not node.right:
             words.append(path[::-1])
         if node.left:
@@ -4121,14 +4240,14 @@ def p1323(num: int) -> int:
     return num
 
 
-def p1323_2(num: int) -> int:
+def p1323b(num: int) -> int:
     """
     Examples:
-    >>> p1323_2(9669)
+    >>> p1323b(9669)
     9969
-    >>> p1323_2(9996)
+    >>> p1323b(9996)
     9999
-    >>> p1323_2(9999)
+    >>> p1323b(9999)
     9999
     """
     return int(str(num).replace("6", "9", 1))
@@ -4231,20 +4350,20 @@ def p1345(arr: list[int]) -> int:
     return -1
 
 
-def p1345_2(arr: list[int]) -> int:
+def p1345b(arr: list[int]) -> int:
     """
     1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/
 
     The BFS solution.
 
     Examples:
-    >>> p1345_2([100,-23,-23,404,100,23,23,23,3,404])
+    >>> p1345b([100,-23,-23,404,100,23,23,23,3,404])
     3
-    >>> p1345_2([7])
+    >>> p1345b([7])
     0
-    >>> p1345_2([7,6,9,6,9,6,9,7])
+    >>> p1345b([7,6,9,6,9,6,9,7])
     1
-    >>> p1345_2([7,7,2,1,7,7,7,3,4,1])
+    >>> p1345b([7,7,2,1,7,7,7,3,4,1])
     3
     """
     if len(arr) == 1:
@@ -4293,19 +4412,19 @@ def p1404(s: str) -> int:
     >>> p1404("111")
     4
     """
-    s: deque = deque(s)
+    d = deque(s)
     steps = 0
-    while len(s) > 1:
-        if s.pop() == "1":
+    while len(d) > 1:
+        if d.pop() == "1":
             steps += 1
-            i = len(s) - 1
-            while i >= 0 and s[i] == "1":
-                s[i] = "0"
+            i = len(d) - 1
+            while i >= 0 and d[i] == "1":
+                d[i] = "0"
                 i -= 1
             if i == -1:
-                s.insert(0, "1")
+                d.insert(0, "1")
             else:
-                s[i] = "1"
+                d[i] = "1"
         steps += 1
     return steps
 
@@ -4359,15 +4478,15 @@ def p1491(salary: list[int]) -> float:
     return (sum(salary) - min(salary) - max(salary)) / (len(salary) - 2)
 
 
-def p1491_2(salary: list[int]) -> float:
+def p1491b(salary: list[int]) -> float:
     """
     Examples:
-    >>> p1491_2([4000,3000,1000,2000])
+    >>> p1491b([4000,3000,1000,2000])
     2500.0
-    >>> p1491_2([1000,2000,3000])
+    >>> p1491b([1000,2000,3000])
     2000.0
     """
-    lo, hi = float("inf"), float("-inf")
+    lo, hi = sys.maxsize, -sys.maxsize - 1
     sums = 0
     count = 0
     for s in salary:
@@ -4630,7 +4749,7 @@ def p1697(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[b
         parent[find(x)] = find(y)
 
     edgeList.sort(key=lambda x: x[2])
-    queries = sorted((q[2], q[0], q[1], i) for i, q in enumerate(queries))
+    queries = sorted([(q[2], q[0], q[1], i) for i, q in enumerate(queries)])
 
     result = [False] * len(queries)
     i = 0
@@ -4643,7 +4762,7 @@ def p1697(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[b
     return result
 
 
-def get_moves_list(nums: list[int], k: int) -> int:
+def get_moves_list(nums: list[int], k: int) -> tuple[list[int], list[int], list[int]]:
     """Test three ways to calculate the absolute value distance.
 
     For testing 1703.
@@ -4677,7 +4796,7 @@ def get_moves_list(nums: list[int], k: int) -> int:
     def method1(nums: list[int], k: int) -> list[int]:
         """Calculate using the absolute value formula with the indices."""
         if len(nums) == k or k == 1:
-            return 0
+            return [0]
 
         moves = []
         stack = deque()
@@ -4835,7 +4954,7 @@ def p1703(nums: list[int], k: int) -> int:
 
     stack = deque()
     s = 0
-    m = float("inf")
+    m = sys.maxsize
     for i, n in enumerate(nums):
         if n == 1:
             stack.append(i)
@@ -4847,22 +4966,22 @@ def p1703(nums: list[int], k: int) -> int:
     return m - correction_factor
 
 
-def p1703_2(nums: list[int], k: int) -> int:
+def p1703b(nums: list[int], k: int) -> int:
     """
     Examples:
-    >>> p1703_2([1,0,0,1,0,0], 2)
+    >>> p1703b([1,0,0,1,0,0], 2)
     2
-    >>> p1703_2([1,0,0,1,0,1], 2)
+    >>> p1703b([1,0,0,1,0,1], 2)
     1
-    >>> p1703_2([1,0,0,0,0,0,1,1], 3)
+    >>> p1703b([1,0,0,0,0,0,1,1], 3)
     5
-    >>> p1703_2([1,1,0,1], 2)
+    >>> p1703b([1,1,0,1], 2)
     0
-    >>> p1703_2([0,0,0,1,0,1,1,0,1], 3)
+    >>> p1703b([0,0,0,1,0,1,1,0,1], 3)
     1
-    >>> p1703_2([0,0,0,1,0,1,1,0,1], 4)
+    >>> p1703b([0,0,0,1,0,1,1,0,1], 4)
     2
-    >>> p1703_2([1,0,1,0,1,0,0,0,1], 4)
+    >>> p1703b([1,0,1,0,1,0,0,0,1], 4)
     6
     """
     if len(nums) == k or k == 1:
@@ -4917,7 +5036,7 @@ def p1706(grid: list[list[int]]) -> list[int]:
     [0, 1, 2, 3, 4, -1]
     """
 
-    def find_ball(i: int) -> Literal[-1, 1]:
+    def find_ball(i: int) -> int:
         x, y = 0, i
         while True:
             if grid[x][y] == 1:
@@ -5294,10 +5413,10 @@ def p2608(n: int, edges: list[list[int]]) -> int:
                     nex.append(path + [x])
             curr = nex
             step += 1
-        return float("inf")
+        return sys.maxsize
 
     nodes = set(range(n))
-    ans = float("inf")
+    ans = sys.maxsize
     while nodes:
         x = nodes.pop()
         seen.add(x)
@@ -5308,7 +5427,7 @@ def p2608(n: int, edges: list[list[int]]) -> int:
             break
         nodes -= seen
 
-    return ans if ans != float("inf") else -1
+    return ans if ans != sys.maxsize else -1
 
 
 def p3005(nums: list[int]) -> int:
