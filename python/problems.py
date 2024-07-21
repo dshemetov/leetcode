@@ -1677,15 +1677,28 @@ def p46(nums: list[int]) -> list[list[int]]:
     """
     46. Permutations https://leetcode.com/problems/permutations/
 
+    First attempt is the Steinhaus-Johnson-Trotter algorithm. Slow, but simple.
+
     Examples:
     >>> p46([1,2,3])
-    [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+    [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
     >>> p46([0,1])
-    [[0,1],[1,0]]
+    [[0, 1], [1, 0]]
     >>> p46([1])
     [[1]]
     """
-    ...
+    permutations = []
+    for x in nums:
+        if not permutations:
+            permutations.append([x])
+        else:
+            temp = []
+            for p in permutations:
+                for i in range(len(p) + 1):
+                    temp.append(p[:i] + [x] + p[i:])
+            permutations = temp
+
+    return permutations
 
 
 def p49(strs: list[str]) -> list[list[str]]:
@@ -2618,7 +2631,7 @@ def p319(n: int) -> int:
     >>> p319(5)
     2
     """
-    arr = np.zeros(n, dtype=int)
+    arr = [0] * n
     for i in range(1, n + 1):
         for j in range(0, n):
             if (j + 1) % i == 0:
