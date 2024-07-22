@@ -1701,6 +1701,62 @@ def p46(nums: list[int]) -> list[list[int]]:
     return permutations
 
 
+def change_ringers():
+    """
+    This is the scale (modulo microtonal tuning) in King Gizzard & The Lizard
+    Wizard's "Rattlesnake".
+    """
+    for i, x in enumerate(p46(["b", "c", "c#", "d#", "f", "g"])):
+        print(i, x)
+
+
+def lehmer_code_to_permutation(lst: list[int]) -> list[int]:
+    """Convert Lehmer code to permutation.
+
+    References:
+    https://en.wikipedia.org/wiki/Lehmer_code
+
+    Examples:
+    >>> lehmer_code_to_permutation([0, 0, 0, 0, 0, 0])
+    [1, 2, 3, 4, 5, 6]
+    >>> lehmer_code_to_permutation([0, 0, 0, 0, 1, 0])
+    [1, 2, 3, 4, 6, 5]
+    >>> lehmer_code_to_permutation([0, 0, 0, 1, 0, 0])
+    [1, 2, 3, 5, 4, 6]
+    >>> lehmer_code_to_permutation([0, 0, 0, 1, 1, 0])
+    [1, 2, 3, 5, 6, 4]
+    """
+    n = len(lst)
+    perm = lst.copy()
+    for i in range(n, 0, -1):
+        for j in range(i, n):
+            if perm[i] <= perm[j]:
+                perm[j] += 1
+    return [x + 1 for x in perm]
+
+
+def permutation_to_lehmer_code(lst: list[int]) -> list[int]:
+    """Convert permutation to Lehmer code.
+
+    Examples:
+    >>> permutation_to_lehmer_code([1, 2, 3, 4, 5, 6])
+    [0, 0, 0, 0, 0, 0]
+    >>> permutation_to_lehmer_code([1, 2, 3, 4, 6, 5])
+    [0, 0, 0, 0, 1, 0]
+    >>> permutation_to_lehmer_code([1, 2, 3, 5, 4, 6])
+    [0, 0, 0, 1, 0, 0]
+    >>> permutation_to_lehmer_code([1, 2, 3, 5, 6, 4])
+    [0, 0, 0, 1, 1, 0]
+    """
+    n = len(lst)
+    lehmer = [lst[i] - 1 for i in range(n)]
+    for i in range(n):
+        for j in range(i, n):
+            if lehmer[i] < lehmer[j]:
+                lehmer[j] -= 1
+    return lehmer
+
+
 def p49(strs: list[str]) -> list[list[str]]:
     """
     49. Group Anagrams https://leetcode.com/problems/group-anagrams/
