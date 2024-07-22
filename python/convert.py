@@ -54,15 +54,14 @@ def convert_to_multifile() -> None:
     Assumes that all the code use by a problem precedes the problem function
     definition.
     """
-    file_text = "\n".join(open("python/problems.py").readlines())
+
+    file_text = "\n".join(Path("python/problems.py").read_text().split("\n"))
     tree = ast.parse(file_text)
     import_statements = []
     problem_chunks = []
     stack = []
     for x in tree.body[1:]:
-        if isinstance(x, ast.Import):
-            import_statements.append(x)
-        elif isinstance(x, ast.ImportFrom):
+        if isinstance(x, (ast.Import, ast.ImportFrom)):
             import_statements.append(x)
         elif isinstance(x, ast.FunctionDef) and re.match(r"p(\d+)", x.name):
             stack.append(x)

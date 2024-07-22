@@ -4,15 +4,16 @@ Programming practice.
 
 ## Usage
 
-I recommend Python >=3.10.
+Uses [`uv`](https://github.com/astral-sh/uv) for project management.
 
 ```py
-# Make a venv and install deps.
-python -m venv venv
-source venv/bin/activate
-pip install wheel
-pip install -r requirements.txt
+# Install uv (Linux/MacOS)
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Run tests (mostly docstrings).
-pytest
+# Make a venv and install dependencies
+uv venv
+uv pip install -r requirements.txt
+
+# Run docstring tests
+.venv/bin/pytest .
 ```

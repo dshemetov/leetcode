@@ -34,6 +34,6 @@ def get_question_detail(title_slug):
 
 
 # pretty print JSON
-json = get_question_detail("two-sum")
-print(list(json["data"]["question"].keys()))
-print(json["data"]["question"]["content"])
+# json = get_question_detail("two-sum")
+# print(list(json["data"]["question"].keys()))
+# print(json["data"]["question"]["content"])

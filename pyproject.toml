@@ -4,8 +4,28 @@ addopts = "--doctest-modules --doctest-continue-on-failure"
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 
 [tool.ruff]
-lint.ignore = ["E501"]
-lint.select = ["E", "F", "I", "W"]
-lint.fixable = ["E", "F", "I"]
-exclude = [".env", ".venv", "venv", "notebooks"]
-output-format = "full"
+line-length = 120
+lint.extend-select = [
+    "F", # Pyflakes
+    "I", # isort
+    # "D",    # pydocstyle
+    "PD",   # pandas-vet
+    "NPY",  # numpy
+    "PERF", # perflint
+    "FURB", # refurbish
+    # "PL",   # pylint
+    "FLY", # flynt
+    "B",   # flakes-bugbear
+    "UP",  # pyupgrade
+    "C4",  # comprehensions
+    "A",   # builtins
+    "ISC", # implicit-str-concat
+    "LOG", # logging
+    "G",   # logging-format
+    "PT",  # pytest-style
+    "RET", # return
+    "SIM", # simplify
+    "PTH", # use-pathlib
+]
+lint.ignore = ["SIM108"]
+format.docstring-code-format = true

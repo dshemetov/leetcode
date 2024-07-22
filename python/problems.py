@@ -1,5 +1,4 @@
-"""
-Python solutions to LeetCode problems.
+"""Python solutions to LeetCode problems.
 
 Keeping it as a monofile because there's something funny about it.
 """
@@ -22,14 +21,15 @@ import numpy as np
 
 
 def p1(nums: list[int], target: int) -> list[int]:
-    """
-    1. Two Sum https://leetcode.com/problems/two-sum/
+    """1. Two Sum https://leetcode.com/problems/two-sum/
 
-    Examples:
+    Examples
+    --------
     >>> p1([3, 3], 6)
     [0, 1]
     >>> p1([3, 2, 4], 7)
     [0, 2]
+
     """
     ix_map = defaultdict(list)
     for i, x in enumerate(nums):
@@ -45,9 +45,7 @@ def p1(nums: list[int], target: int) -> list[int]:
 
 
 class ListNode:
-    def __init__(
-        self, val: int = 0, next: Optional["ListNode"] = None
-    ):  # pylint: disable=redefined-builtin
+    def __init__(self, val: int = 0, next: Optional["ListNode"] = None):  # noqa: A002 pylint: disable=redefined-builtin
         self.val = val
         self.next = next
 
@@ -72,8 +70,7 @@ class ListNode:
 
 
 def listnode_to_list(head) -> list[int]:
-    """
-    Examples:
+    """Examples
     >>> listnode_to_list(ListNode.from_list([1, 2, 3, 4, 5]))
     [1, 2, 3, 4, 5]
     """
@@ -87,8 +84,7 @@ def listnode_to_list(head) -> list[int]:
 
 
 def list_to_int(lst: Optional[ListNode]) -> int:
-    """
-    Examples:
+    """Examples
     >>> list_to_int(ListNode.from_int(0))
     0
     >>> list_to_int(ListNode.from_int(2))
@@ -110,16 +106,17 @@ def list_to_int(lst: Optional[ListNode]) -> int:
 
 
 def p2(l1: ListNode | None, l2: ListNode | None) -> ListNode | None:
-    """
-    2. Add Two Numbers https://leetcode.com/problems/add-two-numbers/
+    """2. Add Two Numbers https://leetcode.com/problems/add-two-numbers/
 
-    Examples:
+    Examples
+    --------
     >>> list_to_int(p2(ListNode.from_int(0), ListNode.from_int(15)))
     15
     >>> list_to_int(p2(ListNode.from_int(12), ListNode.from_int(15)))
     27
     >>> list_to_int(p2(ListNode.from_int(12), ListNode.from_int(153)))
     165
+
     """
     first_node = ListNode(0)
     cur_node = first_node
@@ -142,10 +139,10 @@ def p2(l1: ListNode | None, l2: ListNode | None) -> ListNode | None:
 
 
 def p3(s: str) -> int:
-    """
-    3. Longest Substring Without Repeating Characters https://leetcode.com/problems/longest-substring-without-repeating-characters/
+    """3. Longest Substring Without Repeating Characters https://leetcode.com/problems/longest-substring-without-repeating-characters/
 
-    Examples:
+    Examples
+    --------
     >>> p3("a")
     1
     >>> p3("aa")
@@ -172,6 +169,7 @@ def p3(s: str) -> int:
     3
     >>> p3("ohomm")
     3
+
     """
     if not s:
         return 0
@@ -205,8 +203,7 @@ def get_median_sorted(nums: list[int]) -> float:
 
 
 def p4(nums1: list[int], nums2: list[int]) -> float:
-    """
-    4. Median of Two Sorted Arrays https://leetcode.com/problems/median-of-two-sorted-arrays/
+    """4. Median of Two Sorted Arrays https://leetcode.com/problems/median-of-two-sorted-arrays/
 
     Lessons learned:
     - I spent weeks thinking about this problem before giving up and looking for
@@ -260,13 +257,14 @@ def p4(nums1: list[int], nums2: list[int]) -> float:
 
     - The median is then
 
-        median = max(Aleft, Bleft)                               if len(A) + len(B) odd
+        median = max(Aleft, Bleft)                                if len(A) + len(B) odd
                 = (max(Aleft, Bleft) + min(Aright, Bright)) / 2.  else
 
     - Swapping two variables in Python swaps pointers under the hood:
     https://stackoverflow.com/a/62038590/4784655.
 
-    Examples:
+    Examples
+    --------
     >>> p4([1, 3], [2])
     2.0
     >>> p4([1, 2], [3, 4])
@@ -289,6 +287,7 @@ def p4(nums1: list[int], nums2: list[int]) -> float:
     >>> b2 = [1, 1, 1, 1, 1, 3, 6, 10, 11, 11, 11, 11]
     >>> p4(a2, b2) == get_median_sorted(sorted(a2 + b2))
     True
+
     """
     if not nums1:
         return get_median_sorted(nums2)
@@ -323,8 +322,7 @@ def p4(nums1: list[int], nums2: list[int]) -> float:
 
 
 def p5(s: str) -> str:
-    """
-    5. Longest Palindromic Substring https://leetcode.com/problems/longest-palindromic-substring/
+    """5. Longest Palindromic Substring https://leetcode.com/problems/longest-palindromic-substring/
 
     Lessons learned:
     - I tried an approach with three pointers and expanding outwards if the
@@ -335,7 +333,8 @@ def p5(s: str) -> str:
     - The solution is straightforward and I probably would have thought of it,
     if I didn't get stuck trying to fix the three pointer approach.
 
-    Examples:
+    Examples
+    --------
     >>> p5("babad")
     'bab'
     >>> p5("cbbd")
@@ -356,6 +355,7 @@ def p5(s: str) -> str:
     'aaaaa'
     >>> p5("aaaa")
     'aaaa'
+
     """
     if len(s) == 1:
         return s
@@ -385,8 +385,7 @@ def p5(s: str) -> str:
 
 
 def p6(s: str, numRows: int) -> str:
-    """
-    6. Zigzag Conversion https://leetcode.com/problems/zigzag-conversion/
+    """6. Zigzag Conversion https://leetcode.com/problems/zigzag-conversion/
 
     Lessons learned:
     - I went directly for figuring out the indexing patterns, since the matrix
@@ -396,7 +395,8 @@ def p6(s: str, numRows: int) -> str:
     on the fact that each new character must be appended to one of the rows, so
     it just keeps track of which row to append to.
 
-    Examples:
+    Examples
+    --------
     >>> p6("PAYPALISHIRING", 1)
     'PAYPALISHIRING'
     >>> p6("PAYPALISHIRING", 2)
@@ -409,6 +409,7 @@ def p6(s: str, numRows: int) -> str:
     'A'
     >>> p6("A", 3)
     'A'
+
     """
     if numRows == 1:
         return s
@@ -418,7 +419,7 @@ def p6(s: str, numRows: int) -> str:
 
     new_s = []
     for i in range(0, numRows):
-        if i in {0, numRows - 1}:
+        if i in {0, numRows - 1}:  # noqa: SIM108
             gaps = [2 * numRows - 2, 2 * numRows - 2]
         else:
             gaps = [2 * numRows - 2 - 2 * i, 2 * i]
@@ -451,8 +452,7 @@ def p6b(s: str, numRows: int) -> str:
 
 
 def p7(x: int) -> int:
-    """
-    7. Reverse Integer https://leetcode.com/problems/reverse-integer/
+    """7. Reverse Integer https://leetcode.com/problems/reverse-integer/
 
     Lessons learned:
     - The most interesting part of this problem is finding out how to check for
@@ -468,7 +468,8 @@ def p7(x: int) -> int:
     n), while in C, we have (-x % n) = -(x % n). Also, in Python, -(-x // n) =
     (x - 1) // n + 1.
 
-    Examples:
+    Examples
+    --------
     >>> p7(123)
     321
     >>> p7(-123)
@@ -479,6 +480,7 @@ def p7(x: int) -> int:
     0
     >>> p7(-10)
     -1
+
     """
     int_max_div10 = (2**31 - 1) // 10
     int_min_div10 = (-(2**31)) // 10 + 1
@@ -503,10 +505,10 @@ def p7(x: int) -> int:
 
 
 def p8(s: str) -> int:
-    """
-    8. String to Integer (atoi) https://leetcode.com/problems/string-to-integer-atoi/
+    """8. String to Integer (atoi) https://leetcode.com/problems/string-to-integer-atoi/
 
-    Examples:
+    Examples
+    --------
     >>> p8("42")
     42
     >>> p8("   -42")
@@ -529,6 +531,7 @@ def p8(s: str) -> int:
     0
     >>> p8("-0")
     0
+
     """
     _max = 2**31 - 1
     _min = 2**31
@@ -552,24 +555,23 @@ def p8(s: str) -> int:
                 num = int(c)
             else:
                 return 0
+        elif c.isdigit():
+            num = num * 10 + int(c)
+            if factor == 1 and num > _max:
+                return _max
+            if factor == -1 and num > _min:
+                return -_min
         else:
-            if c.isdigit():
-                num = num * 10 + int(c)
-                if factor == 1 and num > _max:
-                    return _max
-                if factor == -1 and num > _min:
-                    return -_min
-            else:
-                break
+            break
 
     return factor * num
 
 
 def p9(x: int) -> bool:
-    """
-    9. Palindrome Number https://leetcode.com/problems/palindrome-number/
+    """9. Palindrome Number https://leetcode.com/problems/palindrome-number/
 
-    Examples:
+    Examples
+    --------
     >>> p9(121)
     True
     >>> p9(-121)
@@ -588,6 +590,7 @@ def p9(x: int) -> bool:
     True
     >>> p9(1122)
     False
+
     """
     if x < 0:
         return False
@@ -599,15 +602,11 @@ def p9(x: int) -> bool:
     if num_digits == 1:
         return True
 
-    for i in range(num_digits // 2):
-        if x // 10**i % 10 != x // 10 ** (num_digits - i - 1) % 10:
-            return False
-    return True
+    return all(x // 10**i % 10 == x // 10 ** (num_digits - i - 1) % 10 for i in range(num_digits // 2))
 
 
 def p10(s: str, p: str) -> bool:
-    """
-    10. Regular Expression Matching https://leetcode.com/problems/regular-expression-matching/
+    """10. Regular Expression Matching https://leetcode.com/problems/regular-expression-matching/
 
     Lessons learned:
     - I looked at the solution and then wrote it from scratch. The key is the recursive structure
@@ -626,13 +625,15 @@ def p10(s: str, p: str) -> bool:
         dp[i][j] = False                                                otherwise
     - The solution below is bottom-up.
 
-    Examples:
+    Examples
+    --------
     >>> p10("aa", "a")
     False
     >>> p10("aa", "a*")
     True
     >>> p10("ab", ".*")
     True
+
     """
     dp = [[False] * (len(p) + 1) for _ in range(len(s) + 1)]
     dp[len(s)][len(p)] = True
@@ -649,8 +650,7 @@ def p10(s: str, p: str) -> bool:
 
 
 def p11(height: list[int]) -> int:
-    """
-    11. Container With Most Water https://leetcode.com/problems/container-with-most-water/
+    """11. Container With Most Water https://leetcode.com/problems/container-with-most-water/
 
     Lessons learned:
     - The trick to the O(n) solution relies on the following insight: if we
@@ -660,11 +660,13 @@ def p11(height: list[int]) -> int:
     - This feels like a trick problem and I didn't feel like I learned much from
     it.
 
-    Examples:
-    >>> p11([1,8,6,2,5,4,8,3,7])
+    Examples
+    --------
+    >>> p11([1, 8, 6, 2, 5, 4, 8, 3, 7])
     49
-    >>> p11([1,1])
+    >>> p11([1, 1])
     1
+
     """
     lo, hi = 0, len(height) - 1
     m = -1
@@ -678,10 +680,10 @@ def p11(height: list[int]) -> int:
 
 
 def p12(num: int) -> str:
-    """
-    12. Integer to Roman https://leetcode.com/problems/integer-to-roman/
+    """12. Integer to Roman https://leetcode.com/problems/integer-to-roman/
 
-    Examples:
+    Examples
+    --------
     >>> p12(3)
     'III'
     >>> p12(4)
@@ -692,6 +694,7 @@ def p12(num: int) -> str:
     'LVIII'
     >>> p12(1994)
     'MCMXCIV'
+
     """
     letter_map = {
         1: "I",
@@ -717,10 +720,10 @@ def p12(num: int) -> str:
 
 
 def p13(s: str) -> int:
-    """
-    13. Roman to Integer https://leetcode.com/problems/roman-to-integer/
+    """13. Roman to Integer https://leetcode.com/problems/roman-to-integer/
 
-    Examples:
+    Examples
+    --------
     >>> p13("III")
     3
     >>> p13("IV")
@@ -731,6 +734,7 @@ def p13(s: str) -> int:
     58
     >>> p13("MCMXCIV")
     1994
+
     """
     d = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
 
@@ -745,16 +749,17 @@ def p13(s: str) -> int:
 
 
 def p14(strs: list[str]) -> str:
-    """
-    14. Longest Common Prefix https://leetcode.com/problems/longest-common-prefix/
+    """14. Longest Common Prefix https://leetcode.com/problems/longest-common-prefix/
 
-    Examples:
-    >>> p14(["flower","flow","flight"])
+    Examples
+    --------
+    >>> p14(["flower", "flow", "flight"])
     'fl'
-    >>> p14(["dog","racecar","car"])
+    >>> p14(["dog", "racecar", "car"])
     ''
-    >>> p14(["dog","dog","dog","dog"])
+    >>> p14(["dog", "dog", "dog", "dog"])
     'dog'
+
     """
     prefix = strs[0]
     for s in strs[1:]:
@@ -766,16 +771,17 @@ def p14(strs: list[str]) -> str:
 
 
 def p15(nums: list[int]) -> list[list[int]]:
-    """
-    15. 3Sum https://leetcode.com/problems/3sum/
+    """15. 3Sum https://leetcode.com/problems/3sum/
 
-    Examples:
-    >>> p15([-1,0,1,2,-1,-4])
+    Examples
+    --------
+    >>> p15([-1, 0, 1, 2, -1, -4])
     [[-1, -1, 2], [-1, 0, 1]]
     >>> p15([0, 1, 1])
     []
     >>> p15([0, 0, 0])
     [[0, 0, 0]]
+
     """
     nums.sort()
     res = []
@@ -805,14 +811,15 @@ def p15(nums: list[int]) -> list[list[int]]:
 
 
 def p16(nums: list[int], target: int) -> int:
-    """
-    16. 3Sum Closest https://leetcode.com/problems/3sum-closest/
+    """16. 3Sum Closest https://leetcode.com/problems/3sum-closest/
 
-    Examples:
-    >>> p16([-1,2,1,-4], 1)
+    Examples
+    --------
+    >>> p16([-1, 2, 1, -4], 1)
     2
-    >>> p16([0,0,0], 1)
+    >>> p16([0, 0, 0], 1)
     0
+
     """
     nums.sort()
     res = sys.maxsize
@@ -835,8 +842,7 @@ def p16(nums: list[int], target: int) -> int:
 
 
 def p17(digits: str) -> list[str]:
-    """
-    17. Letter Combinations of a Phone Number https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+    """17. Letter Combinations of a Phone Number https://leetcode.com/problems/letter-combinations-of-a-phone-number/
 
     Lessons learned:
     - Implement the Cartesian product, they say! It's fun, they say! And it turns
@@ -844,13 +850,15 @@ def p17(digits: str) -> list[str]:
     - The second solution is a little more manual, but worth knowing.
 
 
-    Examples:
+    Examples
+    --------
     >>> p17("23")
     ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
     >>> p17("")
     []
     >>> p17("2")
     ['a', 'b', 'c']
+
     """
     if not digits:
         return []
@@ -871,14 +879,14 @@ def p17(digits: str) -> list[str]:
 
 
 def p17b(digits: str) -> list[str]:
-    """
-    Examples:
+    """Examples
     >>> p17b("23")
     ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
     >>> p17b("")
     []
     >>> p17b("2")
     ['a', 'b', 'c']
+
     """
     if not digits:
         return []
@@ -896,28 +904,26 @@ def p17b(digits: str) -> list[str]:
 
     res = []
     for c in digits:
-        if not res:
-            res = list(letter_map[c])
-        else:
-            res = [a + b for a in res for b in letter_map[c]]
+        res = [a + b for a in res for b in letter_map[c]] if res else list(letter_map[c])
 
     return res
 
 
 def p18(nums: list[int], target: int) -> list[list[int]]:
-    """
-    18. 4Sum https://leetcode.com/problems/4sum/
+    """18. 4Sum https://leetcode.com/problems/4sum/
 
     Lessons learned:
     - The idea is the same as in 3Sum, but with an extra index.
 
-    Examples:
-    >>> p18([1,0,-1,0,-2,2], 0)
+    Examples
+    --------
+    >>> p18([1, 0, -1, 0, -2, 2], 0)
     [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]]
-    >>> p18([2,2,2,2,2], 8)
+    >>> p18([2, 2, 2, 2, 2], 8)
     [[2, 2, 2, 2]]
-    >>> p18([-2,-1,-1,1,1,2,2], 0)
+    >>> p18([-2, -1, -1, 1, 1, 2, 2], 0)
     [[-2, -1, 1, 2], [-1, -1, 1, 1]]
+
     """
     nums.sort()
     res = []
@@ -951,10 +957,10 @@ def p18(nums: list[int], target: int) -> list[list[int]]:
 
 
 def p19(head: ListNode | None, n: int) -> ListNode | None:
-    """
-    19. Remove Nth Node From End of List https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+    """19. Remove Nth Node From End of List https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 
-    Examples:
+    Examples
+    --------
     >>> listnode_to_list(p19(ListNode.from_list([1, 2, 3, 4, 5]), 1))
     [1, 2, 3, 4]
     >>> listnode_to_list(p19(ListNode.from_list([1, 2, 3, 4, 5]), 2))
@@ -971,6 +977,7 @@ def p19(head: ListNode | None, n: int) -> ListNode | None:
     [1]
     >>> listnode_to_list(p19(ListNode.from_list([1, 2]), 2))
     [2]
+
     """
     if not head:
         return None
@@ -997,16 +1004,17 @@ def p19(head: ListNode | None, n: int) -> ListNode | None:
 
 
 def p20(s: str) -> bool:
-    """
-    20. Valid Parentheses https://leetcode.com/problems/valid-parentheses/
+    """20. Valid Parentheses https://leetcode.com/problems/valid-parentheses/
 
-    Examples:
+    Examples
+    --------
     >>> p20("()")
     True
     >>> p20("()[]{}")
     True
     >>> p20("(]")
     False
+
     """
     stack = deque()
     bracket_map = {"(": ")", "[": "]", "{": "}"}
@@ -1020,16 +1028,17 @@ def p20(s: str) -> bool:
 
 
 def p21(list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
-    """
-     21. Merge Two Sorted Lists https://leetcode.com/problems/merge-two-sorted-lists/
+    """21. Merge Two Sorted Lists https://leetcode.com/problems/merge-two-sorted-lists/
 
-    Examples:
+    Examples
+    --------
     >>> listnode_to_list(p21(ListNode.from_list([1, 2, 4]), ListNode.from_list([1, 3, 4])))
     [1, 1, 2, 3, 4, 4]
     >>> listnode_to_list(p21(None, None))
     []
     >>> listnode_to_list(p21(None, ListNode.from_list([0])))
     [0]
+
     """
     head = pointer = ListNode()
 
@@ -1052,14 +1061,15 @@ def p21(list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
 
 
 def p22(n: int) -> list[str]:
-    """
-    22. Generate Parentheses https://leetcode.com/problems/generate-parentheses/
+    """22. Generate Parentheses https://leetcode.com/problems/generate-parentheses/
 
-    Examples:
+    Examples
+    --------
     >>> p22(3)
     ['((()))', '(()())', '(())()', '()(())', '()()()']
     >>> p22(1)
     ['()']
+
     """
     if n == 1:
         return ["()"]
@@ -1078,19 +1088,22 @@ def p22(n: int) -> list[str]:
 
 
 def p23(lists: list[ListNode | None]) -> ListNode | None:
-    """
-    23. Merge k Sorted Lists https://leetcode.com/problems/merge-k-sorted-lists/
+    """23. Merge k Sorted Lists https://leetcode.com/problems/merge-k-sorted-lists/
 
     Lessons learned:
     - Sometimes the hard problems aren't that hard.
 
-    Examples:
-    >>> listnode_to_list(p23([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])]))
+    Examples
+    --------
+    >>> listnode_to_list(
+    ...     p23([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])])
+    ... )
     [1, 1, 2, 3, 4, 4, 5, 6]
     >>> listnode_to_list(p23([]))
     []
     >>> listnode_to_list(p23([None]))
     []
+
     """
     head = pointer = ListNode()
 
@@ -1110,14 +1123,16 @@ def p23(lists: list[ListNode | None]) -> ListNode | None:
 
 
 def p23b(lists: list[ListNode | None]) -> ListNode | None:
-    """
-    Examples:
-    >>> listnode_to_list(p23b([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])]))
+    """Examples
+    >>> listnode_to_list(
+    ...     p23b([ListNode.from_list([1, 4, 5]), ListNode.from_list([1, 3, 4]), ListNode.from_list([2, 6])])
+    ... )
     [1, 1, 2, 3, 4, 4, 5, 6]
     >>> listnode_to_list(p23b([]))
     []
     >>> listnode_to_list(p23b([None]))
     []
+
     """
     if not lists:
         return None
@@ -1129,10 +1144,10 @@ def p23b(lists: list[ListNode | None]) -> ListNode | None:
 
 
 def p24(head: ListNode | None) -> ListNode | None:
-    """
-    24. Swap Nodes in Pairs https://leetcode.com/problems/swap-nodes-in-pairs/
+    """24. Swap Nodes in Pairs https://leetcode.com/problems/swap-nodes-in-pairs/
 
-    Examples:
+    Examples
+    --------
     >>> listnode_to_list(p24(None))
     []
     >>> listnode_to_list(p24(ListNode.from_list([1])))
@@ -1145,6 +1160,7 @@ def p24(head: ListNode | None) -> ListNode | None:
     [2, 1, 4, 3]
     >>> listnode_to_list(p24(ListNode.from_list([1, 2, 3, 4, 5])))
     [2, 1, 4, 3, 5]
+
     """
     if not head:
         return None
@@ -1171,8 +1187,7 @@ def p24(head: ListNode | None) -> ListNode | None:
 
 
 def p25(head: Optional[ListNode], k: int) -> Optional[ListNode]:
-    """
-    25. Reverse Nodes in k-Group https://leetcode.com/problems/reverse-nodes-in-k-group/description/
+    """25. Reverse Nodes in k-Group https://leetcode.com/problems/reverse-nodes-in-k-group/description/
 
     Lessons learned:
     - Walking through the k=3 case below while writing the algorithm was key.
@@ -1220,11 +1235,11 @@ def p25(head: Optional[ListNode], k: int) -> Optional[ListNode]:
                        ^cur1
                        ^cur2
 
-    >>> listnode_to_list(p25(ListNode.from_list([1,2,3,4,5]), 2))
+    >>> listnode_to_list(p25(ListNode.from_list([1, 2, 3, 4, 5]), 2))
     [2, 1, 4, 3, 5]
-    >>> listnode_to_list(p25(ListNode.from_list([1,2,3,4,5]), 3))
+    >>> listnode_to_list(p25(ListNode.from_list([1, 2, 3, 4, 5]), 3))
     [3, 2, 1, 4, 5]
-    >>> listnode_to_list(p25(ListNode.from_list([1,2,3,4,5]), 1))
+    >>> listnode_to_list(p25(ListNode.from_list([1, 2, 3, 4, 5]), 1))
     [1, 2, 3, 4, 5]
     """
     # Start of new list
@@ -1267,14 +1282,15 @@ def p25(head: Optional[ListNode], k: int) -> Optional[ListNode]:
 
 
 def p26(nums: list[int]) -> int:
-    """
-    26. Remove Duplicates from Sorted Array https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+    """26. Remove Duplicates from Sorted Array https://leetcode.com/problems/remove-duplicates-from-sorted-array/
 
-    Examples:
+    Examples
+    --------
     >>> p26([1, 1, 2])
     2
-    >>> p26([0,0,1,1,1,2,2,3,3,4])
+    >>> p26([0, 0, 1, 1, 1, 2, 2, 3, 3, 4])
     5
+
     """
     k = 0
     for i in range(1, len(nums)):
@@ -1285,14 +1301,15 @@ def p26(nums: list[int]) -> int:
 
 
 def p27(nums: list[int], val: int) -> int:
-    """
-    27. Remove Element https://leetcode.com/problems/remove-element
+    """27. Remove Element https://leetcode.com/problems/remove-element
 
-    Examples:
+    Examples
+    --------
     >>> p27([3, 2, 2, 3], 3)
     2
-    >>> p27([0,1,2,2,3,0,4,2], 2)
+    >>> p27([0, 1, 2, 2, 3, 0, 4, 2], 2)
     5
+
     """
     n = len(nums)
     k = 0
@@ -1304,16 +1321,17 @@ def p27(nums: list[int], val: int) -> int:
 
 
 def p28(haystack: str, needle: str) -> int:
-    """
-    28. Find the Index of the First Occurrence in a String https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string
+    """28. Find the Index of the First Occurrence in a String https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string
 
-    Examples:
+    Examples
+    --------
     >>> p28("sadbutsad", "sad")
     0
     >>> p28("sadbutsad", "but")
     3
     >>> p28("leetcode", "leeto")
     -1
+
     """
     if needle in haystack:
         return haystack.index(needle)
@@ -1321,8 +1339,7 @@ def p28(haystack: str, needle: str) -> int:
 
 
 def p29(dividend: int, divisor: int) -> int:
-    """
-    29. Divide Two Integers https://leetcode.com/problems/divide-two-integers
+    """29. Divide Two Integers https://leetcode.com/problems/divide-two-integers
 
     The straightforward approach is to just subtract divisor from dividend until
     dividend is less than divisor. This is O(n) (where n = dividend/divisor) and
@@ -1330,7 +1347,8 @@ def p29(dividend: int, divisor: int) -> int:
     divisor after each subtraction and resetting once dividend is smaller than
     the doubled value. This algorithm is O(log(n)).
 
-    Examples:
+    Examples
+    --------
     >>> p29(10, 3)
     3
     >>> p29(7, -3)
@@ -1339,6 +1357,7 @@ def p29(dividend: int, divisor: int) -> int:
     0
     >>> p29(1, 1)
     1
+
     """
     sign = 1 if dividend * divisor > 0 else -1
     dividend, divisor = abs(dividend), abs(divisor)
@@ -1356,8 +1375,7 @@ def p29(dividend: int, divisor: int) -> int:
 
 
 def p31(nums: list[int]) -> None:
-    """
-    31. Next Permutation https://leetcode.com/problems/next-permutation
+    """31. Next Permutation https://leetcode.com/problems/next-permutation
 
     Learned a lot about permutations. The algorithm used traces back to Narayana
     Pandita.
@@ -1414,12 +1432,14 @@ def p31(nums: list[int]) -> None:
     (320)   22
     (321)   23
 
-    References:
+    References
+    ----------
     https://en.wikipedia.org/wiki/Permutation#One-line_notation
     https://en.wikipedia.org/wiki/Permutation#Cycle_notation
     https://en.wikipedia.org/wiki/Permutation#Numbering_permutations
 
-    Examples:
+    Examples
+    --------
     >>> nums = [1, 2, 3]
     >>> p31(nums)
     >>> nums
@@ -1440,6 +1460,7 @@ def p31(nums: list[int]) -> None:
     >>> p31(nums)
     >>> nums
     [1, 4, 2, 3]
+
     """
     n = len(nums)
     # Find the largest index k1 such that nums[k1] < nums[k1 + 1]
@@ -1467,8 +1488,7 @@ def p31(nums: list[int]) -> None:
 
 
 def p33(nums: list[int], target: int) -> int:
-    """
-    33. Search in Rotated Sorted Array https://leetcode.com/problems/search-in-rotated-sorted-array/
+    """33. Search in Rotated Sorted Array https://leetcode.com/problems/search-in-rotated-sorted-array/
 
     Approach: find the shift index using binary search, then do a regular binary
     search, translating indices.
@@ -1512,17 +1532,19 @@ def p33(nums: list[int], target: int) -> int:
     0   3   1
     1   3   2
 
-    Examples:
-    >>> p33([4,5,6,7,0,1,2], 0)
+    Examples
+    --------
+    >>> p33([4, 5, 6, 7, 0, 1, 2], 0)
     4
-    >>> p33([4,5,6,7,0,1,2], 3)
+    >>> p33([4, 5, 6, 7, 0, 1, 2], 3)
     -1
     >>> p33([1], 0)
     -1
-    >>> p33([4,5,1,2,3], 1)
+    >>> p33([4, 5, 1, 2, 3], 1)
     2
-    >>> p33([5,1,3], 5)
+    >>> p33([5, 1, 3], 5)
     0
+
     """
     lo, hi = 0, len(nums) - 1
     if nums[lo] > nums[hi]:
@@ -1552,16 +1574,17 @@ def p33(nums: list[int], target: int) -> int:
 
 
 def p35(nums: list[int], target: int) -> int:
-    """
-    35. Search Insert Position https://leetcode.com/problems/search-insert-position
+    """35. Search Insert Position https://leetcode.com/problems/search-insert-position
 
-    Examples:
+    Examples
+    --------
     >>> p35([1, 3, 5, 6], 5)
     2
     >>> p35([1, 3, 5, 6], 2)
     1
     >>> p35([1, 3, 5, 6], 7)
     4
+
     """
     for i, x in enumerate(nums):
         if target <= x:
@@ -1570,10 +1593,10 @@ def p35(nums: list[int], target: int) -> int:
 
 
 def p36(board: list[list[str]]) -> bool:
-    """
-    36. Valid Sudoku https://leetcode.com/problems/valid-sudoku/
+    """36. Valid Sudoku https://leetcode.com/problems/valid-sudoku/
 
-    Examples:
+    Examples
+    --------
     >>> board = [
     ...     ["5", "3", ".", ".", "7", ".", ".", ".", "."],
     ...     ["6", ".", ".", "1", "9", "5", ".", ".", "."],
@@ -1600,6 +1623,7 @@ def p36(board: list[list[str]]) -> bool:
     ... ]
     >>> p36(board)
     False
+
     """
     mat = np.char.replace(np.array(board), ".", "0").astype(int)
 
@@ -1611,18 +1635,14 @@ def p36(board: list[list[str]]) -> bool:
 
     for i in range(3):
         for j in range(3):
-            if not (
-                np.bincount(mat[3 * i : 3 * i + 3, 3 * j : 3 * j + 3].flatten())[1:]
-                <= 1
-            ).all():
+            if not (np.bincount(mat[3 * i : 3 * i + 3, 3 * j : 3 * j + 3].flatten())[1:] <= 1).all():
                 return False
 
     return True
 
 
 def p45(nums: list[int]) -> int:
-    """
-    45. Jump Game II https://leetcode.com/problems/jump-game-ii/
+    """45. Jump Game II https://leetcode.com/problems/jump-game-ii/
 
     Lessons learned:
     - This is the backward version of the dynamic programming solution from
@@ -1635,22 +1655,20 @@ def p45(nums: list[int]) -> int:
     original one. The only necessary jumps are the ones that allow a new
     farthest index to be reached.
 
-    Examples:
-    >>> p45([2,3,1,1,4])
+    Examples
+    --------
+    >>> p45([2, 3, 1, 1, 4])
     2
-    >>> p45([2,3,0,1,4])
+    >>> p45([2, 3, 0, 1, 4])
     2
+
     """
     n = len(nums)
     reachable = [0] * (n - 1) + [1]
     for i in range(n - 2, -1, -1):
         for j in range(i + 1, min(n, i + nums[i] + 1)):
             if reachable[j]:
-                reachable[i] = (
-                    min(1 + reachable[j], reachable[i])
-                    if reachable[i] != 0
-                    else 1 + reachable[j]
-                )
+                reachable[i] = min(1 + reachable[j], reachable[i]) if reachable[i] != 0 else 1 + reachable[j]
 
     return reachable[0] - 1
 
@@ -1674,44 +1692,103 @@ def p45b(nums: list[int]) -> int:
 
 
 def p46(nums: list[int]) -> list[list[int]]:
-    """
-    46. Permutations https://leetcode.com/problems/permutations/
+    """46. Permutations https://leetcode.com/problems/permutations/
 
     First attempt is the Steinhaus-Johnson-Trotter algorithm. Slow, but simple.
 
-    Examples:
-    >>> p46([1,2,3])
+    Examples
+    --------
+    >>> p46([1, 2, 3])
     [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
-    >>> p46([0,1])
+    >>> p46([0, 1])
     [[0, 1], [1, 0]]
     >>> p46([1])
     [[1]]
+
     """
     permutations = []
     for x in nums:
         if not permutations:
             permutations.append([x])
         else:
-            temp = []
-            for p in permutations:
-                for i in range(len(p) + 1):
-                    temp.append(p[:i] + [x] + p[i:])
+            temp = [p[:i] + [x] + p[i:] for p in permutations for i in range(len(p) + 1)]
             permutations = temp
 
     return permutations
 
 
-def p49(strs: list[str]) -> list[list[str]]:
+def change_ringers():
+    """This is the scale (modulo microtonal tuning) in King Gizzard & The Lizard
+    Wizard's "Rattlesnake".
     """
-    49. Group Anagrams https://leetcode.com/problems/group-anagrams/
+    for i, x in enumerate(p46(["b", "c", "c#", "d#", "f", "g"])):
+        print(i, x)
 
-    Examples:
-    >>> p49(["eat","tea","tan","ate","nat","bat"])
+
+def lehmer_code_to_permutation(lst: list[int]) -> list[int]:
+    """Convert Lehmer code to permutation.
+
+    References
+    ----------
+    https://en.wikipedia.org/wiki/Lehmer_code
+
+    Examples
+    --------
+    >>> lehmer_code_to_permutation([0, 0, 0, 0, 0, 0])
+    [1, 2, 3, 4, 5, 6]
+    >>> lehmer_code_to_permutation([0, 0, 0, 0, 1, 0])
+    [1, 2, 3, 4, 6, 5]
+    >>> lehmer_code_to_permutation([0, 0, 0, 1, 0, 0])
+    [1, 2, 3, 5, 4, 6]
+    >>> lehmer_code_to_permutation([0, 0, 0, 1, 1, 0])
+    [1, 2, 3, 5, 6, 4]
+
+    """
+    n = len(lst)
+    perm = lst.copy()
+    for i in range(n, 0, -1):
+        for j in range(i, n):
+            if perm[i] <= perm[j]:
+                perm[j] += 1
+    return [x + 1 for x in perm]
+
+
+def permutation_to_lehmer_code(lst: list[int]) -> list[int]:
+    """Convert permutation to Lehmer code.
+
+    Examples
+    --------
+    >>> permutation_to_lehmer_code([1, 2, 3, 4, 5, 6])
+    [0, 0, 0, 0, 0, 0]
+    >>> permutation_to_lehmer_code([1, 2, 3, 4, 6, 5])
+    [0, 0, 0, 0, 1, 0]
+    >>> permutation_to_lehmer_code([1, 2, 3, 5, 4, 6])
+    [0, 0, 0, 1, 0, 0]
+    >>> permutation_to_lehmer_code([1, 2, 3, 5, 6, 4])
+    [0, 0, 0, 1, 1, 0]
+
+    """
+    n = len(lst)
+    lehmer = [lst[i] - 1 for i in range(n)]
+    for i in range(n):
+        for j in range(i, n):
+            if lehmer[i] < lehmer[j]:
+                lehmer[j] -= 1
+    return lehmer
+
+
+def p49(strs: list[str]) -> list[list[str]]:
+    """49. Group Anagrams https://leetcode.com/problems/group-anagrams/
+
+    Examples
+    --------
+    >>> p49(["eat", "tea", "tan", "ate", "nat", "bat"])
     [['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]
     >>> p49([""])
     [['']]
     >>> p49(["a"])
     [['a']]
+
     """
 
     def group_key(s: str) -> tuple[str, ...]:
@@ -1725,18 +1802,19 @@ def p49(strs: list[str]) -> list[list[str]]:
 
 
 def p54(matrix: list[list[int]]) -> list[int]:
-    """
-    54. Spiral Matrix https://leetcode.com/problems/spiral-matrix/
+    """54. Spiral Matrix https://leetcode.com/problems/spiral-matrix/
 
-    Examples:
-    >>> p54([[1,2,3],[4,5,6],[7,8,9]])
+    Examples
+    --------
+    >>> p54([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     [1, 2, 3, 6, 9, 8, 7, 4, 5]
-    >>> p54([[1,2,3,4],[5,6,7,8],[9,10,11,12]])
+    >>> p54([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]])
     [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]
     >>> p54([[1]])
     [1]
-    >>> p54([[1,2],[3,4]])
+    >>> p54([[1, 2], [3, 4]])
     [1, 2, 4, 3]
+
     """
     m, n = len(matrix), len(matrix[0])
     directions = cycle([[0, 1], [1, 0], [0, -1], [-1, 0]])
@@ -1762,8 +1840,7 @@ def p54(matrix: list[list[int]]) -> list[int]:
 
 
 def p55(nums: list[int]) -> bool:
-    """
-    55. Jump Game https://leetcode.com/problems/jump-game/
+    """55. Jump Game https://leetcode.com/problems/jump-game/
 
     Lessons learned:
     - The forward version of the dynamic programming solution is more intuitive,
@@ -1772,13 +1849,15 @@ def p55(nums: list[int]) -> bool:
     intuition there is that we keep track of minimum known index that can reach
     the end.
 
-    Examples:
-    >>> p55([2,3,1,1,4])
+    Examples
+    --------
+    >>> p55([2, 3, 1, 1, 4])
     True
-    >>> p55([3,2,1,0,4])
+    >>> p55([3, 2, 1, 0, 4])
     False
     >>> p55(list(range(10, -1, -1)) + [0])
     False
+
     """
     n = len(nums)
     reachable = [0] * (n - 1) + [1]
@@ -1806,17 +1885,18 @@ def p55b(nums: list[int]) -> bool:
 def get_fibonacci_number(n: int) -> int:
     """Return the nth Fibonacci number, where F(0) = 0 and F(1) = 1.
 
-    Examples:
+    Examples
+    --------
     >>> [get_fibonacci_number(i) for i in range(10)]
     [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+
     """
     phi = (1 + 5**0.5) / 2
     return int(phi**n / 5**0.5 + 0.5)
 
 
 def get_binary_strings_no_consecutive_zeros(n: int) -> list[str]:
-    """
-    Examples:
+    """Examples
     >>> get_binary_strings_no_consecutive_zeros(1)
     ['0', '1']
     >>> get_binary_strings_no_consecutive_zeros(2)
@@ -1825,6 +1905,7 @@ def get_binary_strings_no_consecutive_zeros(n: int) -> list[str]:
     ['011', '111', '101', '010', '110']
     >>> [len(get_binary_strings_no_consecutive_zeros(i)) for i in range(1, 10)]
     [2, 3, 5, 8, 13, 21, 34, 55, 89]
+
     """
     if n == 1:
         return ["0", "1"]
@@ -1834,8 +1915,7 @@ def get_binary_strings_no_consecutive_zeros(n: int) -> list[str]:
 
 
 def p91(s: str) -> int:
-    """
-    91. Decode Ways https://leetcode.com/problems/decode-ways/
+    """91. Decode Ways https://leetcode.com/problems/decode-ways/
 
     Lessons learned:
     - My first observation was that characters in "34567890" acted as separators,
@@ -1864,7 +1944,8 @@ def p91(s: str) -> int:
     recursion:
     https://en.wikipedia.org/wiki/Composition_(combinatorics)#/media/File:Fibonacci_climbing_stairs.svg.
 
-    Examples:
+    Examples
+    --------
     >>> p91("0")
     0
     >>> p91("06")
@@ -1885,6 +1966,7 @@ def p91(s: str) -> int:
     2
     >>> p91("2022322")
     6
+
     """
     valid_codes = {str(x) for x in range(1, 27)}
 
@@ -1926,8 +2008,7 @@ def p91(s: str) -> int:
 
 
 def p91b(s: str) -> int:
-    """
-    Examples:
+    """Examples
     >>> p91b("0")
     0
     >>> p91b("06")
@@ -1948,6 +2029,7 @@ def p91b(s: str) -> int:
     2
     >>> p91b("2022322")
     6
+
     """
     if not s or s[0] == "0":
         return 0
@@ -1960,7 +2042,7 @@ def p91b(s: str) -> int:
             dp[i] = dp[i - 1] + dp[i - 2]
         elif s[i - 1] != "0":
             dp[i] = dp[i - 1]
-        elif "10" == s[i - 2 : i] or "20" == s[i - 2 : i]:
+        elif s[i - 2 : i] == "10" or s[i - 2 : i] == "20":
             dp[i] = dp[i - 2]
 
     return dp[-1]
@@ -2029,16 +2111,17 @@ class TreeNode:
 
 
 def p102(root: TreeNode | None) -> list[list[int]]:
-    """
-    102. Binary Tree Level Order Traversal https://leetcode.com/problems/binary-tree-level-order-traversal/
+    """102. Binary Tree Level Order Traversal https://leetcode.com/problems/binary-tree-level-order-traversal/
 
-    Examples:
+    Examples
+    --------
     >>> p102(TreeNode.from_list([3, 9, 20, None, None, 15, 7]))
     [[3], [9, 20], [15, 7]]
     >>> p102(TreeNode(1))
     [[1]]
     >>> p102(None)
     []
+
     """
     if not root:
         return []
@@ -2068,9 +2151,11 @@ class Node:
     def from_adjacency_list(adjacency_list: list[list[int]]) -> "Node":
         """Build a node-based graph from an adjacency list.
 
-        Examples:
+        Examples
+        --------
         >>> Node.from_adjacency_list([[1, 2], [1, 4], [2, 3], [3, 4]]).to_adjacency_list()
         [[1, 2], [1, 4], [2, 3], [3, 4]]
+
         """
         if adjacency_list == [[]]:
             return Node(1)
@@ -2109,13 +2194,14 @@ class Node:
 
 
 def p133(node: "Node") -> "Node":
-    """
-    133. Clone Graph https://leetcode.com/problems/clone-graph/
+    """133. Clone Graph https://leetcode.com/problems/clone-graph/
 
-    Examples:
+    Examples
+    --------
     >>> p133(None)
     >>> p133(Node.from_adjacency_list([[1, 2], [1, 4], [2, 3], [3, 4]])).to_adjacency_list()
     [[1, 2], [1, 4], [2, 3], [3, 4]]
+
     """
     if node is None:
         return None
@@ -2137,8 +2223,7 @@ def p133(node: "Node") -> "Node":
 
 
 def p141(head: ListNode | None) -> bool:
-    """
-    141. Linked List Cycle https://leetcode.com/problems/linked-list-cycle/
+    """141. Linked List Cycle https://leetcode.com/problems/linked-list-cycle/
 
     Lessons learned:
     - We use the classic two-pointer cycle detection algorithm known as Floyd's
@@ -2178,8 +2263,7 @@ def p141(head: ListNode | None) -> bool:
 
 
 def p151(s: str) -> str:
-    """
-    151. Reverse Words In A String https://leetcode.com/problems/reverse-words-in-a-string/
+    """151. Reverse Words In A String https://leetcode.com/problems/reverse-words-in-a-string/
 
     Lesson learned:
     - Python string built-ins are fast.
@@ -2188,7 +2272,8 @@ def p151(s: str) -> str:
     requires keeping track of two pointers: the start of a word and the end of a
     word (terminated by a space).
 
-    Examples:
+    Examples
+    --------
     >>> p151("the sky is blue")
     'blue is sky the'
     >>> p151("  hello world!  ")
@@ -2197,13 +2282,13 @@ def p151(s: str) -> str:
     'example good a'
     >>> p151("  Bob    Loves  Alice   ")
     'Alice Loves Bob'
+
     """
     return " ".join(s.split()[::-1])
 
 
 def p151b(s: str) -> str:
-    """
-    Examples:
+    """Examples
     >>> p151b("the sky is blue")
     'blue is sky the'
     >>> p151b("  hello world!  ")
@@ -2212,6 +2297,7 @@ def p151b(s: str) -> str:
     'example good a'
     >>> p151b("  Bob    Loves  Alice   ")
     'Alice Loves Bob'
+
     """
     a = array("u", [])
     a.fromunicode(s.strip())
@@ -2247,16 +2333,17 @@ def p151b(s: str) -> str:
 
 
 def p167(numbers: list[int], target: int) -> list[int]:
-    """
-    167. Two Sum II - Input Array Is Sorted https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+    """167. Two Sum II - Input Array Is Sorted https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
 
-    Examples:
-    >>> p167([2,7,11,15], 9)
+    Examples
+    --------
+    >>> p167([2, 7, 11, 15], 9)
     [1, 2]
-    >>> p167([2,3,4], 6)
+    >>> p167([2, 3, 4], 6)
     [1, 3]
-    >>> p167([-1,0], -1)
+    >>> p167([-1, 0], -1)
     [1, 2]
+
     """
     lo, hi = 0, len(numbers) - 1
     while lo < hi:
@@ -2271,26 +2358,27 @@ def p167(numbers: list[int], target: int) -> list[int]:
 
 
 def p200(grid: list[list[str]]) -> int:
-    """
-    200. Number of Islands https://leetcode.com/problems/number-of-islands/
+    """200. Number of Islands https://leetcode.com/problems/number-of-islands/
 
-    Examples:
+    Examples
+    --------
     >>> grid = [
-    ...    ["1","1","1","1","0"],
-    ...    ["1","1","0","1","0"],
-    ...    ["1","1","0","0","0"],
-    ...    ["0","0","0","0","0"]
-    ...    ]
+    ...     ["1", "1", "1", "1", "0"],
+    ...     ["1", "1", "0", "1", "0"],
+    ...     ["1", "1", "0", "0", "0"],
+    ...     ["0", "0", "0", "0", "0"],
+    ... ]
     >>> p200(grid)
     1
     >>> grid = [
-    ...    ["1","1","0","0","0"],
-    ...    ["1","1","0","0","0"],
-    ...    ["0","0","1","0","0"],
-    ...    ["0","0","0","1","1"]
-    ...    ]
+    ...     ["1", "1", "0", "0", "0"],
+    ...     ["1", "1", "0", "0", "0"],
+    ...     ["0", "0", "1", "0", "0"],
+    ...     ["0", "0", "0", "1", "1"],
+    ... ]
     >>> p200(grid)
     3
+
     """
     n, m = len(grid), len(grid[0])
     visited = set()
@@ -2302,12 +2390,7 @@ def p200(grid: list[list[str]]) -> int:
             visited.add((i_, j_))
 
             for i__, j__ in [(i_ + 1, j_), (i_ - 1, j_), (i_, j_ + 1), (i_, j_ - 1)]:
-                if (
-                    0 <= i__ < n
-                    and 0 <= j__ < m
-                    and (i__, j__) not in visited
-                    and grid[i__][j__] == "1"
-                ):
+                if 0 <= i__ < n and 0 <= j__ < m and (i__, j__) not in visited and grid[i__][j__] == "1":
                     unexplored.add((i__, j__))
 
     islands = 0
@@ -2321,18 +2404,24 @@ def p200(grid: list[list[str]]) -> int:
 
 
 def p212(board: list[list[str]], words: list[str]) -> list[str]:
-    """
-    212. Word Search II https://leetcode.com/problems/word-search-ii/
+    """212. Word Search II https://leetcode.com/problems/word-search-ii/
 
-    Examples:
-    >>> set(p212([["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], ["oath","pea","eat","rain"])) == set(["eat", "oath"])
+    Examples
+    --------
+    >>> set(
+    ...     p212(
+    ...         [["o", "a", "a", "n"], ["e", "t", "a", "e"], ["i", "h", "k", "r"], ["i", "f", "l", "v"]],
+    ...         ["oath", "pea", "eat", "rain"],
+    ...     )
+    ... ) == set(["eat", "oath"])
     True
-    >>> p212([["a","b"],["c","d"]], ["abcb"])
+    >>> p212([["a", "b"], ["c", "d"]], ["abcb"])
     []
-    >>> board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]]
-    >>> words = ["oath","pea","eat","rain", "oat", "oatht", "naaoetaerkhi", "naaoetaerkhii"]
+    >>> board = [["o", "a", "a", "n"], ["e", "t", "a", "e"], ["i", "h", "k", "r"], ["i", "f", "l", "v"]]
+    >>> words = ["oath", "pea", "eat", "rain", "oat", "oatht", "naaoetaerkhi", "naaoetaerkhii"]
     >>> set(p212(board, words)) == set(["eat", "oath", "oat", "naaoetaerkhi"])
     True
+
     """
 
     class Trie:
@@ -2369,12 +2458,7 @@ def p212(board: list[list[str]], words: list[str]) -> list[str]:
 
         for di, dj in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             ni, nj = (i + di, j + dj)
-            if (
-                0 <= ni < len(board)
-                and 0 <= nj < len(board[0])
-                and board[ni][nj] in node
-                and len(path) < 12
-            ):
+            if 0 <= ni < len(board) and 0 <= nj < len(board[0]) and board[ni][nj] in node and len(path) < 12:
                 dfs(
                     ni,
                     nj,
@@ -2407,22 +2491,23 @@ def p212(board: list[list[str]], words: list[str]) -> list[str]:
 
 
 def p222(root: TreeNode | None) -> int:
-    """
-    222. Count Complete Tree Nodes https://leetcode.com/problems/count-complete-tree-nodes/
+    """222. Count Complete Tree Nodes https://leetcode.com/problems/count-complete-tree-nodes/
 
     Lessons learned:
     - A complete binary tree is a binary tree in which every level is completely
     filled, except for the last where the nodes must be as far left as possible.
 
-    Examples:
-    >>> p222(TreeNode.from_list([1,2,3,4,5,6]))
+    Examples
+    --------
+    >>> p222(TreeNode.from_list([1, 2, 3, 4, 5, 6]))
     6
-    >>> p222(TreeNode.from_list([1,2,3,4,5,6,None]))
+    >>> p222(TreeNode.from_list([1, 2, 3, 4, 5, 6, None]))
     6
-    >>> p222(TreeNode.from_list([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))
+    >>> p222(TreeNode.from_list([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]))
     15
-    >>> p222(TreeNode.from_list([1,2,3,4,5,6,7,8,9,10,11,12,None,None,None]))
+    >>> p222(TreeNode.from_list([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, None, None, None]))
     12
+
     """
     if not root:
         return 0
@@ -2454,31 +2539,26 @@ def p222(root: TreeNode | None) -> int:
     return 2 ** (height) + lo - 1
 
 
-def p223(
-    ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int
-) -> int:
-    """
-    223. Rectangle Area https://leetcode.com/problems/rectangle-area/
-    """
+def p223(ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int) -> int:
+    """223. Rectangle Area https://leetcode.com/problems/rectangle-area/"""
     a1 = (ax2 - ax1) * (ay2 - ay1)
     a2 = (bx2 - bx1) * (by2 - by1)
-    intersection = max(min(ax2, bx2) - max(ax1, bx1), 0) * max(
-        min(ay2, by2) - max(ay1, by1), 0
-    )
+    intersection = max(min(ax2, bx2) - max(ax1, bx1), 0) * max(min(ay2, by2) - max(ay1, by1), 0)
     return a1 + a2 - intersection
 
 
 def p238(nums: list[int]) -> list[int]:
-    """
-    238. Product of Array Except Self https://leetcode.com/problems/product-of-array-except-self
+    """238. Product of Array Except Self https://leetcode.com/problems/product-of-array-except-self
 
-    Examples:
-    >>> p238([1,2,3,4])
+    Examples
+    --------
+    >>> p238([1, 2, 3, 4])
     [24, 12, 8, 6]
-    >>> p238([1,2,3,4,5])
+    >>> p238([1, 2, 3, 4, 5])
     [120, 60, 40, 30, 24]
-    >>> p238([-1,1,0,-3,3])
+    >>> p238([-1, 1, 0, -3, 3])
     [0, 0, 9, 0, 0]
+
     """
     n = len(nums)
     prefix_products = [1] * n
@@ -2492,24 +2572,23 @@ def p238(nums: list[int]) -> list[int]:
 
 
 def p242(s: str, t: str) -> bool:
-    """
-    242. Valid Anagram https://leetcode.com/problems/valid-anagram/
-    """
+    """242. Valid Anagram https://leetcode.com/problems/valid-anagram/"""
     return Counter(s) == Counter(t)
 
 
 def p258(num: int) -> int:
-    """
-    258. Add Digits https://leetcode.com/problems/add-digits/
+    """258. Add Digits https://leetcode.com/problems/add-digits/
 
     Lessons learned:
     - Turns out this can be solved with modular arithmetic because 10 ** n == 1 mod 9
 
-    Examples:
+    Examples
+    --------
     >>> p258(38)
     2
     >>> p258(0)
     0
+
     """
     if num == 0:
         return num
@@ -2519,9 +2598,7 @@ def p258(num: int) -> int:
 
 
 def p263(n: int) -> bool:
-    """
-    263. Ugly Number https://leetcode.com/problems/ugly-number/
-    """
+    """263. Ugly Number https://leetcode.com/problems/ugly-number/"""
     if n < 1:
         return False
     while n % 2 == 0:
@@ -2534,10 +2611,10 @@ def p263(n: int) -> bool:
 
 
 class p295:
-    """
-    295. Find Median From Data Stream https://leetcode.com/problems/find-median-from-data-stream/
+    """295. Find Median From Data Stream https://leetcode.com/problems/find-median-from-data-stream/
 
-    Examples:
+    Examples
+    --------
     >>> mf = p295()
     >>> mf.addNum(1)
     >>> mf.addNum(2)
@@ -2564,6 +2641,7 @@ class p295:
     [-3, -2, -1]
     >>> mf.findMedian()
     -2.0
+
     """
 
     def __init__(self):
@@ -2579,8 +2657,7 @@ class p295:
 
 
 def p316(s: str) -> str:
-    """
-    316. Remove Duplicate Letters https://leetcode.com/problems/remove-duplicate-letters/
+    """316. Remove Duplicate Letters https://leetcode.com/problems/remove-duplicate-letters/
     1081. https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
 
     Lessons learned:
@@ -2589,7 +2666,8 @@ def p316(s: str) -> str:
     larger than the next letter. For example, if we have cbxxx and we can remove
     c or another letter, then we will have bxxx < cbxx.
 
-    Examples:
+    Examples
+    --------
     >>> p316("bcabc")
     'abc'
     >>> p316("cbacdcbc")
@@ -2598,6 +2676,7 @@ def p316(s: str) -> str:
     'bac'
     >>> p316("bcba")
     'bca'
+
     """
     letter_counts = Counter(s)
     stack = []
@@ -2612,8 +2691,7 @@ def p316(s: str) -> str:
 
 
 def p319(n: int) -> int:
-    """
-    319. Bulb Switcher https://leetcode.com/problems/bulb-switcher/
+    """319. Bulb Switcher https://leetcode.com/problems/bulb-switcher/
 
     Lessons learned:
     - Testing the array at n=50, I saw that only square numbers remained. From
@@ -2621,7 +2699,8 @@ def p319(n: int) -> int:
     number of factors. So this problem is just counting the number of perfect
     squares <= n.
 
-    Examples:
+    Examples
+    --------
     >>> p319(3)
     1
     >>> p319(0)
@@ -2630,6 +2709,7 @@ def p319(n: int) -> int:
     1
     >>> p319(5)
     2
+
     """
     arr = [0] * n
     for i in range(1, n + 1):
@@ -2640,8 +2720,7 @@ def p319(n: int) -> int:
 
 
 def p319b(n: int) -> int:
-    """
-    Examples:
+    """Examples
     >>> p319b(3)
     1
     >>> p319b(0)
@@ -2650,19 +2729,21 @@ def p319b(n: int) -> int:
     1
     >>> p319b(5)
     2
+
     """
     return int(np.sqrt(n))
 
 
 def p345(s: str) -> str:
-    """
-    345. Reverse Vowels of a String https://leetcode.com/problems/reverse-vowels-of-a-string/
+    """345. Reverse Vowels of a String https://leetcode.com/problems/reverse-vowels-of-a-string/
 
-    Examples:
+    Examples
+    --------
     >>> p345("hello")
     'holle'
     >>> p345("leetcode")
     'leotcede'
+
     """
     if len(s) == 1:
         return s
@@ -2682,47 +2763,50 @@ def p345(s: str) -> str:
 
 
 def p347(nums: list[int], k: int) -> list[int]:
-    """
-    347. Top K Frequent Elements https://leetcode.com/problems/top-k-frequent-elements/
+    """347. Top K Frequent Elements https://leetcode.com/problems/top-k-frequent-elements/
 
-    Examples:
-    >>> p347([1,1,1,2,2,3], 2)
+    Examples
+    --------
+    >>> p347([1, 1, 1, 2, 2, 3], 2)
     [1, 2]
     >>> p347([1], 1)
     [1]
+
     """
     c = Counter(nums)
     return [num for num, _ in c.most_common(k)]
 
 
 def p349(nums1: list[int], nums2: list[int]) -> list[int]:
-    """
-    349. Intersection of Two Arrays https://leetcode.com/problems/intersection-of-two-arrays
+    """349. Intersection of Two Arrays https://leetcode.com/problems/intersection-of-two-arrays
 
-    Examples:
+    Examples
+    --------
     >>> p349([1, 2, 2, 1], [2, 2])
     [2]
     >>> p349([4, 9, 5], [9, 4, 9, 8, 4])
     [9, 4]
+
     """
     return list(set(nums1) & set(nums2))
 
 
 def p373(nums1: list[int], nums2: list[int], k: int) -> list[list[int]]:
-    """
-    373. Find K Pairs with Smallest Sums https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
+    """373. Find K Pairs with Smallest Sums https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
 
-    Examples:
-    >>> p373([1,7,11], [2,4,6], 3)
+    Examples
+    --------
+    >>> p373([1, 7, 11], [2, 4, 6], 3)
     [[1, 2], [1, 4], [1, 6]]
-    >>> p373([1,1,2], [1,2,3], 2)
+    >>> p373([1, 1, 2], [1, 2, 3], 2)
     [[1, 1], [1, 1]]
-    >>> p373([1,2], [3], 3)
+    >>> p373([1, 2], [3], 3)
     [[1, 3], [2, 3]]
-    >>> p373([1,2,4,5,6],[3,5,7,9], 3)
+    >>> p373([1, 2, 4, 5, 6], [3, 5, 7, 9], 3)
     [[1, 3], [2, 3], [1, 5]]
-    >>> p373([1,5,10],[2,7,9],6)
+    >>> p373([1, 5, 10], [2, 7, 9], 6)
     [[1, 2], [5, 2], [1, 7], [1, 9], [5, 7], [10, 2]]
+
     """
     if not nums1 or not nums2:
         return []
@@ -2755,15 +2839,16 @@ def guess(num: int) -> int:
 
 
 def p374(n: int) -> int:
-    """
-    374. Guess Number Higher or Lower https://leetcode.com/problems/guess-number-higher-or-lower/
+    """374. Guess Number Higher or Lower https://leetcode.com/problems/guess-number-higher-or-lower/
 
     Lessons learned:
     - bisect_left has a 'key' argument as of 3.10.
 
-    Examples:
+    Examples
+    --------
     >>> p374(10)
     6
+
     """
     lo, hi = 1, n
     while lo < hi:
@@ -2780,27 +2865,30 @@ def p374(n: int) -> int:
 
 
 def p374b(n: int) -> int:
-    """
-    Examples:
+    """Examples
     >>> p374b(10)
     6
+
     """
     return bisect_left(range(0, n), 0, lo=0, hi=n, key=lambda x: -guess(x))
 
 
-def p399(
-    equations: list[list[str]], values: list[float], queries: list[list[str]]
-) -> list[float]:
-    """
-    399. Evaluate Division https://leetcode.com/problems/evaluate-division/
+def p399(equations: list[list[str]], values: list[float], queries: list[list[str]]) -> list[float]:
+    """399. Evaluate Division https://leetcode.com/problems/evaluate-division/
 
-    Examples:
-    >>> p399([["a","b"],["b","c"]], [2.0,3.0], [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]])
+    Examples
+    --------
+    >>> p399([["a", "b"], ["b", "c"]], [2.0, 3.0], [["a", "c"], ["b", "a"], ["a", "e"], ["a", "a"], ["x", "x"]])
     [6.0, 0.5, -1.0, 1.0, -1.0]
-    >>> p399([["a","b"],["b","c"],["bc","cd"]], [1.5,2.5,5.0], [["a","c"],["c","b"],["bc","cd"],["cd","bc"]])
+    >>> p399(
+    ...     [["a", "b"], ["b", "c"], ["bc", "cd"]],
+    ...     [1.5, 2.5, 5.0],
+    ...     [["a", "c"], ["c", "b"], ["bc", "cd"], ["cd", "bc"]],
+    ... )
     [3.75, 0.4, 5.0, 0.2]
-    >>> p399([["a","b"]], [0.5], [["a","b"],["b","a"],["a","c"],["x","y"]])
+    >>> p399([["a", "b"]], [0.5], [["a", "b"], ["b", "a"], ["a", "c"], ["x", "y"]])
     [0.5, 2.0, -1.0, -1.0]
+
     """
     graph: dict[str, dict[str, float]] = defaultdict(dict)
     for (a, b), v in zip(equations, values):
@@ -2826,13 +2914,13 @@ def p399(
 
 
 def p402(num: str, k: int) -> str:
-    """
-    402. Remove k Digits https://leetcode.com/problems/remove-k-digits/
+    """402. Remove k Digits https://leetcode.com/problems/remove-k-digits/
 
     Lessons learned:
     - try to build up a heuristic algorithm from a few examples
 
-    Examples:
+    Examples
+    --------
     >>> p402("1432219", 3)
     '1219'
     >>> p402("10200", 1)
@@ -2843,6 +2931,7 @@ def p402(num: str, k: int) -> str:
     '0'
     >>> p402("112", 1)
     '11'
+
     """
     if len(num) <= k:
         return "0"
@@ -2863,24 +2952,21 @@ def p402(num: str, k: int) -> str:
 
 
 def p433(startGene: str, endGene: str, bank: list[str]) -> int:
-    """
-    433. Minimum Genetic Mutation https://leetcode.com/problems/minimum-genetic-mutation/
+    """433. Minimum Genetic Mutation https://leetcode.com/problems/minimum-genetic-mutation/
 
-    Examples:
+    Examples
+    --------
     >>> p433("AACCGGTT", "AACCGGTA", ["AACCGGTA"])
     1
     >>> p433("AACCGGTT", "AAACGGTA", ["AACCGGTA", "AACCGCTA", "AAACGGTA"])
     2
     >>> p433("AAAAACCC", "AACCCCCC", ["AAAACCCC", "AAACCCCC", "AACCCCCC"])
     3
+
     """
 
     def get_mutations(gene: str, bank: set[str]) -> set[str]:
-        return {
-            mutation
-            for mutation in bank
-            if sum(1 for i in range(len(mutation)) if mutation[i] != gene[i]) == 1
-        }
+        return {mutation for mutation in bank if sum(1 for i in range(len(mutation)) if mutation[i] != gene[i]) == 1}
 
     bank2 = set(bank)
     explored = set()
@@ -2903,14 +2989,14 @@ def p433(startGene: str, endGene: str, bank: list[str]) -> int:
 
 
 def p456(nums: list[int]) -> bool:
-    """
-    456. 132 Pattern https://leetcode.com/problems/132-pattern/
+    """456. 132 Pattern https://leetcode.com/problems/132-pattern/
 
     Lessons learned:
     - Another opportunity to put monotonic stacks to use. I still don't know
     exactly when to use them, probably need some more practice.
 
-    Examples:
+    Examples
+    --------
     >>> p456([1, 2, 3, 4])
     False
     >>> p456([3, 1, 4, 2])
@@ -2923,6 +3009,7 @@ def p456(nums: list[int]) -> bool:
     False
     >>> p456([-2, 1, -2])
     False
+
     """
     span_stack = [[nums[0], nums[0]]]
 
@@ -2951,14 +3038,15 @@ def p456(nums: list[int]) -> bool:
 
 
 def p495(timeSeries: list[int], duration: int) -> int:
-    """
-    495. Teemo Attacking https://leetcode.com/problems/teemo-attacking
+    """495. Teemo Attacking https://leetcode.com/problems/teemo-attacking
 
-    Examples:
-    >>> p495([1,4], 2)
+    Examples
+    --------
+    >>> p495([1, 4], 2)
     4
-    >>> p495([1,2], 2)
+    >>> p495([1, 2], 2)
     3
+
     """
     total_duration = 0
     for i in range(1, len(timeSeries)):
@@ -2968,8 +3056,7 @@ def p495(timeSeries: list[int], duration: int) -> int:
 
 
 def ccw(p1: tuple[int, int], p2: tuple[int, int], p3: tuple[int, int]) -> float:
-    """
-    Examples:
+    """Examples
     >>> ccw((0, 0), (1, 0), (0, 1))
     1.0
     >>> ccw((0, 0), (1, 0), (1, 1))
@@ -2978,6 +3065,7 @@ def ccw(p1: tuple[int, int], p2: tuple[int, int], p3: tuple[int, int]) -> float:
     0.0
     >>> ccw((0, 0), (1, 0), (0, -1))
     -1.0
+
     """
     v1 = (p2[0] - p1[0], p2[1] - p1[1])
     v2 = (p3[0] - p2[0], p3[1] - p2[1])
@@ -3041,11 +3129,13 @@ def p560(nums: list[int], k: int) -> int:
 
     Same as 930.
 
-    Examples:
-    >>> p560([1,1,1], 2)
+    Examples
+    --------
+    >>> p560([1, 1, 1], 2)
     2
-    >>> p560([1,2,3], 3)
+    >>> p560([1, 2, 3], 3)
     2
+
     """
     goal = k
     prefix_sum = 0
@@ -3061,8 +3151,7 @@ def p560(nums: list[int], k: int) -> int:
 
 
 def p587(trees: list[list[int]]) -> list[list[int]]:
-    """
-    587. Erect the Fence https://leetcode.com/problems/erect-the-fence/
+    """587. Erect the Fence https://leetcode.com/problems/erect-the-fence/
 
     Lessons learned:
     - A broad class of computational geometry algorithms solve this:
@@ -3077,27 +3166,76 @@ def p587(trees: list[list[int]]) -> list[list[int]]:
     - The edge-cases of the Graham scan are tricky, especially all the cases with
     colinear points.
 
-    Examples:
-    >>> p587([[1,1],[2,2],[2,0],[2,4],[3,3],[4,2]])
+    Examples
+    --------
+    >>> p587([[1, 1], [2, 2], [2, 0], [2, 4], [3, 3], [4, 2]])
     [[2, 0], [4, 2], [3, 3], [2, 4], [1, 1]]
-    >>> p587([[1,2],[2,2],[4,2]])
+    >>> p587([[1, 2], [2, 2], [4, 2]])
     [[1, 2], [2, 2], [4, 2]]
-    >>> p587([[1,1],[2,2],[3,3],[2,1],[4,1],[2,3],[1,3]])
+    >>> p587([[1, 1], [2, 2], [3, 3], [2, 1], [4, 1], [2, 3], [1, 3]])
     [[1, 1], [2, 1], [4, 1], [3, 3], [2, 3], [1, 3]]
-    >>> p587([[3,0],[4,0],[5,0],[6,1],[7,2],[7,3],[7,4],[6,5],[5,5],[4,5],[3,5],[2,5],[1,4],[1,3],[1,2],[2,1],[4,2],[0,3]])
+    >>> p587(
+    ...     [
+    ...         [3, 0],
+    ...         [4, 0],
+    ...         [5, 0],
+    ...         [6, 1],
+    ...         [7, 2],
+    ...         [7, 3],
+    ...         [7, 4],
+    ...         [6, 5],
+    ...         [5, 5],
+    ...         [4, 5],
+    ...         [3, 5],
+    ...         [2, 5],
+    ...         [1, 4],
+    ...         [1, 3],
+    ...         [1, 2],
+    ...         [2, 1],
+    ...         [4, 2],
+    ...         [0, 3],
+    ...     ]
+    ... )
     [[3, 0], [4, 0], [5, 0], [6, 1], [7, 2], [7, 3], [7, 4], [6, 5], [5, 5], [4, 5], [3, 5], [2, 5], [1, 4], [0, 3], [1, 2], [2, 1]]
-    >>> p587([[0,2],[0,1],[0,0],[1,0],[2,0],[1,1]])
+    >>> p587([[0, 2], [0, 1], [0, 0], [1, 0], [2, 0], [1, 1]])
     [[0, 0], [1, 0], [2, 0], [1, 1], [0, 2], [0, 1]]
-    >>> p587([[0,2],[0,4],[0,5],[0,9],[2,1],[2,2],[2,3],[2,5],[3,1],[3,2],[3,6],[3,9],[4,2],[4,5],[5,8],[5,9],[6,3],[7,9],[8,1],[8,2],[8,5],[8,7],[9,0],[9,1],[9,6]])
+    >>> p587(
+    ...     [
+    ...         [0, 2],
+    ...         [0, 4],
+    ...         [0, 5],
+    ...         [0, 9],
+    ...         [2, 1],
+    ...         [2, 2],
+    ...         [2, 3],
+    ...         [2, 5],
+    ...         [3, 1],
+    ...         [3, 2],
+    ...         [3, 6],
+    ...         [3, 9],
+    ...         [4, 2],
+    ...         [4, 5],
+    ...         [5, 8],
+    ...         [5, 9],
+    ...         [6, 3],
+    ...         [7, 9],
+    ...         [8, 1],
+    ...         [8, 2],
+    ...         [8, 5],
+    ...         [8, 7],
+    ...         [9, 0],
+    ...         [9, 1],
+    ...         [9, 6],
+    ...     ]
+    ... )
     [[9, 0], [9, 1], [9, 6], [7, 9], [5, 9], [3, 9], [0, 9], [0, 5], [0, 4], [0, 2], [2, 1]]
-    >>> p587([[0,0],[0,1],[0,2],[1,2],[2,2],[3,2],[3,1],[3,0],[2,0],[1,0],[1,1],[3,3]])
+    >>> p587([[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [1, 1], [3, 3]])
     [[0, 0], [1, 0], [2, 0], [3, 0], [3, 1], [3, 2], [3, 3], [0, 2], [0, 1]]
+
     """
     lowest_left_point = (math.inf, math.inf)
     for x, y in trees:
-        if y < lowest_left_point[1] or (
-            y == lowest_left_point[1] and x < lowest_left_point[0]
-        ):
+        if y < lowest_left_point[1] or (y == lowest_left_point[1] and x < lowest_left_point[0]):
             lowest_left_point = (x, y)
 
     trees_by_slope = partition_by(
@@ -3114,18 +3252,12 @@ def p587(trees: list[list[int]]) -> list[list[int]]:
         return np.linalg.norm((p1[1] - p2[1], p1[0] - p2[0]))
 
     # The right-most line should sort by increasing distance from lowest left point
-    trees_by_slope[slopes[0]] = sorted(
-        trees_by_slope[slopes[0]], key=lambda p: distance(p, lowest_left_point)
-    )
+    trees_by_slope[slopes[0]] = sorted(trees_by_slope[slopes[0]], key=lambda p: distance(p, lowest_left_point))
     # The left-most line should sort by decreasing distance from lowest left point
-    trees_by_slope[slopes[-1]] = sorted(
-        trees_by_slope[slopes[-1]], key=lambda p: -distance(p, lowest_left_point)
-    )
+    trees_by_slope[slopes[-1]] = sorted(trees_by_slope[slopes[-1]], key=lambda p: -distance(p, lowest_left_point))
     # The rest should sort by increasing distance from lowest left point
     for slope in slopes[1:-1]:
-        trees_by_slope[slope] = sorted(
-            trees_by_slope[slope], key=lambda p: distance(p, lowest_left_point)
-        )
+        trees_by_slope[slope] = sorted(trees_by_slope[slope], key=lambda p: distance(p, lowest_left_point))
 
     stack = []
     for slope in slopes:
@@ -3138,8 +3270,7 @@ def p587(trees: list[list[int]]) -> list[list[int]]:
 
 
 def p621(tasks: list[str], n: int) -> int:
-    """
-    621. Task Scheduler https://leetcode.com/problems/task-scheduler
+    """621. Task Scheduler https://leetcode.com/problems/task-scheduler
 
     Lessons learned:
     - This problem can be solved using a greedy approach, where we prioritize
@@ -3147,7 +3278,7 @@ def p621(tasks: list[str], n: int) -> int:
     other tasks in between.
 
     Example:
-
+    -------
     Suppose n = 2 and A is the most frequent task, with a frequency F = 4.
     Then our proposed schedule looks like this, where X can be filled in by
     another task
@@ -3170,11 +3301,12 @@ def p621(tasks: list[str], n: int) -> int:
         (F - 1) * (n + 1) + #(elements with count F)
 
     Examples:
-    >>> p621(["A","A","A","B","B","B"], 2)
+    --------
+    >>> p621(["A", "A", "A", "B", "B", "B"], 2)
     8
-    >>> p621(["A","C","A","B","D","B"], 1)
+    >>> p621(["A", "C", "A", "B", "D", "B"], 1)
     6
-    >>> p621(["A","A","A","B","B","B"], 3)
+    >>> p621(["A", "A", "A", "B", "B", "B"], 3)
     10
     >>> p621(["A", "A", "B", "B", "C", "C", "D", "D"], 1)
     8
@@ -3184,8 +3316,9 @@ def p621(tasks: list[str], n: int) -> int:
     8
     >>> p621(["A", "A", "B", "B", "C", "C", "D", "D"], 5)
     10
-    >>> p621(["A","A","A","B","B","B","C","D","E","F","G","H","I","J","K"], 7)
+    >>> p621(["A", "A", "A", "B", "B", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"], 7)
     18
+
     """
     if n == 0:
         return len(tasks)
@@ -3253,10 +3386,10 @@ class MyCircularQueue:
 
 
 def p622(cmds, inputs):
-    """
-    622. Design Circular Queue https://leetcode.com/problems/design-circular-queue/
+    """622. Design Circular Queue https://leetcode.com/problems/design-circular-queue/
 
-    Examples:
+    Examples
+    --------
     >>> cmd = [
     ...     "MyCircularQueue",
     ...     "enQueue",
@@ -3309,6 +3442,7 @@ def p622(cmds, inputs):
     True
     True
     3
+
     """
     print("Running test case:")
     for cmd, inp in zip(cmds, inputs):
@@ -3330,10 +3464,10 @@ def p622(cmds, inputs):
 
 
 def p649(senate: str) -> str:
-    """
-    649. Dota2 Senate https://leetcode.com/problems/dota2-senate/
+    """649. Dota2 Senate https://leetcode.com/problems/dota2-senate/
 
-    Examples:
+    Examples
+    --------
     >>> p649("RD")
     'Radiant'
     >>> p649("RDD")
@@ -3344,6 +3478,7 @@ def p649(senate: str) -> str:
     'Dire'
     >>> p649("R")
     'Radiant'
+
     """
     if senate == "":
         return ""
@@ -3370,8 +3505,7 @@ def p649(senate: str) -> str:
 
 
 def p658(arr: list[int], k: int, x: int) -> list[int]:
-    """
-    658. Find k Closest Elements https://leetcode.com/problems/find-k-closest-elements/
+    """658. Find k Closest Elements https://leetcode.com/problems/find-k-closest-elements/
 
     Lessons learned:
     - My solution uses a straightforward binary search to find the closest element
@@ -3381,7 +3515,8 @@ def p658(arr: list[int], k: int, x: int) -> list[int]:
     - I had some vague intuition that it could be framed as a minimization
     problem, but I couldn't find the loss function.
 
-    Examples:
+    Examples
+    --------
     >>> p658([1, 2, 3, 4, 5], 4, 3)
     [1, 2, 3, 4]
     >>> p658([1, 2, 3, 4, 5], 4, -1)
@@ -3390,6 +3525,7 @@ def p658(arr: list[int], k: int, x: int) -> list[int]:
     [2, 3, 4, 5]
     >>> p658([1, 2, 3, 4, 5], 2, 4)
     [3, 4]
+
     """
 
     def find_insertion_index(arr: list[int], x: int) -> int:
@@ -3416,10 +3552,7 @@ def p658(arr: list[int], k: int, x: int) -> list[int]:
             if lo < 0:
                 lst.append(arr[hi])
                 hi += 1
-            elif hi >= len(arr):
-                lst.append(arr[lo])
-                lo -= 1
-            elif abs(x - arr[lo]) <= abs(x - arr[hi]):
+            elif hi >= len(arr) or abs(x - arr[lo]) <= abs(x - arr[hi]):
                 lst.append(arr[lo])
                 lo -= 1
             elif abs(x - arr[lo]) > abs(x - arr[hi]):
@@ -3430,8 +3563,7 @@ def p658(arr: list[int], k: int, x: int) -> list[int]:
 
 
 def p658b(arr: list[int], k: int, x: int) -> list[int]:
-    """
-    Examples:
+    """Examples
     >>> p658b([1, 2, 3, 4, 5], 4, 3)
     [1, 2, 3, 4]
     >>> p658b([1, 2, 3, 4, 5], 4, -1)
@@ -3442,6 +3574,7 @@ def p658b(arr: list[int], k: int, x: int) -> list[int]:
     [3, 4]
     >>> p658b([1, 2, 3, 3, 4, 5, 90, 100], 3, 4)
     [3, 3, 4]
+
     """
     lo, hi = 0, len(arr) - k
     while lo < hi:
@@ -3455,27 +3588,25 @@ def p658b(arr: list[int], k: int, x: int) -> list[int]:
 
 
 def p766(matrix: list[list[int]]) -> bool:
-    """
-    766. Toeplitz Matrix https://leetcode.com/problems/toeplitz-matrix/
+    """766. Toeplitz Matrix https://leetcode.com/problems/toeplitz-matrix/
 
-    Examples:
+    Examples
+    --------
     >>> p766([[1, 2, 3, 4], [5, 1, 2, 3], [9, 5, 1, 2]])
     True
     >>> p766([[1, 2], [2, 2]])
     False
-    >>> p766([[11,74,0,93],[40,11,74,7]])
+    >>> p766([[11, 74, 0, 93], [40, 11, 74, 7]])
     False
+
     """
     return all(
-        r == 0 or c == 0 or matrix[r - 1][c - 1] == val
-        for r, row in enumerate(matrix)
-        for c, val in enumerate(row)
+        r == 0 or c == 0 or matrix[r - 1][c - 1] == val for r, row in enumerate(matrix) for c, val in enumerate(row)
     )
 
 
 def p785(graph: list[list[int]]) -> bool:
-    """
-    785. Is Graph Bipartite? https://leetcode.com/problems/is-graph-bipartite/
+    """785. Is Graph Bipartite? https://leetcode.com/problems/is-graph-bipartite/
 
     Lessons learned:
     - A graph is bipartite iff it does not contain any odd cycles. So at first I
@@ -3490,11 +3621,13 @@ def p785(graph: list[list[int]]) -> bool:
     go of that idea, I realized that a greedy coloring approach would do the
     trick.
 
-    Examples:
-    >>> p785([[1,2,3], [0,2], [0,1,3], [0,2]])
+    Examples
+    --------
+    >>> p785([[1, 2, 3], [0, 2], [0, 1, 3], [0, 2]])
     False
     >>> p785([[1, 3], [0, 2], [1, 3], [0, 2]])
     True
+
     """
     if not graph:
         return True
@@ -3503,31 +3636,26 @@ def p785(graph: list[list[int]]) -> bool:
 
     def dfs(node: int, color: int) -> bool:
         if node in coloring:
-            if coloring[node] != color:
-                return False
-            return True
+            return coloring[node] == color
 
         coloring[node] = color
         return all(dfs(new_node, color ^ 1) for new_node in graph[node])
 
-    for node in range(len(graph)):
-        if node not in coloring and not dfs(node, 0):
-            return False
-
-    return True
+    return all(node in coloring or dfs(node, 0) for node in range(len(graph)))
 
 
 def p791(order: str, s: str) -> str:
-    """
-    791. Custom Sort String https://leetcode.com/problems/custom-sort-string/
+    """791. Custom Sort String https://leetcode.com/problems/custom-sort-string/
 
-    Examples:
+    Examples
+    --------
     >>> p791("cba", "abcd")
     'cbad'
     >>> p791("cba", "abc")
     'cba'
     >>> p791("bcafg", "abcd")
     'bcad'
+
     """
 
     def key_fn(t: str) -> int:
@@ -3540,8 +3668,7 @@ def p791(order: str, s: str) -> str:
 
 
 def is_similar(s1: str, s2: str) -> bool:
-    """
-    Examples:
+    """Examples
     >>> is_similar("abc", "abc")
     True
     >>> is_similar("abc", "acb")
@@ -3550,6 +3677,7 @@ def is_similar(s1: str, s2: str) -> bool:
     False
     >>> is_similar("abc", "abd")
     False
+
     """
     if len(s1) != len(s2):
         return False
@@ -3558,23 +3686,24 @@ def is_similar(s1: str, s2: str) -> bool:
 
 
 def p839(strs: list[str]) -> int:
-    """
-    839. Similar String Groups https://leetcode.com/problems/similar-string-groups/
+    """839. Similar String Groups https://leetcode.com/problems/similar-string-groups/
 
-    Examples:
-    >>> p839(["tars","rats","arts","star"])
+    Examples
+    --------
+    >>> p839(["tars", "rats", "arts", "star"])
     2
-    >>> p839(["omv","ovm"])
+    >>> p839(["omv", "ovm"])
     1
     >>> p839(["a"])
     1
-    >>> p839(["abc","abc"])
+    >>> p839(["abc", "abc"])
     1
-    >>> p839(["abc","acb","abc","acb","abc","acb"])
+    >>> p839(["abc", "acb", "abc", "acb", "abc", "acb"])
     1
+
     """
     n = len(strs)
-    parent: dict[int, int] = dict({i: i for i in range(n)})
+    parent: dict[int, int] = {i: i for i in range(n)}
 
     def find(x: int) -> int:
         y = x
@@ -3598,14 +3727,15 @@ def p839(strs: list[str]) -> int:
 
 
 def p876(head: Optional[ListNode]) -> Optional[ListNode]:
-    """
-    876. Middle of the Linked List https://leetcode.com/problems/middle-of-the-linked-list
+    """876. Middle of the Linked List https://leetcode.com/problems/middle-of-the-linked-list
 
-    Examples:
+    Examples
+    --------
     >>> listnode_to_list(p876(ListNode.from_list([1, 2, 3, 4, 5])))
     [3, 4, 5]
     >>> listnode_to_list(p876(ListNode.from_list([1, 2, 3, 4, 5, 6])))
     [4, 5, 6]
+
     """
     if not head or not head.next:
         return head
@@ -3618,8 +3748,7 @@ def p876(head: Optional[ListNode]) -> Optional[ListNode]:
 
 
 def p899(s: str, k: int) -> str:
-    """
-    899. Orderly Queue https://leetcode.com/problems/orderly-queue/
+    """899. Orderly Queue https://leetcode.com/problems/orderly-queue/
 
     Lessons learned:
     - This problem is such a troll. At first I thought I found a totally
@@ -3627,7 +3756,8 @@ def p899(s: str, k: int) -> str:
     actually dead simple - you can use the rightmost character as a register and
     rotate the string until the correct insertion point.
 
-    Examples:
+    Examples
+    --------
     >>> p899("cba", 1)
     'acb'
     >>> p899("baaca", 3)
@@ -3642,6 +3772,7 @@ def p899(s: str, k: int) -> str:
     'aaabcd'
     >>> p899("badacadeff", 3)
     'aaabcddeff'
+
     """
     if k == 1:
         return min(s[i:] + s[:i] for i in range(len(s)))
@@ -3650,14 +3781,14 @@ def p899(s: str, k: int) -> str:
 
 
 class p901:
-    """
-    901. Online Stock Span https://leetcode.com/problems/online-stock-span/
+    """901. Online Stock Span https://leetcode.com/problems/online-stock-span/
 
     Lessons learned:
     - This uses a monotonically decreasing stack (MDS) to keep track of the
     previous stock prices and their spans.
 
-    Examples:
+    Examples
+    --------
     >>> obj = p901()
     >>> obj.next(100)
     1
@@ -3673,6 +3804,7 @@ class p901:
     4
     >>> obj.next(85)
     6
+
     """
 
     def __init__(self):
@@ -3687,8 +3819,7 @@ class p901:
 
 
 def p930(nums: list[int], goal: int) -> int:
-    """
-    930. Binary Subarrays With Sum https://leetcode.com/problems/binary-subarrays-with-sum
+    """930. Binary Subarrays With Sum https://leetcode.com/problems/binary-subarrays-with-sum
 
     Same as 560.
 
@@ -3703,13 +3834,15 @@ def p930(nums: list[int], goal: int) -> int:
 
         prefix_sum - (prefix_sum - goal) = goal
 
-    Examples:
+    Examples
+    --------
     >>> p930([1, 0, 1, 0, 1], 2)
     4
     >>> p930([0, 0, 0, 0, 0], 0)
     15
     >>> p930([1, 1, 1, 1, 1], 1)
     5
+
     """
     prefix_sum = 0
     count = 0
@@ -3723,8 +3856,7 @@ def p930(nums: list[int], goal: int) -> int:
 
 
 def p934(grid: list[list[int]]) -> int:
-    """
-    934. Shortest Bridge https://leetcode.com/problems/shortest-bridge/
+    """934. Shortest Bridge https://leetcode.com/problems/shortest-bridge/
 
     Lessons learned:
     - This problem has a couple sub-problems that allow for variants.
@@ -3733,13 +3865,15 @@ def p934(grid: list[list[int]]) -> int:
     here we modify the input grid to save space.
     - Second, there is the path-finding problem. This can be done with BFS.
 
-    Examples:
-    >>> p934([[0,1],[1,0]])
+    Examples
+    --------
+    >>> p934([[0, 1], [1, 0]])
     1
-    >>> p934([[0,1,0],[0,0,0],[0,0,1]])
+    >>> p934([[0, 1, 0], [0, 0, 0], [0, 0, 1]])
     2
-    >>> p934([[1,1,1,1,1],[1,0,0,0,1],[1,0,1,0,1],[1,0,0,0,1],[1,1,1,1,1]])
+    >>> p934([[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 1, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]])
     1
+
     """
     n = len(grid)
     island1 = deque()
@@ -3786,25 +3920,26 @@ def p934(grid: list[list[int]]) -> int:
 
 
 def p947(stones: list[list[int]]) -> int:
-    """
-    947. Most Stones Removed With Same Row or Column https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
+    """947. Most Stones Removed With Same Row or Column https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 
     Lessons learned:
     - The key idea is that we can remove all stones in each connected component
     except one. We can use dfs to find the connected components. Fun fact: the
     dfs can avoid recursion by using a stack.
 
-    Examples:
-    >>> p947([[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]])
+    Examples
+    --------
+    >>> p947([[0, 0], [0, 1], [1, 0], [1, 2], [2, 1], [2, 2]])
     5
-    >>> p947([[0,0],[0,2],[1,1],[2,0],[2,2]])
+    >>> p947([[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]])
     3
-    >>> p947([[0,0]])
+    >>> p947([[0, 0]])
     0
-    >>> p947([[0,0],[0,1],[1,1]])
+    >>> p947([[0, 0], [0, 1], [1, 1]])
     2
-    >>> p947([[0,1],[1,0]])
+    >>> p947([[0, 1], [1, 0]])
     0
+
     """
     rows = defaultdict(list)
     cols = defaultdict(list)
@@ -3816,14 +3951,12 @@ def p947(stones: list[list[int]]) -> int:
     seen = set()
 
     def dfs(i: int) -> None:
-        """dfs without recursion"""
+        """Dfs without recursion"""
         stack = [i]
         while stack:
             j = stack.pop()
             seen.add(j)
-            for k in rows[stones[j][0]] + cols[stones[j][1]]:
-                if k not in seen:
-                    stack.append(k)
+            stack.extend(k for k in rows[stones[j][0]] + cols[stones[j][1]] if k not in seen)
 
     n_components = 0
     for i in range(len(stones)):
@@ -3835,16 +3968,17 @@ def p947(stones: list[list[int]]) -> int:
 
 
 def p977(nums: list[int]) -> list[int]:
-    """
-    977. Squares of a Sorted Array https://leetcode.com/problems/squares-of-a-sorted-array/
+    """977. Squares of a Sorted Array https://leetcode.com/problems/squares-of-a-sorted-array/
 
-    Examples:
-    >>> p977([-4,-1,0,3,10])
+    Examples
+    --------
+    >>> p977([-4, -1, 0, 3, 10])
     [0, 1, 9, 16, 100]
-    >>> p977([-7,-3,2,3,11])
+    >>> p977([-7, -3, 2, 3, 11])
     [4, 9, 9, 49, 121]
-    >>> p977([-5,-3,-2,-1])
+    >>> p977([-5, -3, -2, -1])
     [1, 4, 9, 25]
+
     """
     le, ri = 0, len(nums) - 1
     res = [0] * len(nums)
@@ -3863,16 +3997,17 @@ def p977(nums: list[int]) -> list[int]:
 
 
 def p988(root: Optional[TreeNode]) -> str:
-    """
-    988. Smallest String Starting From Leaf https://leetcode.com/problems/smallest-string-starting-from-leaf
+    """988. Smallest String Starting From Leaf https://leetcode.com/problems/smallest-string-starting-from-leaf
 
-    Examples:
+    Examples
+    --------
     >>> p988(TreeNode.from_list([0, 1, 2, 3, 4, 3, 4]))
     'dba'
     >>> p988(TreeNode.from_list([25, 1, 3, 1, 3, 0, 2]))
     'adz'
-    >>> p988(TreeNode.from_list([2,2,1,None,1,0,None,0]))
+    >>> p988(TreeNode.from_list([2, 2, 1, None, 1, 0, None, 0]))
     'abc'
+
     """
     if not root:
         return ""
@@ -3892,8 +4027,7 @@ def p988(root: Optional[TreeNode]) -> str:
 
 
 def p990(equations: list[str]) -> bool:
-    """
-    990. Satisfiability of Equality Equations https://leetcode.com/problems/satisfiability-of-equality-equations/
+    """990. Satisfiability of Equality Equations https://leetcode.com/problems/satisfiability-of-equality-equations/
 
     Lessons learned:
     - This was clearly a graph problem underneath, where you need to find the
@@ -3903,15 +4037,20 @@ def p990(equations: list[str]) -> bool:
     union find):
     https://cp-algorithms.com/data_structures/disjoint_set_union.html
 
-    Examples:
+    Examples
+    --------
     >>> assert p990(["a==b", "b!=a"]) is False
     >>> assert p990(["x==y", "z==w", "y==z", "a==b", "d==e", "f==g", "e==f", "w==x", "c==d", "b==d", "g!=x"]) is True
-    >>> assert p990(["x==y", "z==w", "y==z", "a==b", "d==e", "f==g", "e==f", "w==x", "c==d", "b==d", "g!=x", "a==z"]) is False
+    >>> assert (
+    ...     p990(["x==y", "z==w", "y==z", "a==b", "d==e", "f==g", "e==f", "w==x", "c==d", "b==d", "g!=x", "a==z"])
+    ...     is False
+    ... )
     >>> assert p990(["x==a", "w==b", "z==c", "a==b", "b==c", "c!=x"]) is False
     >>> assert p990(["a==b", "c==e", "b==c", "a!=e"]) is False
     >>> assert p990(["a==b", "e==c", "c==b", "a!=e"]) is False
     >>> assert p990(["a==b", "e==c", "c==b", "a!=e"]) is False
     >>> assert p990(["a==b", "e==c", "b==c", "a!=e"]) is False
+
     """
     parent: dict[str, str] = {}
 
@@ -3941,19 +4080,20 @@ def p990(equations: list[str]) -> bool:
 
 
 def p1035(nums1: list[int], nums2: list[int]) -> int:
-    """
-    1035. Uncrossed Lines https://leetcode.com/problems/uncrossed-lines/
+    """1035. Uncrossed Lines https://leetcode.com/problems/uncrossed-lines/
 
     Lessons learned:
     - The solution is identical to (1143 Longest Common Subsequence).
 
-    Examples:
-    >>> p1035([1,4,2], [1,2,4])
+    Examples
+    --------
+    >>> p1035([1, 4, 2], [1, 2, 4])
     2
-    >>> p1035([2,5,1,2,5], [10,5,2,1,5,2])
+    >>> p1035([2, 5, 1, 2, 5], [10, 5, 2, 1, 5, 2])
     3
-    >>> p1035([1,3,7,1,7,5], [1,9,2,5,1])
+    >>> p1035([1, 3, 7, 1, 7, 5], [1, 9, 2, 5, 1])
     2
+
     """
     dp_ = [[0 for _ in range(len(nums2) + 1)] for _ in range(len(nums1) + 1)]
 
@@ -3968,16 +4108,17 @@ def p1035(nums1: list[int], nums2: list[int]) -> int:
 
 
 def p1046(stones: list[int]) -> int:
-    """
-    1046. Last Stone Weight https://leetcode.com/problems/last-stone-weight/
+    """1046. Last Stone Weight https://leetcode.com/problems/last-stone-weight/
 
-    Examples:
-    >>> p1046([2,7,4,1,8,1])
+    Examples
+    --------
+    >>> p1046([2, 7, 4, 1, 8, 1])
     1
-    >>> p1046([1,3])
+    >>> p1046([1, 3])
     2
     >>> p1046([1])
     1
+
     """
     sorted_stones = sorted(stones)
     while len(sorted_stones) > 1:
@@ -3988,14 +4129,15 @@ def p1046(stones: list[int]) -> int:
 
 
 def p1047(s: str) -> str:
-    """
-    1047. Remove All Adjacent Duplicates in String https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
+    """1047. Remove All Adjacent Duplicates in String https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
 
-    Examples:
+    Examples
+    --------
     >>> p1047("abbaca")
     'ca'
     >>> p1047("aaaaaaaa")
     ''
+
     """
     stack = []
     for c in s:
@@ -4007,8 +4149,7 @@ def p1047(s: str) -> str:
 
 
 def p1143(text1: str, text2: str) -> int:
-    """
-    1143. Longest Common Subsequence https://leetcode.com/problems/longest-common-subsequence/
+    """1143. Longest Common Subsequence https://leetcode.com/problems/longest-common-subsequence/
 
     Lessons learned:
     - This is a classic dynamic programming problem. Define
@@ -4025,13 +4166,15 @@ def p1143(text1: str, text2: str) -> int:
     smallest subproblems and build up to the largest, storing the results in a
     table.
 
-    Examples:
+    Examples
+    --------
     >>> p1143("abcde", "ace")
     3
     >>> p1143("abc", "abc")
     3
     >>> p1143("abc", "def")
     0
+
     """
     dp_ = [[0 for _ in range(len(text2) + 1)] for _ in range(len(text1) + 1)]
 
@@ -4046,8 +4189,7 @@ def p1143(text1: str, text2: str) -> int:
 
 
 def p1171(head: Optional[ListNode]) -> Optional[ListNode]:
-    """
-    1171. Remove Zero Sum Consecutive Node from Linked List https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
+    """1171. Remove Zero Sum Consecutive Node from Linked List https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
 
     Lessons learned:
     - The key here is to use a prefix sum map and make two passes through the
@@ -4055,15 +4197,17 @@ def p1171(head: Optional[ListNode]) -> Optional[ListNode]:
     find a prefix sum that we've seen before, we can remove the nodes between
     the two occurrences.
 
-    Examples:
-    >>> listnode_to_list(p1171(ListNode.from_list([1,2,-3,3,1])))
+    Examples
+    --------
+    >>> listnode_to_list(p1171(ListNode.from_list([1, 2, -3, 3, 1])))
     [3, 1]
-    >>> listnode_to_list(p1171(ListNode.from_list([1,2,3,-3,4])))
+    >>> listnode_to_list(p1171(ListNode.from_list([1, 2, 3, -3, 4])))
     [1, 2, 4]
-    >>> listnode_to_list(p1171(ListNode.from_list([1,2,3,-3,-2])))
+    >>> listnode_to_list(p1171(ListNode.from_list([1, 2, 3, -3, -2])))
     [1]
-    >>> listnode_to_list(p1171(ListNode.from_list([5,-3,-4,1,6,-2,-5])))
+    >>> listnode_to_list(p1171(ListNode.from_list([5, -3, -4, 1, 6, -2, -5])))
     [5, -2, -5]
+
     """
     start = ListNode(0, head)
     prefix_sum_to_node = {0: start}
@@ -4086,8 +4230,7 @@ def p1171(head: Optional[ListNode]) -> Optional[ListNode]:
 
 
 def p1208(s: str, t: str, maxCost: int) -> int:
-    """
-    1208. Get Equal Substrings Within Budget https://leetcode.com/problems/get-equal-substrings-within-budget
+    """1208. Get Equal Substrings Within Budget https://leetcode.com/problems/get-equal-substrings-within-budget
 
     Lessons learned:
     * The toughest part was correctly handling indices. I used half-open [lo, hi) intervals for a while, but things turned out cleaner with closed intervals [lo, hi].
@@ -4117,7 +4260,8 @@ def p1208(s: str, t: str, maxCost: int) -> int:
     [8 11] 1
     [9 12] 0
 
-    Examples:
+    Examples
+    --------
     >>> p1208("abcd", "bcdf", 3)
     3
     >>> p1208("abcd", "cdef", 3)
@@ -4128,6 +4272,7 @@ def p1208(s: str, t: str, maxCost: int) -> int:
     4
     >>> p1208("abcd", "cdef", 1)
     0
+
     """
     diffs = [abs(ord(x) - ord(y)) for x, y in zip(s, t)]
     lo, hi, max_len = 0, 0, 0
@@ -4144,25 +4289,36 @@ def p1208(s: str, t: str, maxCost: int) -> int:
 
 
 def p1293(grid: list[list[int]], k: int) -> int:
-    """
-    1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
+    """1293. Shortest Path in a Grid With Obstacles Elimination https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/
 
     Lessons learned:
     - You don't need a dictionary of best distances, just a set of visited nodes
     (since any first visit to a node is the best).
     - You don't need a priority queue, just a queue.
 
-    Examples:
-    >>> p1293([[0,0,0],[1,1,0],[0,0,0],[0,1,1],[0,0,0]], 1)
+    Examples
+    --------
+    >>> p1293([[0, 0, 0], [1, 1, 0], [0, 0, 0], [0, 1, 1], [0, 0, 0]], 1)
     6
-    >>> p1293([[0,1,1],[1,1,1],[1,0,0]], 1)
+    >>> p1293([[0, 1, 1], [1, 1, 1], [1, 0, 0]], 1)
     -1
     >>> grid = [
-    ...     [0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,0],
-    ...     [0,1,0,0,0,0,0,0,0,0],[0,1,0,1,1,1,1,1,1,1],[0,1,0,1,1,1,1,0,0,0],[0,1,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,0,1,0],[0,0,0,0,0,0,0,0,1,0]
+    ...     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ...     [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    ...     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    ...     [0, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    ...     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    ...     [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    ...     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    ...     [0, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    ...     [0, 1, 0, 1, 1, 1, 1, 0, 0, 0],
+    ...     [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+    ...     [0, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+    ...     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
     ... ]
     >>> p1293(grid, 1)
     20
+
     """
     State = namedtuple("State", "steps k i j")
     m, n = len(grid), len(grid[0])
@@ -4201,18 +4357,19 @@ def p1293(grid: list[list[int]], k: int) -> int:
 
 
 def p1306(arr: list[int], start: int) -> bool:
-    """
-    1306. Jump Game III https://leetcode.com/problems/jump-game-iii/
+    """1306. Jump Game III https://leetcode.com/problems/jump-game-iii/
 
     Just a BFS.
 
-    Examples:
-    >>> p1306([4,2,3,0,3,1,2], 5)
+    Examples
+    --------
+    >>> p1306([4, 2, 3, 0, 3, 1, 2], 5)
     True
-    >>> p1306([4,2,3,0,3,1,2], 0)
+    >>> p1306([4, 2, 3, 0, 3, 1, 2], 0)
     True
-    >>> p1306([3,0,2,1,2], 2)
+    >>> p1306([3, 0, 2, 1, 2], 2)
     False
+
     """
     seen = set()
     stack = {start}
@@ -4232,20 +4389,21 @@ def p1306(arr: list[int], start: int) -> bool:
 
 
 def p1323(num: int) -> int:
-    """
-    1323. Maximum 69 Number https://leetcode.com/problems/maximum-69-number/
+    """1323. Maximum 69 Number https://leetcode.com/problems/maximum-69-number/
 
     Lessons learned:
     - Converting to a string and using replace is surprisingly fast.
     - Just need to accept that Python string built-ins are in C-land.
 
-    Examples:
+    Examples
+    --------
     >>> p1323(9669)
     9969
     >>> p1323(9996)
     9999
     >>> p1323(9999)
     9999
+
     """
     for i in range(math.floor(math.log10(num)) + 1, -1, -1):
         if num // 10**i % 10 == 6:
@@ -4254,21 +4412,20 @@ def p1323(num: int) -> int:
 
 
 def p1323b(num: int) -> int:
-    """
-    Examples:
+    """Examples
     >>> p1323b(9669)
     9969
     >>> p1323b(9996)
     9999
     >>> p1323b(9999)
     9999
+
     """
     return int(str(num).replace("6", "9", 1))
 
 
 def p1340(arr: list[int], d: int) -> int:
-    """
-    1340. Jump Game V https://leetcode.com/problems/jump-game-v/
+    """1340. Jump Game V https://leetcode.com/problems/jump-game-v/
 
     Lessons learned:
     - I solved this using a DFS and DP. The problem structure is
@@ -4280,13 +4437,15 @@ def p1340(arr: list[int], d: int) -> int:
 
     where n = len(arr). This lends itself well to a recursive DFS solution.
 
-    Examples:
-    >>> p1340([6,4,14,6,8,13,9,7,10,6,12], 2)
+    Examples
+    --------
+    >>> p1340([6, 4, 14, 6, 8, 13, 9, 7, 10, 6, 12], 2)
     4
-    >>> p1340([3,3,3,3,3], 3)
+    >>> p1340([3, 3, 3, 3, 3], 3)
     1
-    >>> p1340([7,6,5,4,3,2,1], 1)
+    >>> p1340([7, 6, 5, 4, 3, 2, 1], 1)
     7
+
     """
     if len(arr) == 1:
         return 1
@@ -4311,6 +4470,7 @@ def p1340(arr: list[int], d: int) -> int:
             max_visits = max(max_visits, dp[i_])
 
         dp[i] = 1 + max_visits
+        return None
 
     for i in range(len(arr)):
         dfs(i)
@@ -4319,22 +4479,23 @@ def p1340(arr: list[int], d: int) -> int:
 
 
 def p1345(arr: list[int]) -> int:
-    """
-    1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/
+    """1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/
 
     Lessons learned:
     - This solution is very similar to Jump Game III. I added a priority queue,
     but this problem could be done with BFS as well.
 
-    Examples:
-    >>> p1345([100,-23,-23,404,100,23,23,23,3,404])
+    Examples
+    --------
+    >>> p1345([100, -23, -23, 404, 100, 23, 23, 23, 3, 404])
     3
     >>> p1345([7])
     0
-    >>> p1345([7,6,9,6,9,6,9,7])
+    >>> p1345([7, 6, 9, 6, 9, 6, 9, 7])
     1
-    >>> p1345([7,7,2,1,7,7,7,3,4,1])
+    >>> p1345([7, 7, 2, 1, 7, 7, 7, 3, 4, 1])
     3
+
     """
     if len(arr) == 1:
         return 0
@@ -4364,20 +4525,21 @@ def p1345(arr: list[int]) -> int:
 
 
 def p1345b(arr: list[int]) -> int:
-    """
-    1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/
+    """1345. Jump Game IV https://leetcode.com/problems/jump-game-iv/
 
     The BFS solution.
 
-    Examples:
-    >>> p1345b([100,-23,-23,404,100,23,23,23,3,404])
+    Examples
+    --------
+    >>> p1345b([100, -23, -23, 404, 100, 23, 23, 23, 3, 404])
     3
     >>> p1345b([7])
     0
-    >>> p1345b([7,6,9,6,9,6,9,7])
+    >>> p1345b([7, 6, 9, 6, 9, 6, 9, 7])
     1
-    >>> p1345b([7,7,2,1,7,7,7,3,4,1])
+    >>> p1345b([7, 7, 2, 1, 7, 7, 7, 3, 4, 1])
     3
+
     """
     if len(arr) == 1:
         return 0
@@ -4411,11 +4573,11 @@ def p1345b(arr: list[int]) -> int:
 
 
 def p1404(s: str) -> int:
-    """
-    1404. Number of Steps to Reduce a Number in Binary Representation to One
+    """1404. Number of Steps to Reduce a Number in Binary Representation to One
     https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one
 
-    Examples:
+    Examples
+    --------
     >>> p1404("1101")
     6
     >>> p1404("10")
@@ -4424,6 +4586,7 @@ def p1404(s: str) -> int:
     0
     >>> p1404("111")
     4
+
     """
     d = deque(s)
     steps = 0
@@ -4443,14 +4606,14 @@ def p1404(s: str) -> int:
 
 
 def p1456(s: str, k: int) -> int:
-    """
-    1456. Maximum Number of Vowels in a Substring of Given Length https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/
+    """1456. Maximum Number of Vowels in a Substring of Given Length https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/
 
     Lessons learned:
     - Sliding window and no need for a queue here, because sum statistics are easy
     to update.
 
-    Examples:
+    Examples
+    --------
     >>> p1456("abciiidef", 3)
     3
     >>> p1456("aeiou", 2)
@@ -4461,6 +4624,7 @@ def p1456(s: str, k: int) -> int:
     0
     >>> p1456("tryhard", 4)
     1
+
     """
     vowels = set("aeiou")
     num_vowels = sum(c in vowels for c in s[:k])
@@ -4475,38 +4639,37 @@ def p1456(s: str, k: int) -> int:
 
 
 def p1491(salary: list[int]) -> float:
-    """
-    1491. Average Salary Excluding the Minimum and Maximum Salary https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/
+    """1491. Average Salary Excluding the Minimum and Maximum Salary https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/
 
     Lessons learned:
     - Slightly surprised the single pass Python-loop approach is slightly faster
     than the three pass approach using built-ins.
 
-    Examples:
-    >>> p1491([4000,3000,1000,2000])
+    Examples
+    --------
+    >>> p1491([4000, 3000, 1000, 2000])
     2500.0
-    >>> p1491([1000,2000,3000])
+    >>> p1491([1000, 2000, 3000])
     2000.0
+
     """
     return (sum(salary) - min(salary) - max(salary)) / (len(salary) - 2)
 
 
 def p1491b(salary: list[int]) -> float:
-    """
-    Examples:
-    >>> p1491b([4000,3000,1000,2000])
+    """Examples
+    >>> p1491b([4000, 3000, 1000, 2000])
     2500.0
-    >>> p1491b([1000,2000,3000])
+    >>> p1491b([1000, 2000, 3000])
     2000.0
+
     """
     lo, hi = sys.maxsize, -sys.maxsize - 1
     sums = 0
     count = 0
     for s in salary:
-        if s < lo:
-            lo = s
-        if s > hi:
-            hi = s
+        lo = min(s, lo)
+        hi = max(s, hi)
         sums += s
         count += 1
 
@@ -4514,22 +4677,73 @@ def p1491b(salary: list[int]) -> float:
 
 
 def p1498(nums: list[int], target: int) -> int:
-    """
-    1498. Number of Subsequences That Satisfy the Given Sum Condition https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
+    """1498. Number of Subsequences That Satisfy the Given Sum Condition https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/
 
     Lessons learned:
     - I had the rough idea, but I was tired, so I looked at a hint.
     - 1 << n is much faster in Python than 2**n.
 
-    Examples:
-    >>> p1498([3,5,6,7], 9)
+    Examples
+    --------
+    >>> p1498([3, 5, 6, 7], 9)
     4
-    >>> p1498([3,3,6,8], 10)
+    >>> p1498([3, 3, 6, 8], 10)
     6
-    >>> p1498([2,3,3,4,6,7], 12)
+    >>> p1498([2, 3, 3, 4, 6, 7], 12)
     61
-    >>> p1498([14,4,6,6,20,8,5,6,8,12,6,10,14,9,17,16,9,7,14,11,14,15,13,11,10,18,13,17,17,14,17,7,9,5,10,13,8,5,18,20,7,5,5,15,19,14], 22)
+    >>> p1498(
+    ...     [
+    ...         14,
+    ...         4,
+    ...         6,
+    ...         6,
+    ...         20,
+    ...         8,
+    ...         5,
+    ...         6,
+    ...         8,
+    ...         12,
+    ...         6,
+    ...         10,
+    ...         14,
+    ...         9,
+    ...         17,
+    ...         16,
+    ...         9,
+    ...         7,
+    ...         14,
+    ...         11,
+    ...         14,
+    ...         15,
+    ...         13,
+    ...         11,
+    ...         10,
+    ...         18,
+    ...         13,
+    ...         17,
+    ...         17,
+    ...         14,
+    ...         17,
+    ...         7,
+    ...         9,
+    ...         5,
+    ...         10,
+    ...         13,
+    ...         8,
+    ...         5,
+    ...         18,
+    ...         20,
+    ...         7,
+    ...         5,
+    ...         5,
+    ...         15,
+    ...         19,
+    ...         14,
+    ...     ],
+    ...     22,
+    ... )
     272187084
+
     """
     nums.sort()
     lo, hi = 0, len(nums) - 1
@@ -4544,16 +4758,17 @@ def p1498(nums: list[int], target: int) -> int:
 
 
 def p1544(s: str) -> str:
-    """
-    1544. Make The String Great https://leetcode.com/problems/make-the-string-great/
+    """1544. Make The String Great https://leetcode.com/problems/make-the-string-great/
 
-    Examples:
+    Examples
+    --------
     >>> p1544("leEeetcode")
     'leetcode'
     >>> p1544("abBAcC")
     ''
     >>> p1544("s")
     's'
+
     """
     stack = []
     for c in s:
@@ -4565,19 +4780,20 @@ def p1544(s: str) -> str:
 
 
 def p1557(n: int, edges: list[list[int]]) -> list[int]:
-    """
-    1557. Minimum Number of Vertices to Reach All Nodes https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/
+    """1557. Minimum Number of Vertices to Reach All Nodes https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/
 
     Lessons learned:
     - At first I thought this required union find, but that is for partitions /
     undirected graphs. After fiddling with a modification of union find for a
     while, I saw that the solution was actually really simple.
 
-    Examples:
-    >>> p1557(6, [[0,1],[0,2],[2,5],[3,4],[4,2]])
+    Examples
+    --------
+    >>> p1557(6, [[0, 1], [0, 2], [2, 5], [3, 4], [4, 2]])
     [0, 3]
-    >>> p1557(5, [[0,1],[2,1],[3,1],[1,4],[2,4]])
+    >>> p1557(5, [[0, 1], [2, 1], [3, 1], [1, 4], [2, 4]])
     [0, 2, 3]
+
     """
     nodes_with_parents = set()
     for _, v in edges:
@@ -4587,14 +4803,15 @@ def p1557(n: int, edges: list[list[int]]) -> list[int]:
 
 
 def p1572(mat: list[list[int]]) -> int:
-    """
-    1572. Matrix Diagonal Sum https://leetcode.com/problems/matrix-diagonal-sum/
+    """1572. Matrix Diagonal Sum https://leetcode.com/problems/matrix-diagonal-sum/
 
-    Examples:
-    >>> p1572([[1,2,3],[4,5,6],[7,8,9]])
+    Examples
+    --------
+    >>> p1572([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     25
-    >>> p1572([[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]])
+    >>> p1572([[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]])
     8
+
     """
     n = len(mat)
 
@@ -4613,8 +4830,7 @@ def p1572(mat: list[list[int]]) -> int:
 
 
 def p1579(n: int, edges: list[list[int]]) -> int:
-    """
-    1579. Remove Max Number of Edges to Keep Graph Fully Traversable https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/
+    """1579. Remove Max Number of Edges to Keep Graph Fully Traversable https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/
 
     Lessons learned:
     - We can build a spanning tree greedily by adding edges when they don't create
@@ -4627,15 +4843,17 @@ def p1579(n: int, edges: list[list[int]]) -> int:
     - A spanning tree always has the minimum number of edges to connect all nodes,
     which is V - 1 for a graph with V nodes
 
-    Examples:
-    >>> p1579(4, [[3,1,2],[3,2,3],[1,1,3],[1,2,4],[1,1,2],[2,3,4]])
+    Examples
+    --------
+    >>> p1579(4, [[3, 1, 2], [3, 2, 3], [1, 1, 3], [1, 2, 4], [1, 1, 2], [2, 3, 4]])
     2
-    >>> p1579(4, [[3,1,2],[3,2,3],[1,1,4],[2,1,4]])
+    >>> p1579(4, [[3, 1, 2], [3, 2, 3], [1, 1, 4], [2, 1, 4]])
     0
-    >>> p1579(4, [[3,2,3],[1,1,2],[2,3,4]])
+    >>> p1579(4, [[3, 2, 3], [1, 1, 2], [2, 3, 4]])
     -1
-    >>> p1579(2, [[1,1,2],[2,1,2],[3,1,2]])
+    >>> p1579(2, [[1, 1, 2], [2, 1, 2], [3, 1, 2]])
     2
+
     """
 
     def find(x: int, parent: list[int]) -> int:
@@ -4683,16 +4901,17 @@ def p1579(n: int, edges: list[list[int]]) -> int:
 
 
 def p1608(nums: list[int]) -> int:
-    """
-    1608. Special Array With X Elements Greater Than or Equal X https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x
+    """1608. Special Array With X Elements Greater Than or Equal X https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x
 
-    Examples:
-    >>> p1608([3,5])
+    Examples
+    --------
+    >>> p1608([3, 5])
     2
-    >>> p1608([0,0])
+    >>> p1608([0, 0])
     -1
-    >>> p1608([0,4,3,0,4])
+    >>> p1608([0, 4, 3, 0, 4])
     3
+
     """
     nums.sort()
     lo, hi = 0, len(nums)
@@ -4711,16 +4930,17 @@ def p1608(nums: list[int]) -> int:
 
 
 def p1680(n: int) -> int:
-    """
-    1680. Concatenation of Consecutive Binary Numbers https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
+    """1680. Concatenation of Consecutive Binary Numbers https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/
 
-    Examples:
+    Examples
+    --------
     >>> p1680(1)
     1
     >>> p1680(3)
     27
     >>> p1680(12)
     505379714
+
     """
     M = 10**9 + 7
     total = 1
@@ -4731,8 +4951,7 @@ def p1680(n: int) -> int:
 
 
 def p1697(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[bool]:
-    """
-    1697. Checking Existence of Edge Length Limited Paths https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
+    """1697. Checking Existence of Edge Length Limited Paths https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
 
     Lessons learned:
     - This problem is a connected component problem, though the weighted edges may
@@ -4741,13 +4960,15 @@ def p1697(n: int, edgeList: list[list[int]], queries: list[list[int]]) -> list[b
     the connected components given by the query threshold. This lets us build on
     the work done for previous queries.
 
-    Examples:
-    >>> p1697(3, [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], [[0,1,2],[0,2,5]])
+    Examples
+    --------
+    >>> p1697(3, [[0, 1, 2], [1, 2, 4], [2, 0, 8], [1, 0, 16]], [[0, 1, 2], [0, 2, 5]])
     [False, True]
-    >>> p1697(5, [[0,1,10],[1,2,5],[2,3,9],[3,4,13]], [[0,4,14],[1,4,13]])
+    >>> p1697(5, [[0, 1, 10], [1, 2, 5], [2, 3, 9], [3, 4, 13]], [[0, 4, 14], [1, 4, 13]])
     [True, False]
-    >>> p1697(3, [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], [[0,2,1], [0,2,7]])
+    >>> p1697(3, [[0, 1, 2], [1, 2, 4], [2, 0, 8], [1, 0, 16]], [[0, 2, 1], [0, 2, 7]])
     [False, True]
+
     """
     parent = list(range(n))
 
@@ -4780,25 +5001,27 @@ def get_moves_list(nums: list[int], k: int) -> tuple[list[int], list[int], list[
 
     For testing 1703.
 
-    Examples:
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 2)
+    Examples
+    --------
+    >>> a, b, c = get_moves_list([0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], 2)
     >>> a == b == c
     True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 3)
+    >>> a, b, c = get_moves_list([0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], 3)
     >>> a == b == c
     True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 4)
+    >>> a, b, c = get_moves_list([0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], 4)
     >>> a == b == c
     True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 5)
+    >>> a, b, c = get_moves_list([0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], 5)
     >>> a == b == c
     True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 6)
+    >>> a, b, c = get_moves_list([0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], 6)
     >>> a == b == c
     True
-    >>> a, b, c = get_moves_list([0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,1], 8)
+    >>> a, b, c = get_moves_list([0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1], 8)
     >>> a == b == c
     True
+
     """
 
     def calc1(stack: deque, k: int) -> int:
@@ -4831,10 +5054,7 @@ def get_moves_list(nums: list[int], k: int) -> tuple[list[int], list[int], list[
     def method2(nums: list[int], k: int) -> list[int]:
         """Calculate using the absolute value formula with the differences between indices."""
         gaps = get_gaps(nums)
-        moves = []
-        for j in range(len(gaps) - k + 2):
-            moves.append(calc2(gaps, k, j))
-        return moves
+        return [calc2(gaps, k, j) for j in range(len(gaps) - k + 2)]
 
     def method3(nums: list[int], k: int) -> list[int]:
         """Calculate using a magic iterative approach."""
@@ -4870,8 +5090,7 @@ def get_gaps(nums: list[int]) -> list[int]:
 
 
 def p1703(nums: list[int], k: int) -> int:
-    """
-    1703. Minimum Adjacent Swaps for K Consecutive Ones https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/
+    """1703. Minimum Adjacent Swaps for K Consecutive Ones https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/
 
     Lesson learned:
     - The first solution is not fast enough, but has the right general idea. It
@@ -4932,19 +5151,21 @@ def p1703(nums: list[int], k: int) -> int:
 
       which is the correction factor we discused above.
 
-    Examples:
-    >>> p1703([1,0,0,1,0,1], 2)
+    Examples
+    --------
+    >>> p1703([1, 0, 0, 1, 0, 1], 2)
     1
-    >>> p1703([1,0,0,0,0,0,1,1], 3)
+    >>> p1703([1, 0, 0, 0, 0, 0, 1, 1], 3)
     5
-    >>> p1703([1,1,0,1], 2)
+    >>> p1703([1, 1, 0, 1], 2)
     0
-    >>> p1703([0,0,0,1,0,1,1,0,1], 3)
+    >>> p1703([0, 0, 0, 1, 0, 1, 1, 0, 1], 3)
     1
-    >>> p1703([0,0,0,1,0,1,1,0,1], 4)
+    >>> p1703([0, 0, 0, 1, 0, 1, 1, 0, 1], 4)
     2
-    >>> p1703([1,0,1,0,1,0,0,0,1], 4)
+    >>> p1703([1, 0, 1, 0, 1, 0, 0, 0, 1], 4)
     6
+
     """
     if len(nums) == k or k == 1:
         return 0
@@ -4980,22 +5201,22 @@ def p1703(nums: list[int], k: int) -> int:
 
 
 def p1703b(nums: list[int], k: int) -> int:
-    """
-    Examples:
-    >>> p1703b([1,0,0,1,0,0], 2)
+    """Examples
+    >>> p1703b([1, 0, 0, 1, 0, 0], 2)
     2
-    >>> p1703b([1,0,0,1,0,1], 2)
+    >>> p1703b([1, 0, 0, 1, 0, 1], 2)
     1
-    >>> p1703b([1,0,0,0,0,0,1,1], 3)
+    >>> p1703b([1, 0, 0, 0, 0, 0, 1, 1], 3)
     5
-    >>> p1703b([1,1,0,1], 2)
+    >>> p1703b([1, 1, 0, 1], 2)
     0
-    >>> p1703b([0,0,0,1,0,1,1,0,1], 3)
+    >>> p1703b([0, 0, 0, 1, 0, 1, 1, 0, 1], 3)
     1
-    >>> p1703b([0,0,0,1,0,1,1,0,1], 4)
+    >>> p1703b([0, 0, 0, 1, 0, 1, 1, 0, 1], 4)
     2
-    >>> p1703b([1,0,1,0,1,0,0,0,1], 4)
+    >>> p1703b([1, 0, 1, 0, 1, 0, 0, 0, 1], 4)
     6
+
     """
     if len(nums) == k or k == 1:
         return 0
@@ -5035,18 +5256,19 @@ def p1703b(nums: list[int], k: int) -> int:
 
 
 def p1706(grid: list[list[int]]) -> list[int]:
-    """
-    1706. Where Will The Ball Fall https://leetcode.com/problems/where-will-the-ball-fall/
+    """1706. Where Will The Ball Fall https://leetcode.com/problems/where-will-the-ball-fall/
 
-    Examples:
+    Examples
+    --------
     >>> p1706([[-1]])
     [-1]
-    >>> p1706([[1,1,1,-1,-1],[1,1,1,-1,-1],[-1,-1,-1,1,1],[1,1,1,1,-1],[-1,-1,-1,-1,-1]])
+    >>> p1706([[1, 1, 1, -1, -1], [1, 1, 1, -1, -1], [-1, -1, -1, 1, 1], [1, 1, 1, 1, -1], [-1, -1, -1, -1, -1]])
     [1, -1, -1, -1, -1]
-    >>> p1706([[1,1,1,1,1,1]])
+    >>> p1706([[1, 1, 1, 1, 1, 1]])
     [1, 2, 3, 4, 5, -1]
-    >>> p1706([[1,1,1,1,1,1],[-1,-1,-1,-1,-1,-1],[1,1,1,1,1,1],[-1,-1,-1,-1,-1,-1]])
+    >>> p1706([[1, 1, 1, 1, 1, 1], [-1, -1, -1, -1, -1, -1], [1, 1, 1, 1, 1, 1], [-1, -1, -1, -1, -1, -1]])
     [0, 1, 2, 3, 4, -1]
+
     """
 
     def find_ball(i: int) -> int:
@@ -5068,17 +5290,18 @@ def p1706(grid: list[list[int]]) -> list[int]:
 
 
 def p1721(head: ListNode, k: int) -> ListNode:
-    """
-    1721. Swapping Nodes in a Linked List https://leetcode.com/problems/swapping-nodes-in-a-linked-list/
+    """1721. Swapping Nodes in a Linked List https://leetcode.com/problems/swapping-nodes-in-a-linked-list/
 
     Lessons learned:
     - Two pointers allows you to do this in one pass.
 
-    Examples:
-    >>> listnode_to_list(p1721(ListNode.from_list([1,2,3,4,5]), 2))
+    Examples
+    --------
+    >>> listnode_to_list(p1721(ListNode.from_list([1, 2, 3, 4, 5]), 2))
     [1, 4, 3, 2, 5]
-    >>> listnode_to_list(p1721(ListNode.from_list([7,9,6,6,7,8,3,0,9,5]), 5))
+    >>> listnode_to_list(p1721(ListNode.from_list([7, 9, 6, 6, 7, 8, 3, 0, 9, 5]), 5))
     [7, 9, 6, 6, 8, 7, 3, 0, 9, 5]
+
     """
     p1 = head
     for _ in range(k - 1):
@@ -5094,16 +5317,17 @@ def p1721(head: ListNode, k: int) -> ListNode:
 
 
 def p1822(nums: list[int]) -> int:
-    """
-    1822. Sign of the Product of an Array https://leetcode.com/problems/sign-of-the-product-of-an-array/
+    """1822. Sign of the Product of an Array https://leetcode.com/problems/sign-of-the-product-of-an-array/
 
-    Examples:
-    >>> p1822([-1,-2,-3,-4,3,2,1])
+    Examples
+    --------
+    >>> p1822([-1, -2, -3, -4, 3, 2, 1])
     1
-    >>> p1822([1,5,0,2,-3])
+    >>> p1822([1, 5, 0, 2, -3])
     0
-    >>> p1822([-1,1,-1,1,-1])
+    >>> p1822([-1, 1, -1, 1, -1])
     -1
+
     """
     pos = 1
     for n in nums:
@@ -5115,21 +5339,22 @@ def p1822(nums: list[int]) -> int:
 
 
 def p2130(head: ListNode | None) -> int:
-    """
-    2130. Maximum Twin Sum of a Linked List https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/
+    """2130. Maximum Twin Sum of a Linked List https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/
 
     Lessons learned:
     - Finding the midpoint of a linked list can be done with two pointers.
     Reversing a linked list is pretty easy. These steps above can be done in one
     pass.
 
-    Examples:
-    >>> p2130(ListNode.from_list([5,4,2,1]))
+    Examples
+    --------
+    >>> p2130(ListNode.from_list([5, 4, 2, 1]))
     6
-    >>> p2130(ListNode.from_list([4,2,2,3]))
+    >>> p2130(ListNode.from_list([4, 2, 2, 3]))
     7
-    >>> p2130(ListNode.from_list([1,100000]))
+    >>> p2130(ListNode.from_list([1, 100000]))
     100001
+
     """
     if head is None:
         return 0
@@ -5156,24 +5381,25 @@ def p2130(head: ListNode | None) -> int:
 
 
 def p2131(words: list[str]) -> int:
-    """
-    2131. Longest Palindrome by Concatenating Two Letter Words https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
+    """2131. Longest Palindrome by Concatenating Two Letter Words https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/
 
-    Examples:
-    >>> p2131(["ab","ba","aa","bb","cc"])
+    Examples
+    --------
+    >>> p2131(["ab", "ba", "aa", "bb", "cc"])
     6
-    >>> p2131(["ab","ba","cc","ab","ba","cc"])
+    >>> p2131(["ab", "ba", "cc", "ab", "ba", "cc"])
     12
-    >>> p2131(["aa","ba"])
+    >>> p2131(["aa", "ba"])
     2
     >>> p2131(["ba", "ce"])
     0
-    >>> p2131(["lc","cl","gg"])
+    >>> p2131(["lc", "cl", "gg"])
     6
-    >>> p2131(["ab","ty","yt","lc","cl","ab"])
+    >>> p2131(["ab", "ty", "yt", "lc", "cl", "ab"])
     8
-    >>> p2131(["cc","ll","xx"])
+    >>> p2131(["cc", "ll", "xx"])
     2
+
     """
     d: Counter[str] = Counter()
 
@@ -5197,23 +5423,22 @@ def p2131(words: list[str]) -> int:
 
 
 def p2215(nums1: list[int], nums2: list[int]) -> list[list[int]]:
-    """
-    2215. Find the Difference of Two Arrays https://leetcode.com/problems/find-the-difference-of-two-arrays/
+    """2215. Find the Difference of Two Arrays https://leetcode.com/problems/find-the-difference-of-two-arrays/
 
-    Examples:
-    >>> p2215([1,2,3], [2,4,6])
+    Examples
+    --------
+    >>> p2215([1, 2, 3], [2, 4, 6])
     [[1, 3], [4, 6]]
-    >>> p2215([1,2,3,3], [1,1,2,2])
+    >>> p2215([1, 2, 3, 3], [1, 1, 2, 2])
     [[3], []]
+
     """
     s1, s2 = set(nums1), set(nums2)
     return [[n for n in s1 if n not in s2], [n for n in s2 if n not in s1]]
 
 
 def p2269(num: int, k: int) -> int:
-    """
-    2269. Find The k-Beauty of a Number https://leetcode.com/problems/find-the-k-beauty-of-a-number/
-    """
+    """2269. Find The k-Beauty of a Number https://leetcode.com/problems/find-the-k-beauty-of-a-number/"""
     result = 0
     digits = str(num)
     for i in range(len(digits) - k + 1):
@@ -5226,8 +5451,7 @@ def p2269(num: int, k: int) -> int:
 
 
 def p2485(n: int) -> int:
-    """
-    2485. Find the Pivot Integer
+    """2485. Find the Pivot Integer
 
     Lessons learned:
     - This one has a cute algebraic solution. Starting with the algebraic
@@ -5239,21 +5463,22 @@ def p2485(n: int) -> int:
 
     So i has a solution iff n (n + 1) / 2 is a perfect square.
 
-    Examples:
+    Examples
+    --------
     >>> p2485(8)
     6
     >>> p2485(1)
     1
     >>> p2485(4)
     -1
+
     """
     x = (n * (n + 1) // 2) ** 0.5
     return int(x) if int(x) == x else -1
 
 
 def p2493(n: int, edges: list[list[int]]) -> int:
-    """
-    2493. Divide Nodes Into The Maximum Number of Groups https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/
+    """2493. Divide Nodes Into The Maximum Number of Groups https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/
 
     Lessons learned:
     - This problem is a pretty straightforward extension of (785 Bipartite Graph
@@ -5268,11 +5493,13 @@ def p2493(n: int, edges: list[list[int]]) -> int:
     so maybe looking for the smallest degree nodes leads us to outer boundary of
     a graph. Not sure.
 
-    Examples:
-    >>> p2493(6, [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]])
+    Examples
+    --------
+    >>> p2493(6, [[1, 2], [1, 4], [1, 5], [2, 6], [2, 3], [4, 6]])
     4
-    >>> p2493(3, [[1,2],[2,3],[3,1]])
+    >>> p2493(3, [[1, 2], [2, 3], [3, 1]])
     -1
+
     """
     # Convert from edge list to adjacency list
     graph = defaultdict(list)
@@ -5309,10 +5536,7 @@ def p2493(n: int, edges: list[list[int]]) -> int:
                 coloring[node] = color
 
                 for neighbor_node in graph[node]:
-                    if (
-                        neighbor_node in coloring
-                        and (coloring[neighbor_node] - color - 1) % 2 == 1
-                    ):
+                    if neighbor_node in coloring and (coloring[neighbor_node] - color - 1) % 2 == 1:
                         return False
                     if neighbor_node not in coloring:
                         queue.append((neighbor_node, color + 1))
@@ -5322,7 +5546,7 @@ def p2493(n: int, edges: list[list[int]]) -> int:
     # Do BFS from every node, building a spanning tree, and looking for the maximum depth achieved
     result = 0
     max_coloring = -1
-    for _, partition_nodes in partitions.items():
+    for partition_nodes in partitions.values():
         for node in partition_nodes:
             if not bfs_coloring(node):
                 return -1
@@ -5352,10 +5576,10 @@ def p2493(n: int, edges: list[list[int]]) -> int:
 
 
 def p2540(nums1: list[int], nums2: list[int]) -> int:
-    """
-    2540. Minimum Common Value https://leetcode.com/problems/minimum-common-value/
+    """2540. Minimum Common Value https://leetcode.com/problems/minimum-common-value/
 
-    Examples:
+    Examples
+    --------
     >>> p2540([1, 2, 3], [2, 4])
     2
     >>> p2540([1, 2, 3], [4, 5])
@@ -5364,6 +5588,7 @@ def p2540(nums1: list[int], nums2: list[int]) -> int:
     2
     >>> p2540([1, 1, 2], [2, 4])
     2
+
     """
     n, m = len(nums1), len(nums2)
     i, j = 0, 0
@@ -5379,8 +5604,7 @@ def p2540(nums1: list[int], nums2: list[int]) -> int:
 
 
 def p2608(n: int, edges: list[list[int]]) -> int:
-    """
-    2608. Shortest Cycle in a Graph https://leetcode.com/problems/shortest-cycle-in-a-graph/
+    """2608. Shortest Cycle in a Graph https://leetcode.com/problems/shortest-cycle-in-a-graph/
 
     Lessons learned:
     * A correct initial approach to this problem is to run BFS on every node and
@@ -5390,17 +5614,994 @@ def p2608(n: int, edges: list[list[int]]) -> int:
     was found to be part of a cycle previously. These are enough to beat 90% of
     other solutions.
 
-    Examples:
-    >>> p2608(7, [[0,1],[1,2],[2,0],[3,4],[4,5],[5,6],[6,3]])
+    Examples
+    --------
+    >>> p2608(7, [[0, 1], [1, 2], [2, 0], [3, 4], [4, 5], [5, 6], [6, 3]])
     3
-    >>> p2608(4, [[0,1],[0,2]])
+    >>> p2608(4, [[0, 1], [0, 2]])
     -1
-    >>> p2608(5, [[0,2],[2,4],[4,0]])
+    >>> p2608(5, [[0, 2], [2, 4], [4, 0]])
     3
-    >>> p2608(91, [[20, 47], [46, 83], [16, 80], [59, 82], [14, 42], [12, 25], [31, 40], [32, 63], [14, 70], [25, 46], [23, 72], [27, 48], [39, 89], [1, 8], [1, 33], [61, 90], [17, 20], [27, 69], [47, 90], [67, 84], [54, 76], [38, 56], [4, 88], [62, 82], [17, 60], [32, 41], [53, 63], [24, 66], [49, 86], [25, 30], [30, 63], [36, 88], [16, 18], [5, 27], [3, 21], [13, 22], [66, 87], [16, 62], [43, 84], [17, 56], [24, 41], [67, 90], [17, 33], [86, 89], [22, 56], [9, 44], [52, 74], [3, 13], [56, 74], [35, 39], [60, 63], [0, 56], [33, 40], [29, 72], [14, 58], [48, 81], [56, 83], [12, 53], [40, 80], [26, 50], [6, 71], [28, 36], [23, 42], [55, 79], [0, 4], [3, 16], [29, 50], [19, 67], [78, 88], [77, 86], [1, 87], [6, 18], [6, 11], [25, 48], [21, 64], [54, 74], [60, 72], [71, 78], [23, 37], [7, 55], [31, 50], [11, 48], [73, 74], [19, 60], [25, 57], [0, 84], [16, 28], [16, 34], [13, 78], [63, 69], [4, 32], [24, 84], [9, 49], [43, 69], [17, 45], [18, 63], [72, 89], [74, 85], [28, 47], [0, 28], [39, 73], [41, 42], [59, 72], [85, 88], [70, 85], [16, 20]])
+    >>> p2608(
+    ...     91,
+    ...     [
+    ...         [20, 47],
+    ...         [46, 83],
+    ...         [16, 80],
+    ...         [59, 82],
+    ...         [14, 42],
+    ...         [12, 25],
+    ...         [31, 40],
+    ...         [32, 63],
+    ...         [14, 70],
+    ...         [25, 46],
+    ...         [23, 72],
+    ...         [27, 48],
+    ...         [39, 89],
+    ...         [1, 8],
+    ...         [1, 33],
+    ...         [61, 90],
+    ...         [17, 20],
+    ...         [27, 69],
+    ...         [47, 90],
+    ...         [67, 84],
+    ...         [54, 76],
+    ...         [38, 56],
+    ...         [4, 88],
+    ...         [62, 82],
+    ...         [17, 60],
+    ...         [32, 41],
+    ...         [53, 63],
+    ...         [24, 66],
+    ...         [49, 86],
+    ...         [25, 30],
+    ...         [30, 63],
+    ...         [36, 88],
+    ...         [16, 18],
+    ...         [5, 27],
+    ...         [3, 21],
+    ...         [13, 22],
+    ...         [66, 87],
+    ...         [16, 62],
+    ...         [43, 84],
+    ...         [17, 56],
+    ...         [24, 41],
+    ...         [67, 90],
+    ...         [17, 33],
+    ...         [86, 89],
+    ...         [22, 56],
+    ...         [9, 44],
+    ...         [52, 74],
+    ...         [3, 13],
+    ...         [56, 74],
+    ...         [35, 39],
+    ...         [60, 63],
+    ...         [0, 56],
+    ...         [33, 40],
+    ...         [29, 72],
+    ...         [14, 58],
+    ...         [48, 81],
+    ...         [56, 83],
+    ...         [12, 53],
+    ...         [40, 80],
+    ...         [26, 50],
+    ...         [6, 71],
+    ...         [28, 36],
+    ...         [23, 42],
+    ...         [55, 79],
+    ...         [0, 4],
+    ...         [3, 16],
+    ...         [29, 50],
+    ...         [19, 67],
+    ...         [78, 88],
+    ...         [77, 86],
+    ...         [1, 87],
+    ...         [6, 18],
+    ...         [6, 11],
+    ...         [25, 48],
+    ...         [21, 64],
+    ...         [54, 74],
+    ...         [60, 72],
+    ...         [71, 78],
+    ...         [23, 37],
+    ...         [7, 55],
+    ...         [31, 50],
+    ...         [11, 48],
+    ...         [73, 74],
+    ...         [19, 60],
+    ...         [25, 57],
+    ...         [0, 84],
+    ...         [16, 28],
+    ...         [16, 34],
+    ...         [13, 78],
+    ...         [63, 69],
+    ...         [4, 32],
+    ...         [24, 84],
+    ...         [9, 49],
+    ...         [43, 69],
+    ...         [17, 45],
+    ...         [18, 63],
+    ...         [72, 89],
+    ...         [74, 85],
+    ...         [28, 47],
+    ...         [0, 28],
+    ...         [39, 73],
+    ...         [41, 42],
+    ...         [59, 72],
+    ...         [85, 88],
+    ...         [70, 85],
+    ...         [16, 20],
+    ...     ],
+    ... )
     4
-    >>> p2608(861, [[814,760],[545,586],[809,847],[625,197],[736,771],[320,677],[826,778],[542,206],[53,210],[712,145],[783,342],[125,510],[171,170],[793,640],[849,686],[234,784],[119,661],[756,574],[133,619],[207,366],[367,45],[513,133],[534,687],[673,22],[221,171],[414,764],[423,392],[438,493],[726,188],[393,96],[254,762],[481,136],[214,665],[239,745],[695,135],[268,647],[15,468],[313,30],[716,281],[80,465],[450,776],[624,431],[792,345],[83,652],[317,674],[403,807],[34,276],[410,774],[757,808],[480,599],[616,339],[787,792],[339,859],[377,236],[492,540],[550,271],[219,447],[422,162],[797,748],[382,288],[300,34],[665,173],[629,24],[402,484],[121,814],[105,773],[734,785],[584,98],[386,533],[728,289],[175,457],[706,695],[212,520],[799,733],[749,192],[554,404],[309,359],[593,402],[164,432],[729,70],[278,860],[0,709],[587,389],[112,414],[570,577],[781,729],[316,228],[703,576],[556,78],[504,119],[95,651],[363,341],[512,401],[819,2],[204,324],[299,442],[52,244],[622,190],[859,39],[507,106],[372,418],[196,811],[96,165],[548,53],[75,611],[851,424],[394,472],[138,3],[198,263],[836,239],[769,741],[496,11],[530,124],[676,477],[845,435],[720,680],[222,369],[50,769],[233,569],[202,36],[291,657],[13,66],[680,679],[503,278],[385,354],[744,105],[324,645],[630,265],[696,399],[841,71],[635,55],[366,541],[489,775],[473,147],[495,38],[763,736],[693,846],[292,101],[26,656],[216,696],[798,513],[185,818],[282,758],[440,499],[60,349],[115,543],[7,731],[303,19],[458,705],[369,72],[91,284],[279,28],[565,240],[419,538],[476,26],[365,573],[404,90],[544,789],[304,546],[47,584],[162,659],[9,189],[187,196],[350,102],[229,494],[345,858],[499,463],[431,363],[469,297],[815,772],[201,750],[344,842],[782,692],[590,452],[842,279],[453,549],[40,725],[857,134],[435,247],[73,416],[390,514],[848,649],[543,525],[424,587],[670,348],[153,721],[511,713],[141,571],[165,25],[699,185],[168,466],[564,243],[540,273],[23,630],[607,638],[567,726],[310,118],[501,461],[718,756],[42,524],[508,253],[330,804],[516,529],[220,458],[478,211],[796,715],[10,163],[183,786],[765,131],[39,84],[114,321],[486,553],[446,816],[619,23],[391,221],[623,579],[84,251],[65,460],[592,340],[78,219],[657,658],[245,40],[140,322],[659,364],[692,320],[800,144],[163,181],[263,89],[211,628],[17,664],[582,353],[260,356],[244,732],[579,160],[172,620],[666,623],[698,350],[636,828],[808,831],[72,476],[753,820],[285,291],[108,155],[27,327],[748,375],[768,626],[169,302],[32,714],[807,140],[295,409],[192,97],[457,803],[652,805],[421,407],[176,262],[827,855],[755,390],[290,93],[120,697],[418,735],[360,201],[225,408],[333,449],[780,565],[110,248],[215,12],[287,518],[24,684],[451,434],[771,827],[368,486],[860,832],[459,475],[828,482],[620,60],[59,64],[277,683],[271,266],[25,121],[517,198],[470,63],[599,727],[474,616],[137,544],[111,746],[506,512],[55,381],[858,516],[337,108],[18,51],[821,396],[776,260],[322,852],[306,298],[357,37],[685,379],[14,507],[442,590],[251,755],[342,526],[448,86],[77,110],[603,528],[723,311],[595,850],[70,448],[559,438],[493,800],[106,126],[293,417],[158,245],[262,613],[813,286],[825,395],[205,114],[354,557],[806,65],[3,793],[846,717],[197,796],[526,602],[170,443],[118,454],[247,728],[113,604],[331,559],[854,812],[4,158],[626,57],[455,614],[609,21],[241,269],[510,823],[127,172],[817,815],[714,202],[67,625],[297,833],[129,609],[654,711],[598,151],[591,15],[8,817],[327,0],[583,13],[356,663],[754,701],[6,643],[832,85],[35,391],[61,400],[128,323],[645,819],[398,222],[256,54],[834,370],[462,519],[803,310],[822,857],[634,575],[838,129],[790,149],[677,527],[388,351],[210,531],[683,347],[231,120],[252,670],[509,58],[397,634],[347,179],[611,412],[159,530],[684,307],[318,76],[273,763],[107,485],[182,20],[602,187],[69,294],[353,229],[237,52],[737,10],[364,148],[425,130],[36,99],[688,556],[788,191],[532,6],[697,644],[400,199],[663,382],[432,496],[74,627],[436,470],[228,492],[314,781],[38,836],[527,329],[41,589],[213,734],[29,62],[705,603],[408,425],[632,388],[752,241],[537,854],[528,582],[514,790],[664,195],[267,132],[92,41],[490,32],[475,397],[374,501],[312,150],[601,398],[831,840],[531,607],[610,580],[529,483],[264,258],[682,227],[62,844],[54,437],[764,542],[335,624],[731,35],[733,678],[777,439],[541,618],[86,87],[156,608],[762,68],[427,787],[724,636],[794,67],[447,428],[319,700],[500,433],[157,394],[147,300],[340,464],[209,226],[288,809],[28,532],[336,204],[709,326],[437,138],[546,759],[604,795],[835,344],[381,343],[378,420],[482,422],[802,551],[472,848],[650,141],[667,167],[371,330],[461,328],[562,694],[227,653],[289,479],[837,176],[463,423],[103,788],[853,798],[258,456],[443,383],[760,765],[638,552],[311,646],[151,621],[434,216],[411,845],[573,675],[332,361],[167,193],[662,779],[64,597],[160,469],[742,214],[519,654],[269,371],[384,194],[674,633],[702,555],[651,722],[30,205],[721,299],[131,79],[672,856],[789,747],[173,564],[477,285],[745,744],[588,838],[325,767],[707,1],[586,605],[135,766],[417,673],[687,491],[255,562],[97,606],[261,161],[594,316],[56,352],[647,337],[104,411],[775,566],[820,33],[321,367],[193,252],[274,103],[420,689],[161,427],[399,128],[704,522],[560,498],[467,718],[343,48],[658,503],[272,315],[494,708],[700,703],[563,270],[561,712],[818,296],[281,49],[578,478],[409,672],[810,489],[195,515],[717,393],[265,560],[577,782],[57,362],[296,292],[538,592],[58,691],[441,495],[230,752],[416,314],[686,593],[483,601],[326,578],[401,806],[154,306],[123,290],[66,174],[124,444],[5,517],[741,91],[407,410],[329,213],[452,387],[302,47],[856,27],[208,146],[628,113],[248,612],[45,506],[428,761],[426,4],[203,429],[275,419],[276,5],[487,567],[294,539],[194,104],[730,572],[649,777],[130,303],[134,376],[71,218],[811,304],[568,547],[535,505],[761,821],[589,215],[301,822],[852,521],[392,536],[750,698],[358,723],[816,275],[323,212],[824,335],[621,631],[79,622],[346,797],[485,223],[136,358],[44,183],[612,94],[122,671],[174,153],[1,693],[348,127],[690,235],[786,92],[746,261],[681,497],[801,112],[413,490],[2,534],[643,168],[613,143],[142,667],[648,751],[37,209],[539,511],[675,487],[740,610],[608,157],[558,617],[637,853],[479,385],[117,841],[22,56],[191,44],[631,178],[217,441],[770,217],[361,813],[48,462],[727,554],[497,666],[43,690],[656,317],[341,639],[843,704],[334,203],[249,829],[445,753],[152,169],[20,642],[491,849],[743,426],[823,413],[552,635],[166,338],[68,791],[454,641],[614,319],[200,73],[572,558],[439,17],[574,598],[661,186],[16,719],[520,182],[694,655],[671,548],[605,164],[351,175],[701,355],[224,280],[143,232],[338,325],[90,293],[795,372],[641,794],[566,184],[359,373],[774,757],[639,257],[109,154],[679,287],[708,749],[85,509],[805,374],[711,835],[12,283],[715,69],[186,480],[525,780],[571,59],[524,386],[660,305],[355,699],[63,43],[580,568],[139,380],[518,801],[349,481],[766,770],[847,238],[644,632],[226,585],[94,234],[833,74],[307,591],[722,504],[804,115],[732,77],[523,430],[533,471],[270,384],[93,450],[618,500],[576,839],[488,537],[617,710],[179,446],[689,312],[33,29],[844,596],[149,250],[758,18],[82,282],[305,688],[759,50],[328,336],[235,716],[253,783],[19,301],[284,80],[223,246],[177,122],[370,545],[150,743],[49,851],[190,7],[855,249],[76,662],[155,272],[713,488],[181,459],[784,535],[551,406],[747,445],[668,177],[246,768],[839,220],[199,142],[468,802],[243,754],[238,834],[772,368],[31,225],[376,277],[380,436],[555,740],[615,83],[515,334],[678,82],[257,720],[89,46],[547,563],[145,583],[406,125],[98,180],[405,16],[46,264],[412,116],[812,123],[188,825],[653,231],[315,233],[379,159],[88,360],[738,648],[600,255],[236,837],[81,724],[830,824],[456,377],[464,268],[735,600],[581,502],[553,308],[184,455],[779,508],[642,669],[640,738],[522,595],[286,403],[259,415],[218,274],[751,237],[11,117],[471,730],[850,208],[280,107],[102,799],[606,702],[362,8],[466,706],[739,637],[521,111],[430,318],[596,474],[505,843],[232,615],[178,31],[449,14],[242,682],[536,742],[373,357],[116,313],[484,75],[375,139],[791,453],[100,594],[691,440],[206,523],[627,256],[99,254],[250,230],[387,242],[669,81],[383,200],[767,405],[144,9],[429,668],[840,676],[829,451],[773,207],[433,826],[126,152],[148,333],[146,830],[51,42],[502,467],[395,421],[132,224],[460,156],[778,581],[569,681],[719,295],[557,707],[725,346],[101,137],[189,737],[444,365],[646,259],[308,561],[21,267],[180,810],[655,332],[633,109],[240,588],[498,570],[266,685],[465,95],[710,660],[585,629],[396,61],[549,473],[389,331],[298,739],[575,88],[785,650],[415,100],[352,550],[87,166],[283,378],[597,309]])
+    >>> p2608(
+    ...     861,
+    ...     [
+    ...         [814, 760],
+    ...         [545, 586],
+    ...         [809, 847],
+    ...         [625, 197],
+    ...         [736, 771],
+    ...         [320, 677],
+    ...         [826, 778],
+    ...         [542, 206],
+    ...         [53, 210],
+    ...         [712, 145],
+    ...         [783, 342],
+    ...         [125, 510],
+    ...         [171, 170],
+    ...         [793, 640],
+    ...         [849, 686],
+    ...         [234, 784],
+    ...         [119, 661],
+    ...         [756, 574],
+    ...         [133, 619],
+    ...         [207, 366],
+    ...         [367, 45],
+    ...         [513, 133],
+    ...         [534, 687],
+    ...         [673, 22],
+    ...         [221, 171],
+    ...         [414, 764],
+    ...         [423, 392],
+    ...         [438, 493],
+    ...         [726, 188],
+    ...         [393, 96],
+    ...         [254, 762],
+    ...         [481, 136],
+    ...         [214, 665],
+    ...         [239, 745],
+    ...         [695, 135],
+    ...         [268, 647],
+    ...         [15, 468],
+    ...         [313, 30],
+    ...         [716, 281],
+    ...         [80, 465],
+    ...         [450, 776],
+    ...         [624, 431],
+    ...         [792, 345],
+    ...         [83, 652],
+    ...         [317, 674],
+    ...         [403, 807],
+    ...         [34, 276],
+    ...         [410, 774],
+    ...         [757, 808],
+    ...         [480, 599],
+    ...         [616, 339],
+    ...         [787, 792],
+    ...         [339, 859],
+    ...         [377, 236],
+    ...         [492, 540],
+    ...         [550, 271],
+    ...         [219, 447],
+    ...         [422, 162],
+    ...         [797, 748],
+    ...         [382, 288],
+    ...         [300, 34],
+    ...         [665, 173],
+    ...         [629, 24],
+    ...         [402, 484],
+    ...         [121, 814],
+    ...         [105, 773],
+    ...         [734, 785],
+    ...         [584, 98],
+    ...         [386, 533],
+    ...         [728, 289],
+    ...         [175, 457],
+    ...         [706, 695],
+    ...         [212, 520],
+    ...         [799, 733],
+    ...         [749, 192],
+    ...         [554, 404],
+    ...         [309, 359],
+    ...         [593, 402],
+    ...         [164, 432],
+    ...         [729, 70],
+    ...         [278, 860],
+    ...         [0, 709],
+    ...         [587, 389],
+    ...         [112, 414],
+    ...         [570, 577],
+    ...         [781, 729],
+    ...         [316, 228],
+    ...         [703, 576],
+    ...         [556, 78],
+    ...         [504, 119],
+    ...         [95, 651],
+    ...         [363, 341],
+    ...         [512, 401],
+    ...         [819, 2],
+    ...         [204, 324],
+    ...         [299, 442],
+    ...         [52, 244],
+    ...         [622, 190],
+    ...         [859, 39],
+    ...         [507, 106],
+    ...         [372, 418],
+    ...         [196, 811],
+    ...         [96, 165],
+    ...         [548, 53],
+    ...         [75, 611],
+    ...         [851, 424],
+    ...         [394, 472],
+    ...         [138, 3],
+    ...         [198, 263],
+    ...         [836, 239],
+    ...         [769, 741],
+    ...         [496, 11],
+    ...         [530, 124],
+    ...         [676, 477],
+    ...         [845, 435],
+    ...         [720, 680],
+    ...         [222, 369],
+    ...         [50, 769],
+    ...         [233, 569],
+    ...         [202, 36],
+    ...         [291, 657],
+    ...         [13, 66],
+    ...         [680, 679],
+    ...         [503, 278],
+    ...         [385, 354],
+    ...         [744, 105],
+    ...         [324, 645],
+    ...         [630, 265],
+    ...         [696, 399],
+    ...         [841, 71],
+    ...         [635, 55],
+    ...         [366, 541],
+    ...         [489, 775],
+    ...         [473, 147],
+    ...         [495, 38],
+    ...         [763, 736],
+    ...         [693, 846],
+    ...         [292, 101],
+    ...         [26, 656],
+    ...         [216, 696],
+    ...         [798, 513],
+    ...         [185, 818],
+    ...         [282, 758],
+    ...         [440, 499],
+    ...         [60, 349],
+    ...         [115, 543],
+    ...         [7, 731],
+    ...         [303, 19],
+    ...         [458, 705],
+    ...         [369, 72],
+    ...         [91, 284],
+    ...         [279, 28],
+    ...         [565, 240],
+    ...         [419, 538],
+    ...         [476, 26],
+    ...         [365, 573],
+    ...         [404, 90],
+    ...         [544, 789],
+    ...         [304, 546],
+    ...         [47, 584],
+    ...         [162, 659],
+    ...         [9, 189],
+    ...         [187, 196],
+    ...         [350, 102],
+    ...         [229, 494],
+    ...         [345, 858],
+    ...         [499, 463],
+    ...         [431, 363],
+    ...         [469, 297],
+    ...         [815, 772],
+    ...         [201, 750],
+    ...         [344, 842],
+    ...         [782, 692],
+    ...         [590, 452],
+    ...         [842, 279],
+    ...         [453, 549],
+    ...         [40, 725],
+    ...         [857, 134],
+    ...         [435, 247],
+    ...         [73, 416],
+    ...         [390, 514],
+    ...         [848, 649],
+    ...         [543, 525],
+    ...         [424, 587],
+    ...         [670, 348],
+    ...         [153, 721],
+    ...         [511, 713],
+    ...         [141, 571],
+    ...         [165, 25],
+    ...         [699, 185],
+    ...         [168, 466],
+    ...         [564, 243],
+    ...         [540, 273],
+    ...         [23, 630],
+    ...         [607, 638],
+    ...         [567, 726],
+    ...         [310, 118],
+    ...         [501, 461],
+    ...         [718, 756],
+    ...         [42, 524],
+    ...         [508, 253],
+    ...         [330, 804],
+    ...         [516, 529],
+    ...         [220, 458],
+    ...         [478, 211],
+    ...         [796, 715],
+    ...         [10, 163],
+    ...         [183, 786],
+    ...         [765, 131],
+    ...         [39, 84],
+    ...         [114, 321],
+    ...         [486, 553],
+    ...         [446, 816],
+    ...         [619, 23],
+    ...         [391, 221],
+    ...         [623, 579],
+    ...         [84, 251],
+    ...         [65, 460],
+    ...         [592, 340],
+    ...         [78, 219],
+    ...         [657, 658],
+    ...         [245, 40],
+    ...         [140, 322],
+    ...         [659, 364],
+    ...         [692, 320],
+    ...         [800, 144],
+    ...         [163, 181],
+    ...         [263, 89],
+    ...         [211, 628],
+    ...         [17, 664],
+    ...         [582, 353],
+    ...         [260, 356],
+    ...         [244, 732],
+    ...         [579, 160],
+    ...         [172, 620],
+    ...         [666, 623],
+    ...         [698, 350],
+    ...         [636, 828],
+    ...         [808, 831],
+    ...         [72, 476],
+    ...         [753, 820],
+    ...         [285, 291],
+    ...         [108, 155],
+    ...         [27, 327],
+    ...         [748, 375],
+    ...         [768, 626],
+    ...         [169, 302],
+    ...         [32, 714],
+    ...         [807, 140],
+    ...         [295, 409],
+    ...         [192, 97],
+    ...         [457, 803],
+    ...         [652, 805],
+    ...         [421, 407],
+    ...         [176, 262],
+    ...         [827, 855],
+    ...         [755, 390],
+    ...         [290, 93],
+    ...         [120, 697],
+    ...         [418, 735],
+    ...         [360, 201],
+    ...         [225, 408],
+    ...         [333, 449],
+    ...         [780, 565],
+    ...         [110, 248],
+    ...         [215, 12],
+    ...         [287, 518],
+    ...         [24, 684],
+    ...         [451, 434],
+    ...         [771, 827],
+    ...         [368, 486],
+    ...         [860, 832],
+    ...         [459, 475],
+    ...         [828, 482],
+    ...         [620, 60],
+    ...         [59, 64],
+    ...         [277, 683],
+    ...         [271, 266],
+    ...         [25, 121],
+    ...         [517, 198],
+    ...         [470, 63],
+    ...         [599, 727],
+    ...         [474, 616],
+    ...         [137, 544],
+    ...         [111, 746],
+    ...         [506, 512],
+    ...         [55, 381],
+    ...         [858, 516],
+    ...         [337, 108],
+    ...         [18, 51],
+    ...         [821, 396],
+    ...         [776, 260],
+    ...         [322, 852],
+    ...         [306, 298],
+    ...         [357, 37],
+    ...         [685, 379],
+    ...         [14, 507],
+    ...         [442, 590],
+    ...         [251, 755],
+    ...         [342, 526],
+    ...         [448, 86],
+    ...         [77, 110],
+    ...         [603, 528],
+    ...         [723, 311],
+    ...         [595, 850],
+    ...         [70, 448],
+    ...         [559, 438],
+    ...         [493, 800],
+    ...         [106, 126],
+    ...         [293, 417],
+    ...         [158, 245],
+    ...         [262, 613],
+    ...         [813, 286],
+    ...         [825, 395],
+    ...         [205, 114],
+    ...         [354, 557],
+    ...         [806, 65],
+    ...         [3, 793],
+    ...         [846, 717],
+    ...         [197, 796],
+    ...         [526, 602],
+    ...         [170, 443],
+    ...         [118, 454],
+    ...         [247, 728],
+    ...         [113, 604],
+    ...         [331, 559],
+    ...         [854, 812],
+    ...         [4, 158],
+    ...         [626, 57],
+    ...         [455, 614],
+    ...         [609, 21],
+    ...         [241, 269],
+    ...         [510, 823],
+    ...         [127, 172],
+    ...         [817, 815],
+    ...         [714, 202],
+    ...         [67, 625],
+    ...         [297, 833],
+    ...         [129, 609],
+    ...         [654, 711],
+    ...         [598, 151],
+    ...         [591, 15],
+    ...         [8, 817],
+    ...         [327, 0],
+    ...         [583, 13],
+    ...         [356, 663],
+    ...         [754, 701],
+    ...         [6, 643],
+    ...         [832, 85],
+    ...         [35, 391],
+    ...         [61, 400],
+    ...         [128, 323],
+    ...         [645, 819],
+    ...         [398, 222],
+    ...         [256, 54],
+    ...         [834, 370],
+    ...         [462, 519],
+    ...         [803, 310],
+    ...         [822, 857],
+    ...         [634, 575],
+    ...         [838, 129],
+    ...         [790, 149],
+    ...         [677, 527],
+    ...         [388, 351],
+    ...         [210, 531],
+    ...         [683, 347],
+    ...         [231, 120],
+    ...         [252, 670],
+    ...         [509, 58],
+    ...         [397, 634],
+    ...         [347, 179],
+    ...         [611, 412],
+    ...         [159, 530],
+    ...         [684, 307],
+    ...         [318, 76],
+    ...         [273, 763],
+    ...         [107, 485],
+    ...         [182, 20],
+    ...         [602, 187],
+    ...         [69, 294],
+    ...         [353, 229],
+    ...         [237, 52],
+    ...         [737, 10],
+    ...         [364, 148],
+    ...         [425, 130],
+    ...         [36, 99],
+    ...         [688, 556],
+    ...         [788, 191],
+    ...         [532, 6],
+    ...         [697, 644],
+    ...         [400, 199],
+    ...         [663, 382],
+    ...         [432, 496],
+    ...         [74, 627],
+    ...         [436, 470],
+    ...         [228, 492],
+    ...         [314, 781],
+    ...         [38, 836],
+    ...         [527, 329],
+    ...         [41, 589],
+    ...         [213, 734],
+    ...         [29, 62],
+    ...         [705, 603],
+    ...         [408, 425],
+    ...         [632, 388],
+    ...         [752, 241],
+    ...         [537, 854],
+    ...         [528, 582],
+    ...         [514, 790],
+    ...         [664, 195],
+    ...         [267, 132],
+    ...         [92, 41],
+    ...         [490, 32],
+    ...         [475, 397],
+    ...         [374, 501],
+    ...         [312, 150],
+    ...         [601, 398],
+    ...         [831, 840],
+    ...         [531, 607],
+    ...         [610, 580],
+    ...         [529, 483],
+    ...         [264, 258],
+    ...         [682, 227],
+    ...         [62, 844],
+    ...         [54, 437],
+    ...         [764, 542],
+    ...         [335, 624],
+    ...         [731, 35],
+    ...         [733, 678],
+    ...         [777, 439],
+    ...         [541, 618],
+    ...         [86, 87],
+    ...         [156, 608],
+    ...         [762, 68],
+    ...         [427, 787],
+    ...         [724, 636],
+    ...         [794, 67],
+    ...         [447, 428],
+    ...         [319, 700],
+    ...         [500, 433],
+    ...         [157, 394],
+    ...         [147, 300],
+    ...         [340, 464],
+    ...         [209, 226],
+    ...         [288, 809],
+    ...         [28, 532],
+    ...         [336, 204],
+    ...         [709, 326],
+    ...         [437, 138],
+    ...         [546, 759],
+    ...         [604, 795],
+    ...         [835, 344],
+    ...         [381, 343],
+    ...         [378, 420],
+    ...         [482, 422],
+    ...         [802, 551],
+    ...         [472, 848],
+    ...         [650, 141],
+    ...         [667, 167],
+    ...         [371, 330],
+    ...         [461, 328],
+    ...         [562, 694],
+    ...         [227, 653],
+    ...         [289, 479],
+    ...         [837, 176],
+    ...         [463, 423],
+    ...         [103, 788],
+    ...         [853, 798],
+    ...         [258, 456],
+    ...         [443, 383],
+    ...         [760, 765],
+    ...         [638, 552],
+    ...         [311, 646],
+    ...         [151, 621],
+    ...         [434, 216],
+    ...         [411, 845],
+    ...         [573, 675],
+    ...         [332, 361],
+    ...         [167, 193],
+    ...         [662, 779],
+    ...         [64, 597],
+    ...         [160, 469],
+    ...         [742, 214],
+    ...         [519, 654],
+    ...         [269, 371],
+    ...         [384, 194],
+    ...         [674, 633],
+    ...         [702, 555],
+    ...         [651, 722],
+    ...         [30, 205],
+    ...         [721, 299],
+    ...         [131, 79],
+    ...         [672, 856],
+    ...         [789, 747],
+    ...         [173, 564],
+    ...         [477, 285],
+    ...         [745, 744],
+    ...         [588, 838],
+    ...         [325, 767],
+    ...         [707, 1],
+    ...         [586, 605],
+    ...         [135, 766],
+    ...         [417, 673],
+    ...         [687, 491],
+    ...         [255, 562],
+    ...         [97, 606],
+    ...         [261, 161],
+    ...         [594, 316],
+    ...         [56, 352],
+    ...         [647, 337],
+    ...         [104, 411],
+    ...         [775, 566],
+    ...         [820, 33],
+    ...         [321, 367],
+    ...         [193, 252],
+    ...         [274, 103],
+    ...         [420, 689],
+    ...         [161, 427],
+    ...         [399, 128],
+    ...         [704, 522],
+    ...         [560, 498],
+    ...         [467, 718],
+    ...         [343, 48],
+    ...         [658, 503],
+    ...         [272, 315],
+    ...         [494, 708],
+    ...         [700, 703],
+    ...         [563, 270],
+    ...         [561, 712],
+    ...         [818, 296],
+    ...         [281, 49],
+    ...         [578, 478],
+    ...         [409, 672],
+    ...         [810, 489],
+    ...         [195, 515],
+    ...         [717, 393],
+    ...         [265, 560],
+    ...         [577, 782],
+    ...         [57, 362],
+    ...         [296, 292],
+    ...         [538, 592],
+    ...         [58, 691],
+    ...         [441, 495],
+    ...         [230, 752],
+    ...         [416, 314],
+    ...         [686, 593],
+    ...         [483, 601],
+    ...         [326, 578],
+    ...         [401, 806],
+    ...         [154, 306],
+    ...         [123, 290],
+    ...         [66, 174],
+    ...         [124, 444],
+    ...         [5, 517],
+    ...         [741, 91],
+    ...         [407, 410],
+    ...         [329, 213],
+    ...         [452, 387],
+    ...         [302, 47],
+    ...         [856, 27],
+    ...         [208, 146],
+    ...         [628, 113],
+    ...         [248, 612],
+    ...         [45, 506],
+    ...         [428, 761],
+    ...         [426, 4],
+    ...         [203, 429],
+    ...         [275, 419],
+    ...         [276, 5],
+    ...         [487, 567],
+    ...         [294, 539],
+    ...         [194, 104],
+    ...         [730, 572],
+    ...         [649, 777],
+    ...         [130, 303],
+    ...         [134, 376],
+    ...         [71, 218],
+    ...         [811, 304],
+    ...         [568, 547],
+    ...         [535, 505],
+    ...         [761, 821],
+    ...         [589, 215],
+    ...         [301, 822],
+    ...         [852, 521],
+    ...         [392, 536],
+    ...         [750, 698],
+    ...         [358, 723],
+    ...         [816, 275],
+    ...         [323, 212],
+    ...         [824, 335],
+    ...         [621, 631],
+    ...         [79, 622],
+    ...         [346, 797],
+    ...         [485, 223],
+    ...         [136, 358],
+    ...         [44, 183],
+    ...         [612, 94],
+    ...         [122, 671],
+    ...         [174, 153],
+    ...         [1, 693],
+    ...         [348, 127],
+    ...         [690, 235],
+    ...         [786, 92],
+    ...         [746, 261],
+    ...         [681, 497],
+    ...         [801, 112],
+    ...         [413, 490],
+    ...         [2, 534],
+    ...         [643, 168],
+    ...         [613, 143],
+    ...         [142, 667],
+    ...         [648, 751],
+    ...         [37, 209],
+    ...         [539, 511],
+    ...         [675, 487],
+    ...         [740, 610],
+    ...         [608, 157],
+    ...         [558, 617],
+    ...         [637, 853],
+    ...         [479, 385],
+    ...         [117, 841],
+    ...         [22, 56],
+    ...         [191, 44],
+    ...         [631, 178],
+    ...         [217, 441],
+    ...         [770, 217],
+    ...         [361, 813],
+    ...         [48, 462],
+    ...         [727, 554],
+    ...         [497, 666],
+    ...         [43, 690],
+    ...         [656, 317],
+    ...         [341, 639],
+    ...         [843, 704],
+    ...         [334, 203],
+    ...         [249, 829],
+    ...         [445, 753],
+    ...         [152, 169],
+    ...         [20, 642],
+    ...         [491, 849],
+    ...         [743, 426],
+    ...         [823, 413],
+    ...         [552, 635],
+    ...         [166, 338],
+    ...         [68, 791],
+    ...         [454, 641],
+    ...         [614, 319],
+    ...         [200, 73],
+    ...         [572, 558],
+    ...         [439, 17],
+    ...         [574, 598],
+    ...         [661, 186],
+    ...         [16, 719],
+    ...         [520, 182],
+    ...         [694, 655],
+    ...         [671, 548],
+    ...         [605, 164],
+    ...         [351, 175],
+    ...         [701, 355],
+    ...         [224, 280],
+    ...         [143, 232],
+    ...         [338, 325],
+    ...         [90, 293],
+    ...         [795, 372],
+    ...         [641, 794],
+    ...         [566, 184],
+    ...         [359, 373],
+    ...         [774, 757],
+    ...         [639, 257],
+    ...         [109, 154],
+    ...         [679, 287],
+    ...         [708, 749],
+    ...         [85, 509],
+    ...         [805, 374],
+    ...         [711, 835],
+    ...         [12, 283],
+    ...         [715, 69],
+    ...         [186, 480],
+    ...         [525, 780],
+    ...         [571, 59],
+    ...         [524, 386],
+    ...         [660, 305],
+    ...         [355, 699],
+    ...         [63, 43],
+    ...         [580, 568],
+    ...         [139, 380],
+    ...         [518, 801],
+    ...         [349, 481],
+    ...         [766, 770],
+    ...         [847, 238],
+    ...         [644, 632],
+    ...         [226, 585],
+    ...         [94, 234],
+    ...         [833, 74],
+    ...         [307, 591],
+    ...         [722, 504],
+    ...         [804, 115],
+    ...         [732, 77],
+    ...         [523, 430],
+    ...         [533, 471],
+    ...         [270, 384],
+    ...         [93, 450],
+    ...         [618, 500],
+    ...         [576, 839],
+    ...         [488, 537],
+    ...         [617, 710],
+    ...         [179, 446],
+    ...         [689, 312],
+    ...         [33, 29],
+    ...         [844, 596],
+    ...         [149, 250],
+    ...         [758, 18],
+    ...         [82, 282],
+    ...         [305, 688],
+    ...         [759, 50],
+    ...         [328, 336],
+    ...         [235, 716],
+    ...         [253, 783],
+    ...         [19, 301],
+    ...         [284, 80],
+    ...         [223, 246],
+    ...         [177, 122],
+    ...         [370, 545],
+    ...         [150, 743],
+    ...         [49, 851],
+    ...         [190, 7],
+    ...         [855, 249],
+    ...         [76, 662],
+    ...         [155, 272],
+    ...         [713, 488],
+    ...         [181, 459],
+    ...         [784, 535],
+    ...         [551, 406],
+    ...         [747, 445],
+    ...         [668, 177],
+    ...         [246, 768],
+    ...         [839, 220],
+    ...         [199, 142],
+    ...         [468, 802],
+    ...         [243, 754],
+    ...         [238, 834],
+    ...         [772, 368],
+    ...         [31, 225],
+    ...         [376, 277],
+    ...         [380, 436],
+    ...         [555, 740],
+    ...         [615, 83],
+    ...         [515, 334],
+    ...         [678, 82],
+    ...         [257, 720],
+    ...         [89, 46],
+    ...         [547, 563],
+    ...         [145, 583],
+    ...         [406, 125],
+    ...         [98, 180],
+    ...         [405, 16],
+    ...         [46, 264],
+    ...         [412, 116],
+    ...         [812, 123],
+    ...         [188, 825],
+    ...         [653, 231],
+    ...         [315, 233],
+    ...         [379, 159],
+    ...         [88, 360],
+    ...         [738, 648],
+    ...         [600, 255],
+    ...         [236, 837],
+    ...         [81, 724],
+    ...         [830, 824],
+    ...         [456, 377],
+    ...         [464, 268],
+    ...         [735, 600],
+    ...         [581, 502],
+    ...         [553, 308],
+    ...         [184, 455],
+    ...         [779, 508],
+    ...         [642, 669],
+    ...         [640, 738],
+    ...         [522, 595],
+    ...         [286, 403],
+    ...         [259, 415],
+    ...         [218, 274],
+    ...         [751, 237],
+    ...         [11, 117],
+    ...         [471, 730],
+    ...         [850, 208],
+    ...         [280, 107],
+    ...         [102, 799],
+    ...         [606, 702],
+    ...         [362, 8],
+    ...         [466, 706],
+    ...         [739, 637],
+    ...         [521, 111],
+    ...         [430, 318],
+    ...         [596, 474],
+    ...         [505, 843],
+    ...         [232, 615],
+    ...         [178, 31],
+    ...         [449, 14],
+    ...         [242, 682],
+    ...         [536, 742],
+    ...         [373, 357],
+    ...         [116, 313],
+    ...         [484, 75],
+    ...         [375, 139],
+    ...         [791, 453],
+    ...         [100, 594],
+    ...         [691, 440],
+    ...         [206, 523],
+    ...         [627, 256],
+    ...         [99, 254],
+    ...         [250, 230],
+    ...         [387, 242],
+    ...         [669, 81],
+    ...         [383, 200],
+    ...         [767, 405],
+    ...         [144, 9],
+    ...         [429, 668],
+    ...         [840, 676],
+    ...         [829, 451],
+    ...         [773, 207],
+    ...         [433, 826],
+    ...         [126, 152],
+    ...         [148, 333],
+    ...         [146, 830],
+    ...         [51, 42],
+    ...         [502, 467],
+    ...         [395, 421],
+    ...         [132, 224],
+    ...         [460, 156],
+    ...         [778, 581],
+    ...         [569, 681],
+    ...         [719, 295],
+    ...         [557, 707],
+    ...         [725, 346],
+    ...         [101, 137],
+    ...         [189, 737],
+    ...         [444, 365],
+    ...         [646, 259],
+    ...         [308, 561],
+    ...         [21, 267],
+    ...         [180, 810],
+    ...         [655, 332],
+    ...         [633, 109],
+    ...         [240, 588],
+    ...         [498, 570],
+    ...         [266, 685],
+    ...         [465, 95],
+    ...         [710, 660],
+    ...         [585, 629],
+    ...         [396, 61],
+    ...         [549, 473],
+    ...         [389, 331],
+    ...         [298, 739],
+    ...         [575, 88],
+    ...         [785, 650],
+    ...         [415, 100],
+    ...         [352, 550],
+    ...         [87, 166],
+    ...         [283, 378],
+    ...         [597, 309],
+    ...     ],
+    ... )
     861
+
     """
     graph = defaultdict(list)
     for u, v in edges:
@@ -5444,14 +6645,15 @@ def p2608(n: int, edges: list[list[int]]) -> int:
 
 
 def p3005(nums: list[int]) -> int:
-    """
-    3005. Count Elements With Maximum Frequency https://leetcode.com/problems/count-elements-with-maximum-frequency
+    """3005. Count Elements With Maximum Frequency https://leetcode.com/problems/count-elements-with-maximum-frequency
 
-    Examples:
+    Examples
+    --------
     >>> p3005([1, 2, 2, 3, 1, 4])
     4
     >>> p3005([1, 2, 3, 4, 5])
     5
+
     """
     c = Counter(nums)
     max_value = max(c.values())
